@@ -1,0 +1,123 @@
+/* Add these new styles to your existing dashboard.css */
+
+.file-drop-zone {
+    border: 2px dashed #3498db;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+}
+
+.file-drop-zone:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-color: #2980b9;
+}
+
+.file-drop-zone i {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.file-drop-zone p {
+    margin: 0;
+    color: #555;
+}
+
+body.dark-mode .file-drop-zone p {
+    color: #ccc;
+}
+
+.file-list {
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+body.dark-mode .file-list {
+    border-color: #555;
+    background-color: #3c3c3c;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+body.dark-mode .file-item {
+    border-bottom-color: #555;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-size {
+    color: #777;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+body.dark-mode .file-size {
+    color: #999;
+}
+
+.remove-file {
+    color: #e74c3c;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.remove-file:hover {
+    color: #c0392b;
+}
+
+/* Make deployment tables consistent */
+.deployment-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.deployment-list th, 
+.deployment-list td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+body.dark-mode .deployment-list th,
+body.dark-mode .deployment-list td {
+    border-bottom-color: #555;
+}
+
+.deployment-list th {
+    background-color: #f4f4f4;
+    font-weight: 600;
+}
+
+body.dark-mode .deployment-list th {
+    background-color: #4c4c4c;
+}
+
+.deployment-list tr:hover {
+    background-color: #f9f9f9;
+}
+
+body.dark-mode .deployment-list tr:hover {
+    background-color: #555;
+}
