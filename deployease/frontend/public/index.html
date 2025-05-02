@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeployEase - Blue-Green Deployment Manager</title>
+    <base href="/deployease/frontend/">
+    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="src/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/deployease-icon.png">
+    <script>
+        window.AppConfig = {
+            apiBaseUrl: "http://localhost:3000",
+            websocketUrl: "ws://localhost:8080"
+        };
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>DeployEase</h1>
+                <p>Blue-Green Deployment Manager</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#environments"><i class="fas fa-server"></i> Environments</a></li>
+                    <li><a href="#deployments"><i class="fas fa-rocket"></i> Deployments</a></li>
+                    <li><a href="#logs"><i class="fas fa-list"></i> Logs</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <span>Final Year Project v1.0</span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <h2 id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <div class="dark-mode-toggle">
+                        <span>Dark Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <button id="refreshButton" class="refresh-button">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-wrapper">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="dashboard-grid">
+                        <!-- Environment Status Card -->
+                        <div class="card environment-status">
+                            <div class="card-header">
+                                <h3>Environment Status</h3>
+                                <span class="card-actions">
+                                    <button class="refresh-card"><i class="fas fa-sync-alt"></i></button>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="environment-info">
+                                    <div id="blueEnv" class="environment blue">
+                                        <div class="env-header">
+                                            <h4>Blue Environment</h4>
+                                            <span id="blueStatus" class="status-badge active">Active</span>
+                                        </div>
+                                        <div class="env-details">
+                                            <div class="env-detail">
+                                                <span class="label">Branch:</span>
+                                                <span class="value">blue</span>
+                                            </div>
+                                            <div class="env-detail">
+                                                <span class="label">Status:</span>
+                                                <span id="blueHealthStatus" class="value">Healthy</span>
+                                            </div>
+                                            <div class="env-detail">
+                                                <span class="label">URL:</span>
+                                                <a id="blueUrl" class="value" target="_blank">View Site</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="traffic-control">
+                                        <div class="traffic-switch">
+                                            <button id="switchTraffic" class="switch-button">Switch to Green</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="greenEnv" class="environment green">
+                                        <div class="env-header">
+                                            <h4>Green Environment</h4>
+                                            <span id="greenStatus" class="status-badge inactive">Inactive</span>
+                                        </div>
+                                        <div class="env-details">
+                                            <div class="env-detail">
+                                                <span class="label">Branch:</span>
+                                                <span class="value">green</span>
+                                            </div>
+                                            <div class="env-detail">
+                                                <span class="label">Status:</span>
+                                                <span id="greenHealthStatus" class="value">Healthy</span>
+                                            </div>
+                                            <div class="env-detail">
+                                                <span class="label">URL:</span>
+                                                <a id="greenUrl" class="value" target="_blank">View Site</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button id="newDeploymentBtn" class="primary-button">New Deployment</button>
+                                <button id="rollbackButton" class="secondary-button">Rollback</button>
+                            </div>
+                        </div>
+
+                        <!-- Recent Deployments Card -->
+                        <div class="card recent-deployments">
+                            <div class="card-header">
+                                <h3>Recent Deployments</h3>
+                                <span class="card-actions">
+                                    <button class="refresh-card"><i class="fas fa-sync-alt"></i></button>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="deployment-list">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Timestamp</th>
+                                                <th>Branch</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="deploymentsTableBody">
+                                            <!-- Deployments will be populated here by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Logs Card -->
+                        <div class="card logs-card">
+                            <div class="card-header">
+                                <h3>Deployment Logs</h3>
+                                <span class="card-actions">
+                                    <button class="refresh-card"><i class="fas fa-sync-alt"></i></button>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div id="logs" class="logs-container">
+                                    <pre id="logContent"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Deployments Section -->
+                <section id="deployments" class="content-section">
+                    <div class="section-header">
+                        <h3>Deployment History</h3>
+                        <div class="section-actions">
+                            <button id="refreshDeployments" class="refresh-button">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <button id="newDeploymentBtn2" class="primary-button">
+                                <i class="fas fa-plus"></i> New Deployment
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="deployment-list">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Timestamp</th>
+                                            <th>Branch</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="deploymentHistoryTableBody">
+                                        <!-- Deployment history will be populated here by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Deployment Modal -->
+    <div id="deployModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>New Deployment</h4>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="deployForm">
+                    <div class="form-group">
+                        <label for="deploymentType">Deployment Type</label>
+                        <select id="deploymentType">
+                            <option value="NEW">New Deployment (Blue)</option>
+                            <option value="UPDATE">Update Deployment (Green)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileUpload">Upload Files</label>
+                        <div class="file-drop-zone" id="fileDropZone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop your HTML/CSS/JS files here</p>
+                            <input type="file" id="fileUpload" multiple accept=".html,.css,.js" style="display: none;">
+                            <button type="button" class="secondary-button" id="browseFilesBtn" style="margin-top: 10px;">
+                                Browse Files
+                            </button>
+                        </div>
+                        <div id="fileList" class="file-list"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="commitMessage">Deployment Message</label>
+                        <input type="text" id="commitMessage" placeholder="Enter deployment description">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDeployBtn" class="secondary-button">Cancel</button>
+                <button id="confirmDeployBtn" class="primary-button">Deploy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+<script type="module" src="src/js/main.js"></script>
+<script type="module" src="src/js/dashboard.js"></script>
+<script type="module" src="src/js/websocket.js"></script>
+<script type="module" src="src/js/gitDeploy.js"></script>
+<script type="module" src="src/js/config.js"></script> 
+</body>
+</html>

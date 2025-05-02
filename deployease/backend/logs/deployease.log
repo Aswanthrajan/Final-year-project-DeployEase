@@ -1,0 +1,1370 @@
+2025-04-25 15:24:55 [INFO]: Logger initialized in development mode
+2025-04-25 15:24:55 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 15:24:55 [ERROR]: WebSocket initialization failed: Cannot find module './services/websocketService'
+Require stack:
+- C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\app.js
+2025-04-25 15:24:55 [INFO]: Server running on port 3000
+2025-04-25 15:28:14 [INFO]: GET /api/environments/status
+2025-04-25 15:28:14 [INFO]: GET /api/environments/status
+2025-04-25 15:28:18 [ERROR]: Failed to get deploy status [m9wmce10] Request failed with status code 404
+2025-04-25 15:28:18 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:18 [ERROR]: Failed to get deploy status [m9wmce16] Request failed with status code 404
+2025-04-25 15:28:18 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:18 [ERROR]: Failed to get deploy status [m9wmce19] Request failed with status code 404
+2025-04-25 15:28:18 [INFO]: GET /api/environments/status
+2025-04-25 15:28:18 [ERROR]: Failed to get deploy status [m9wmce1d] Request failed with status code 404
+2025-04-25 15:28:18 [ERROR]: Failed to get deploy status [m9wmcea3] Request failed with status code 404
+2025-04-25 15:28:18 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:18 [ERROR]: Failed to get deploy status [m9wmceaa] Request failed with status code 404
+2025-04-25 15:28:19 [INFO]: GET /api/environments/status
+2025-04-25 15:28:19 [ERROR]: Failed to get deploy status [m9wmcf1x] Request failed with status code 404
+2025-04-25 15:28:19 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:19 [ERROR]: Failed to get deploy status [m9wmcf29] Request failed with status code 404
+2025-04-25 15:28:20 [INFO]: GET /api/environments/status
+2025-04-25 15:28:21 [ERROR]: Failed to get deploy status [m9wmcg2e] Request failed with status code 404
+2025-04-25 15:28:21 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:21 [ERROR]: Failed to get deploy status [m9wmcg2h] Request failed with status code 404
+2025-04-25 15:28:22 [INFO]: GET /api/environments/status
+2025-04-25 15:28:22 [ERROR]: Failed to get deploy status [m9wmch30] Request failed with status code 404
+2025-04-25 15:28:22 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:22 [ERROR]: Failed to get deploy status [m9wmch39] Request failed with status code 404
+2025-04-25 15:28:44 [INFO]: GET /api/environments/status
+2025-04-25 15:28:48 [ERROR]: Failed to get deploy status [m9wmd153] Request failed with status code 404
+2025-04-25 15:28:48 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:48 [ERROR]: Failed to get deploy status [m9wmd15r] Request failed with status code 404
+2025-04-25 15:28:49 [INFO]: GET /api/environments/status
+2025-04-25 15:28:49 [ERROR]: Failed to get deploy status [m9wmd25z] Request failed with status code 404
+2025-04-25 15:28:49 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:49 [ERROR]: Failed to get deploy status [m9wmd26b] Request failed with status code 404
+2025-04-25 15:28:50 [INFO]: GET /api/environments/status
+2025-04-25 15:28:50 [ERROR]: Failed to get deploy status [m9wmd36o] Request failed with status code 404
+2025-04-25 15:28:50 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:50 [ERROR]: Failed to get deploy status [m9wmd36v] Request failed with status code 404
+2025-04-25 15:28:51 [INFO]: GET /api/environments/status
+2025-04-25 15:28:52 [ERROR]: Failed to get deploy status [m9wmd488] Request failed with status code 404
+2025-04-25 15:28:52 [ERROR]: Failed to fetch environment status
+2025-04-25 15:28:52 [ERROR]: Failed to get deploy status [m9wmd48t] Request failed with status code 404
+2025-04-25 15:29:14 [INFO]: GET /api/environments/status
+2025-04-25 15:29:18 [ERROR]: Failed to get deploy status [m9wmdobx] Request failed with status code 404
+2025-04-25 15:29:18 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:18 [ERROR]: Failed to get deploy status [m9wmdoby] Request failed with status code 404
+2025-04-25 15:29:19 [INFO]: GET /api/environments/status
+2025-04-25 15:29:19 [ERROR]: Failed to get deploy status [m9wmdpcv] Request failed with status code 404
+2025-04-25 15:29:19 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:19 [ERROR]: Failed to get deploy status [m9wmdpdv] Request failed with status code 404
+2025-04-25 15:29:20 [INFO]: GET /api/environments/status
+2025-04-25 15:29:21 [ERROR]: Failed to get deploy status [m9wmdqe4] Request failed with status code 404
+2025-04-25 15:29:21 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:21 [ERROR]: Failed to get deploy status [m9wmdqe7] Request failed with status code 404
+2025-04-25 15:29:22 [INFO]: GET /api/environments/status
+2025-04-25 15:29:22 [ERROR]: Failed to get deploy status [m9wmdreu] Request failed with status code 404
+2025-04-25 15:29:22 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:22 [ERROR]: Failed to get deploy status [m9wmdrgq] Request failed with status code 404
+2025-04-25 15:29:44 [INFO]: GET /api/environments/status
+2025-04-25 15:29:48 [ERROR]: Failed to get deploy status [m9wmebi8] Request failed with status code 404
+2025-04-25 15:29:48 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:48 [ERROR]: Failed to get deploy status [m9wmebir] Request failed with status code 404
+2025-04-25 15:29:50 [INFO]: GET /api/environments/status
+2025-04-25 15:29:50 [ERROR]: Failed to get deploy status [m9wmed76] Request failed with status code 404
+2025-04-25 15:29:50 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:50 [ERROR]: Failed to get deploy status [m9wmed78] Request failed with status code 404
+2025-04-25 15:29:52 [INFO]: GET /api/environments/status
+2025-04-25 15:29:52 [ERROR]: Failed to get deploy status [m9wmeeqk] Request failed with status code 404
+2025-04-25 15:29:52 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:52 [ERROR]: Failed to get deploy status [m9wmeeqm] Request failed with status code 404
+2025-04-25 15:29:54 [INFO]: GET /api/environments/status
+2025-04-25 15:29:54 [ERROR]: Failed to get deploy status [m9wmegaf] Request failed with status code 404
+2025-04-25 15:29:54 [ERROR]: Failed to fetch environment status
+2025-04-25 15:29:54 [ERROR]: Failed to get deploy status [m9wmegag] Request failed with status code 404
+2025-04-25 15:30:14 [INFO]: GET /api/environments/status
+2025-04-25 15:30:18 [ERROR]: Failed to get deploy status [m9wmeyl8] Request failed with status code 404
+2025-04-25 15:30:18 [ERROR]: Failed to fetch environment status
+2025-04-25 15:30:18 [ERROR]: Failed to get deploy status [m9wmeyms] Request failed with status code 404
+2025-04-25 15:30:20 [INFO]: GET /api/environments/status
+2025-04-25 15:30:20 [ERROR]: Failed to get deploy status [m9wmf0ck] Request failed with status code 404
+2025-04-25 15:30:20 [ERROR]: Failed to fetch environment status
+2025-04-25 15:30:20 [ERROR]: Failed to get deploy status [m9wmf0cx] Request failed with status code 404
+2025-04-25 15:30:22 [INFO]: GET /api/environments/status
+2025-04-25 15:30:22 [ERROR]: Failed to get deploy status [m9wmf1vo] Request failed with status code 404
+2025-04-25 15:30:22 [ERROR]: Failed to fetch environment status
+2025-04-25 15:30:22 [ERROR]: Failed to get deploy status [m9wmf1w4] Request failed with status code 404
+2025-04-25 15:30:24 [INFO]: GET /api/environments/status
+2025-04-25 15:30:24 [ERROR]: Failed to get deploy status [m9wmf3fh] Request failed with status code 404
+2025-04-25 15:30:24 [ERROR]: Failed to fetch environment status
+2025-04-25 15:30:24 [ERROR]: Failed to get deploy status [m9wmf3fz] Request failed with status code 404
+2025-04-25 20:09:46 [INFO]: Logger initialized in development mode
+2025-04-25 20:09:46 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 20:09:46 [ERROR]: WebSocket initialization failed: Cannot find module './services/websocketService'
+Require stack:
+- C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\app.js
+2025-04-25 20:09:46 [INFO]: Server running on port 3000
+2025-04-25 20:23:23 [INFO]: Logger initialized in development mode
+2025-04-25 20:23:23 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 20:23:24 [ERROR]: WebSocket initialization failed: websocket.init is not a function
+2025-04-25 20:23:24 [INFO]: Server running on port 3000
+2025-04-25 21:36:06 [INFO]: Logger initialized in development mode
+2025-04-25 21:36:06 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 21:36:06 [INFO]: Server running on port 3000
+2025-04-25 21:36:06 [INFO]: WebSocket server initialized
+2025-04-25 21:36:06 [INFO]: WebSocket service initialized
+2025-04-25 21:37:58 [INFO]: Logger initialized in development mode
+2025-04-25 21:37:58 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 21:37:58 [INFO]: Server running on port 3000
+2025-04-25 21:37:58 [INFO]: WebSocket server initialized
+2025-04-25 21:37:58 [INFO]: WebSocket service initialized
+2025-04-25 21:37:58 [INFO]: GET /api/environments/status
+2025-04-25 21:38:02 [ERROR]: Failed to get deploy status [m9wzjv0w] Request failed with status code 404
+2025-04-25 21:38:02 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:02 [ERROR]: Failed to get deploy status [m9wzjv1b] Request failed with status code 404
+2025-04-25 21:38:02 [INFO]: GET /api/environments/status
+2025-04-25 21:38:02 [ERROR]: Failed to get deploy status [m9wzjv9s] Request failed with status code 404
+2025-04-25 21:38:02 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:02 [ERROR]: Failed to get deploy status [m9wzjv9u] Request failed with status code 404
+2025-04-25 21:38:03 [INFO]: GET /api/environments/status
+2025-04-25 21:38:03 [INFO]: GET /api/environments/status
+2025-04-25 21:38:03 [INFO]: GET /api/environments/status
+2025-04-25 21:38:03 [ERROR]: Failed to get deploy status [m9wzjwae] Request failed with status code 404
+2025-04-25 21:38:03 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:03 [ERROR]: Failed to get deploy status [m9wzjwah] Request failed with status code 404
+2025-04-25 21:38:06 [ERROR]: Failed to get deploy status [m9wzjyf9] Request failed with status code 404
+2025-04-25 21:38:06 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:06 [ERROR]: Failed to get deploy status [m9wzjyfd] Request failed with status code 404
+2025-04-25 21:38:06 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:06 [INFO]: GET /api/environments/status
+2025-04-25 21:38:06 [ERROR]: Failed to get deploy status [m9wzjygy] Request failed with status code 404
+2025-04-25 21:38:06 [ERROR]: Failed to get deploy status [m9wzjyh1] Request failed with status code 404
+2025-04-25 21:38:06 [ERROR]: Failed to get deploy status [m9wzjypt] Request failed with status code 404
+2025-04-25 21:38:06 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:06 [ERROR]: Failed to get deploy status [m9wzjyq7] Request failed with status code 404
+2025-04-25 21:38:07 [INFO]: GET /api/environments/status
+2025-04-25 21:38:07 [ERROR]: Failed to get deploy status [m9wzjzj8] Request failed with status code 404
+2025-04-25 21:38:07 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:07 [ERROR]: Failed to get deploy status [m9wzjzja] Request failed with status code 404
+2025-04-25 21:38:08 [INFO]: GET /api/environments/status
+2025-04-25 21:38:09 [ERROR]: Failed to get deploy status [m9wzk0jq] Request failed with status code 404
+2025-04-25 21:38:09 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:09 [ERROR]: Failed to get deploy status [m9wzk0js] Request failed with status code 404
+2025-04-25 21:38:10 [INFO]: GET /api/environments/status
+2025-04-25 21:38:10 [ERROR]: Failed to get deploy status [m9wzk1r7] Request failed with status code 404
+2025-04-25 21:38:10 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:10 [ERROR]: Failed to get deploy status [m9wzk1r9] Request failed with status code 404
+2025-04-25 21:38:33 [INFO]: GET /api/environments/status
+2025-04-25 21:38:36 [ERROR]: Failed to get deploy status [m9wzklsy] Request failed with status code 404
+2025-04-25 21:38:36 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:36 [ERROR]: Failed to get deploy status [m9wzklt0] Request failed with status code 404
+2025-04-25 21:38:38 [INFO]: GET /api/environments/status
+2025-04-25 21:38:46 [INFO]: Logger initialized in development mode
+2025-04-25 21:38:46 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 21:38:46 [INFO]: Server running on port 3000
+2025-04-25 21:38:46 [INFO]: WebSocket server initialized
+2025-04-25 21:38:46 [INFO]: WebSocket service initialized
+2025-04-25 21:38:48 [INFO]: GET /api/environments/status
+2025-04-25 21:38:49 [INFO]: GET /api/environments/status
+2025-04-25 21:38:49 [INFO]: GET /api/environments/status
+2025-04-25 21:38:51 [ERROR]: Failed to get deploy status [m9wzkx6k] Request failed with status code 404
+2025-04-25 21:38:51 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:51 [ERROR]: Failed to get deploy status [m9wzkx6q] Request failed with status code 404
+2025-04-25 21:38:52 [ERROR]: Failed to get deploy status [m9wzkxxz] Request failed with status code 404
+2025-04-25 21:38:52 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:52 [INFO]: GET /api/environments/status
+2025-04-25 21:38:52 [ERROR]: Failed to get deploy status [m9wzky0h] Request failed with status code 404
+2025-04-25 21:38:52 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:52 [ERROR]: Failed to get deploy status [m9wzky0v] Request failed with status code 404
+2025-04-25 21:38:52 [ERROR]: Failed to get deploy status [m9wzky1p] Request failed with status code 404
+2025-04-25 21:38:52 [ERROR]: Failed to get deploy status [m9wzky78] Request failed with status code 404
+2025-04-25 21:38:52 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:52 [ERROR]: Failed to get deploy status [m9wzky8k] Request failed with status code 404
+2025-04-25 21:38:53 [INFO]: GET /api/environments/status
+2025-04-25 21:38:53 [ERROR]: Failed to get deploy status [m9wzkyz9] Request failed with status code 404
+2025-04-25 21:38:53 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:53 [ERROR]: Failed to get deploy status [m9wzkyzk] Request failed with status code 404
+2025-04-25 21:38:54 [INFO]: GET /api/environments/status
+2025-04-25 21:38:55 [ERROR]: Failed to get deploy status [m9wzl04b] Request failed with status code 404
+2025-04-25 21:38:55 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:55 [ERROR]: Failed to get deploy status [m9wzl04h] Request failed with status code 404
+2025-04-25 21:38:56 [INFO]: GET /api/environments/status
+2025-04-25 21:38:56 [ERROR]: Failed to get deploy status [m9wzl15i] Request failed with status code 404
+2025-04-25 21:38:56 [ERROR]: Failed to fetch environment status
+2025-04-25 21:38:56 [ERROR]: Failed to get deploy status [m9wzl15l] Request failed with status code 404
+2025-04-25 21:46:09 [INFO]: Logger initialized in development mode
+2025-04-25 21:46:09 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 21:46:09 [INFO]: Server running on port 3000
+2025-04-25 21:46:09 [INFO]: WebSocket server initialized
+2025-04-25 21:46:09 [INFO]: WebSocket service initialized
+2025-04-25 21:46:10 [INFO]: GET /api/environments/status
+2025-04-25 21:46:11 [INFO]: GET /api/environments/status
+2025-04-25 21:46:11 [INFO]: GET /api/environments/status
+2025-04-25 21:46:13 [ERROR]: Failed to get deploy status [m9wzue1r] Request failed with status code 404
+2025-04-25 21:46:13 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:13 [ERROR]: Failed to get deploy status [m9wzue20] Request failed with status code 404
+2025-04-25 21:46:13 [ERROR]: Failed to get deploy status [m9wzuei9] Request failed with status code 404
+2025-04-25 21:46:13 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:13 [INFO]: GET /api/environments/status
+2025-04-25 21:46:13 [ERROR]: Failed to get deploy status [m9wzuej7] Request failed with status code 404
+2025-04-25 21:46:13 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:13 [ERROR]: Failed to get deploy status [m9wzueja] Request failed with status code 404
+2025-04-25 21:46:13 [ERROR]: Failed to get deploy status [m9wzuel2] Request failed with status code 404
+2025-04-25 21:46:14 [ERROR]: Failed to get deploy status [m9wzueqv] Request failed with status code 404
+2025-04-25 21:46:14 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:14 [ERROR]: Failed to get deploy status [m9wzuer7] Request failed with status code 404
+2025-04-25 21:46:14 [INFO]: GET /api/environments/status
+2025-04-25 21:46:15 [ERROR]: Failed to get deploy status [m9wzufiu] Request failed with status code 404
+2025-04-25 21:46:15 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:15 [ERROR]: Failed to get deploy status [m9wzufj7] Request failed with status code 404
+2025-04-25 21:46:16 [INFO]: GET /api/environments/status
+2025-04-25 21:46:16 [ERROR]: Failed to get deploy status [m9wzugkg] Request failed with status code 404
+2025-04-25 21:46:16 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:16 [ERROR]: Failed to get deploy status [m9wzugki] Request failed with status code 404
+2025-04-25 21:46:17 [INFO]: GET /api/environments/status
+2025-04-25 21:46:17 [ERROR]: Failed to get deploy status [m9wzuhmz] Request failed with status code 404
+2025-04-25 21:46:17 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:17 [ERROR]: Failed to get deploy status [m9wzuhn1] Request failed with status code 404
+2025-04-25 21:46:24 [INFO]: GET /api/environments/status
+2025-04-25 21:46:25 [INFO]: GET /api/deployments/history/blue
+2025-04-25 21:46:26 [ERROR]: Failed to get deploy status [m9wzuojq] Request failed with status code 404
+2025-04-25 21:46:26 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:26 [ERROR]: Failed to get deploy status [m9wzuojs] Request failed with status code 404
+2025-04-25 21:46:26 [INFO]: GET /api/environments/status
+2025-04-25 21:46:27 [ERROR]: Failed to get deploy status [m9wzuosd] Request failed with status code 404
+2025-04-25 21:46:27 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:27 [ERROR]: Failed to get deploy status [m9wzuosp] Request failed with status code 404
+2025-04-25 21:46:27 [INFO]: GET /api/environments/status
+2025-04-25 21:46:28 [ERROR]: Failed to get deploy status [m9wzupnk] Request failed with status code 404
+2025-04-25 21:46:28 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:28 [ERROR]: Failed to get deploy status [m9wzupnm] Request failed with status code 404
+2025-04-25 21:46:29 [INFO]: GET /api/environments/status
+2025-04-25 21:46:29 [ERROR]: Failed to get deploy status [m9wzuqp2] Request failed with status code 404
+2025-04-25 21:46:29 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:29 [ERROR]: Failed to get deploy status [m9wzuqp5] Request failed with status code 404
+2025-04-25 21:46:30 [INFO]: GET /api/environments/status
+2025-04-25 21:46:31 [ERROR]: Failed to get deploy status [m9wzursc] Request failed with status code 404
+2025-04-25 21:46:31 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:31 [ERROR]: Failed to get deploy status [m9wzurse] Request failed with status code 404
+2025-04-25 21:46:39 [INFO]: POST /api/deployments
+2025-04-25 21:46:39 [INFO]: New deployment request received
+2025-04-25 21:46:41 [INFO]: GET /api/environments/status
+2025-04-25 21:46:44 [ERROR]: Failed to get deploy status [m9wzv1tl] Request failed with status code 404
+2025-04-25 21:46:44 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:44 [ERROR]: Failed to get deploy status [m9wzv1to] Request failed with status code 404
+2025-04-25 21:46:45 [INFO]: GET /api/environments/status
+2025-04-25 21:46:45 [INFO]: Deployment successful to blue branch
+2025-04-25 21:46:45 [INFO]: GitHub deployment successful
+2025-04-25 21:46:45 [ERROR]: Failed to trigger blue deployment [m9wzv2um] Build hook not configured for blue
+2025-04-25 21:46:45 [ERROR]: Deployment failed
+2025-04-25 21:46:45 [ERROR]: Failed to get deploy status [m9wzv2xf] Request failed with status code 404
+2025-04-25 21:46:45 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:45 [ERROR]: Failed to get deploy status [m9wzv2xh] Request failed with status code 404
+2025-04-25 21:46:46 [INFO]: GET /api/environments/status
+2025-04-25 21:46:46 [ERROR]: Failed to get deploy status [m9wzv3ye] Request failed with status code 404
+2025-04-25 21:46:46 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:46 [ERROR]: Failed to get deploy status [m9wzv3yg] Request failed with status code 404
+2025-04-25 21:46:47 [INFO]: GET /api/environments/status
+2025-04-25 21:46:48 [ERROR]: Failed to get deploy status [m9wzv528] Request failed with status code 404
+2025-04-25 21:46:48 [ERROR]: Failed to fetch environment status
+2025-04-25 21:46:48 [ERROR]: Failed to get deploy status [m9wzv529] Request failed with status code 404
+2025-04-25 22:46:13 [INFO]: Logger initialized in development mode
+2025-04-25 22:46:13 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:03:09 [INFO]: Logger initialized in development mode
+2025-04-25 23:03:09 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:03:58 [INFO]: Logger initialized in development mode
+2025-04-25 23:03:58 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:04:22 [INFO]: Logger initialized in development mode
+2025-04-25 23:04:22 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:04:38 [INFO]: Logger initialized in development mode
+2025-04-25 23:04:38 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:04:58 [INFO]: Logger initialized in development mode
+2025-04-25 23:04:58 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:08:06 [INFO]: Logger initialized in development mode
+2025-04-25 23:08:06 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:08:19 [INFO]: Logger initialized in development mode
+2025-04-25 23:08:19 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:08:41 [INFO]: Logger initialized in development mode
+2025-04-25 23:08:41 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:09:53 [INFO]: Logger initialized in development mode
+2025-04-25 23:09:53 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:15:13 [INFO]: Logger initialized in development mode
+2025-04-25 23:15:13 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:23:45 [INFO]: Logger initialized in development mode
+2025-04-25 23:23:45 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:38:30 [INFO]: Logger initialized in development mode
+2025-04-25 23:38:30 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-25 23:38:33 [INFO]: Netlify service connected successfully
+2025-04-25 23:38:33 [INFO]: WebSocket server running on path /deployease
+2025-04-25 23:38:33 [INFO]: WebSocket service initialized
+2025-04-25 23:38:33 [INFO]: Server running in development mode on port 3000
+2025-04-25 23:39:43 [INFO]: GET /api/environments/status
+2025-04-25 23:39:43 [INFO]: GET /api/environments/status
+2025-04-25 23:39:44 [ERROR]: Status check failed:
+2025-04-25 23:39:44 [ERROR]: Failed to fetch environment status
+2025-04-25 23:39:45 [ERROR]: Status check failed:
+2025-04-25 23:39:45 [ERROR]: Failed to fetch environment status
+2025-04-25 23:39:45 [INFO]: GET /api/environments/status
+2025-04-25 23:39:45 [ERROR]: Status check failed:
+2025-04-25 23:39:45 [ERROR]: Status check failed:
+2025-04-25 23:39:46 [ERROR]: Status check failed:
+2025-04-25 23:39:46 [ERROR]: Failed to fetch environment status
+2025-04-25 23:39:46 [ERROR]: Status check failed:
+2025-04-25 23:39:46 [INFO]: GET /api/environments/status
+2025-04-25 23:39:47 [ERROR]: Status check failed:
+2025-04-25 23:39:47 [ERROR]: Failed to fetch environment status
+2025-04-25 23:39:47 [ERROR]: Status check failed:
+2025-04-25 23:39:48 [INFO]: GET /api/environments/status
+2025-04-25 23:39:48 [ERROR]: Status check failed:
+2025-04-25 23:39:48 [ERROR]: Failed to fetch environment status
+2025-04-25 23:39:48 [ERROR]: Status check failed:
+2025-04-25 23:39:49 [INFO]: GET /api/environments/status
+2025-04-25 23:39:49 [ERROR]: Status check failed:
+2025-04-25 23:39:49 [ERROR]: Failed to fetch environment status
+2025-04-25 23:39:49 [ERROR]: Status check failed:
+2025-04-25 23:40:13 [INFO]: GET /api/environments/status
+2025-04-25 23:40:16 [ERROR]: Status check failed:
+2025-04-25 23:40:16 [ERROR]: Failed to fetch environment status
+2025-04-25 23:40:16 [ERROR]: Status check failed:
+2025-04-25 23:40:17 [INFO]: GET /api/environments/status
+2025-04-25 23:40:17 [ERROR]: Status check failed:
+2025-04-25 23:40:17 [ERROR]: Failed to fetch environment status
+2025-04-25 23:40:17 [ERROR]: Status check failed:
+2025-04-25 23:40:18 [INFO]: POST /api/deployments
+2025-04-25 23:40:18 [INFO]: New deployment request received
+2025-04-25 23:40:18 [INFO]: GET /api/environments/status
+2025-04-25 23:40:18 [ERROR]: Status check failed:
+2025-04-25 23:40:18 [ERROR]: Failed to fetch environment status
+2025-04-25 23:40:18 [ERROR]: Status check failed:
+2025-04-25 23:40:19 [INFO]: GET /api/environments/status
+2025-04-25 23:40:20 [ERROR]: Status check failed:
+2025-04-25 23:40:20 [ERROR]: Failed to fetch environment status
+2025-04-25 23:40:20 [ERROR]: Status check failed:
+2025-04-25 23:40:21 [INFO]: Deployment successful to blue branch
+2025-04-25 23:40:21 [INFO]: GitHub deployment successful
+2025-04-25 23:40:21 [INFO]: Netlify build triggered
+2025-04-25 23:40:26 [INFO]: GET /api/environments/status
+2025-04-25 23:40:29 [ERROR]: Status check failed:
+2025-04-25 23:40:29 [ERROR]: Failed to fetch environment status
+2025-04-25 23:40:29 [ERROR]: Status check failed:
+2025-04-25 23:40:43 [INFO]: GET /api/environments/status
+2025-04-25 23:40:58 [ERROR]: Status check failed:
+2025-04-25 23:40:58 [ERROR]: Failed to fetch environment status
+2025-04-25 23:40:58 [ERROR]: Status check failed:
+2025-04-25 23:40:59 [INFO]: GET /api/environments/status
+2025-04-25 23:40:59 [ERROR]: Status check failed:
+2025-04-25 23:40:59 [ERROR]: Failed to fetch environment status
+2025-04-25 23:40:59 [ERROR]: Status check failed:
+2025-04-25 23:41:01 [INFO]: GET /api/environments/status
+2025-04-25 23:41:01 [ERROR]: Status check failed:
+2025-04-25 23:41:01 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:01 [ERROR]: Status check failed:
+2025-04-25 23:41:03 [INFO]: GET /api/environments/status
+2025-04-25 23:41:03 [ERROR]: Status check failed:
+2025-04-25 23:41:03 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:03 [ERROR]: Status check failed:
+2025-04-25 23:41:14 [INFO]: GET /api/environments/status
+2025-04-25 23:41:20 [ERROR]: Status check failed:
+2025-04-25 23:41:20 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:20 [ERROR]: Status check failed:
+2025-04-25 23:41:21 [INFO]: GET /api/environments/status
+2025-04-25 23:41:21 [ERROR]: Status check failed:
+2025-04-25 23:41:21 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:21 [ERROR]: Status check failed:
+2025-04-25 23:41:23 [INFO]: GET /api/environments/status
+2025-04-25 23:41:23 [ERROR]: Status check failed:
+2025-04-25 23:41:23 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:23 [ERROR]: Status check failed:
+2025-04-25 23:41:25 [INFO]: GET /api/environments/status
+2025-04-25 23:41:25 [ERROR]: Status check failed:
+2025-04-25 23:41:25 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:25 [ERROR]: Status check failed:
+2025-04-25 23:41:43 [INFO]: GET /api/environments/status
+2025-04-25 23:41:45 [ERROR]: Status check failed:
+2025-04-25 23:41:45 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:45 [ERROR]: Status check failed:
+2025-04-25 23:41:46 [INFO]: GET /api/environments/status
+2025-04-25 23:41:47 [ERROR]: Status check failed:
+2025-04-25 23:41:47 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:47 [ERROR]: Status check failed:
+2025-04-25 23:41:48 [INFO]: GET /api/environments/status
+2025-04-25 23:41:48 [ERROR]: Status check failed:
+2025-04-25 23:41:48 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:48 [ERROR]: Status check failed:
+2025-04-25 23:41:49 [INFO]: GET /api/environments/status
+2025-04-25 23:41:49 [ERROR]: Status check failed:
+2025-04-25 23:41:49 [ERROR]: Failed to fetch environment status
+2025-04-25 23:41:49 [ERROR]: Status check failed:
+2025-04-25 23:41:54 [INFO]: POST /api/deployments
+2025-04-25 23:41:54 [INFO]: New deployment request received
+2025-04-25 23:41:57 [INFO]: Deployment successful to green branch
+2025-04-25 23:41:57 [INFO]: GitHub deployment successful
+2025-04-25 23:41:59 [INFO]: Netlify build triggered
+2025-04-25 23:42:02 [INFO]: GET /api/deployments/history/blue
+2025-04-25 23:42:04 [INFO]: GET /api/environments/status
+2025-04-25 23:42:04 [ERROR]: Status check failed:
+2025-04-25 23:42:04 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:06 [ERROR]: Status check failed:
+2025-04-25 23:42:14 [INFO]: GET /api/environments/status
+2025-04-25 23:42:15 [ERROR]: Status check failed:
+2025-04-25 23:42:15 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:16 [ERROR]: Status check failed:
+2025-04-25 23:42:17 [INFO]: GET /api/environments/status
+2025-04-25 23:42:17 [ERROR]: Status check failed:
+2025-04-25 23:42:17 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:17 [ERROR]: Status check failed:
+2025-04-25 23:42:19 [INFO]: GET /api/environments/status
+2025-04-25 23:42:19 [ERROR]: Status check failed:
+2025-04-25 23:42:19 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:19 [ERROR]: Status check failed:
+2025-04-25 23:42:21 [INFO]: GET /api/environments/status
+2025-04-25 23:42:21 [ERROR]: Status check failed:
+2025-04-25 23:42:21 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:21 [ERROR]: Status check failed:
+2025-04-25 23:42:43 [INFO]: GET /api/environments/status
+2025-04-25 23:42:46 [ERROR]: Status check failed:
+2025-04-25 23:42:46 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:46 [ERROR]: Status check failed:
+2025-04-25 23:42:48 [INFO]: GET /api/environments/status
+2025-04-25 23:42:48 [ERROR]: Status check failed:
+2025-04-25 23:42:48 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:48 [ERROR]: Status check failed:
+2025-04-25 23:42:50 [INFO]: GET /api/environments/status
+2025-04-25 23:42:50 [ERROR]: Status check failed:
+2025-04-25 23:42:50 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:50 [ERROR]: Status check failed:
+2025-04-25 23:42:52 [INFO]: GET /api/environments/status
+2025-04-25 23:42:52 [ERROR]: Status check failed:
+2025-04-25 23:42:52 [ERROR]: Failed to fetch environment status
+2025-04-25 23:42:52 [ERROR]: Status check failed:
+2025-04-25 23:43:13 [INFO]: GET /api/environments/status
+2025-04-25 23:43:16 [ERROR]: Status check failed:
+2025-04-25 23:43:16 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:16 [ERROR]: Status check failed:
+2025-04-25 23:43:17 [INFO]: GET /api/environments/status
+2025-04-25 23:43:17 [ERROR]: Status check failed:
+2025-04-25 23:43:17 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:17 [ERROR]: Status check failed:
+2025-04-25 23:43:18 [INFO]: GET /api/environments/status
+2025-04-25 23:43:18 [ERROR]: Status check failed:
+2025-04-25 23:43:18 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:18 [ERROR]: Status check failed:
+2025-04-25 23:43:19 [INFO]: GET /api/environments/status
+2025-04-25 23:43:20 [ERROR]: Status check failed:
+2025-04-25 23:43:20 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:20 [ERROR]: Status check failed:
+2025-04-25 23:43:44 [INFO]: GET /api/environments/status
+2025-04-25 23:43:46 [ERROR]: Status check failed:
+2025-04-25 23:43:46 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:46 [ERROR]: Status check failed:
+2025-04-25 23:43:48 [INFO]: GET /api/environments/status
+2025-04-25 23:43:48 [ERROR]: Status check failed:
+2025-04-25 23:43:48 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:48 [ERROR]: Status check failed:
+2025-04-25 23:43:50 [INFO]: GET /api/environments/status
+2025-04-25 23:43:50 [ERROR]: Status check failed:
+2025-04-25 23:43:50 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:50 [ERROR]: Status check failed:
+2025-04-25 23:43:52 [INFO]: GET /api/environments/status
+2025-04-25 23:43:52 [ERROR]: Status check failed:
+2025-04-25 23:43:52 [ERROR]: Failed to fetch environment status
+2025-04-25 23:43:52 [ERROR]: Status check failed:
+2025-04-25 23:44:14 [INFO]: GET /api/environments/status
+2025-04-25 23:44:16 [ERROR]: Status check failed:
+2025-04-25 23:44:16 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:16 [ERROR]: Status check failed:
+2025-04-25 23:44:18 [INFO]: GET /api/environments/status
+2025-04-25 23:44:18 [ERROR]: Status check failed:
+2025-04-25 23:44:18 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:18 [ERROR]: Status check failed:
+2025-04-25 23:44:20 [INFO]: GET /api/environments/status
+2025-04-25 23:44:20 [ERROR]: Status check failed:
+2025-04-25 23:44:20 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:20 [ERROR]: Status check failed:
+2025-04-25 23:44:22 [INFO]: GET /api/environments/status
+2025-04-25 23:44:22 [ERROR]: Status check failed:
+2025-04-25 23:44:22 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:22 [ERROR]: Status check failed:
+2025-04-25 23:44:46 [INFO]: GET /api/environments/status
+2025-04-25 23:44:47 [ERROR]: Status check failed:
+2025-04-25 23:44:47 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:48 [ERROR]: Status check failed:
+2025-04-25 23:44:49 [INFO]: GET /api/environments/status
+2025-04-25 23:44:49 [ERROR]: Status check failed:
+2025-04-25 23:44:49 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:49 [ERROR]: Status check failed:
+2025-04-25 23:44:51 [INFO]: GET /api/environments/status
+2025-04-25 23:44:51 [ERROR]: Status check failed:
+2025-04-25 23:44:51 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:51 [ERROR]: Status check failed:
+2025-04-25 23:44:53 [INFO]: GET /api/environments/status
+2025-04-25 23:44:53 [ERROR]: Status check failed:
+2025-04-25 23:44:53 [ERROR]: Failed to fetch environment status
+2025-04-25 23:44:53 [ERROR]: Status check failed:
+2025-04-25 23:45:46 [INFO]: GET /api/environments/status
+2025-04-25 23:45:48 [ERROR]: Status check failed:
+2025-04-25 23:45:48 [ERROR]: Failed to fetch environment status
+2025-04-25 23:45:48 [ERROR]: Status check failed:
+2025-04-25 23:45:50 [INFO]: GET /api/environments/status
+2025-04-25 23:45:50 [ERROR]: Status check failed:
+2025-04-25 23:45:50 [ERROR]: Failed to fetch environment status
+2025-04-25 23:45:50 [ERROR]: Status check failed:
+2025-04-25 23:45:52 [INFO]: GET /api/environments/status
+2025-04-25 23:45:52 [ERROR]: Status check failed:
+2025-04-25 23:45:52 [ERROR]: Failed to fetch environment status
+2025-04-25 23:45:52 [ERROR]: Status check failed:
+2025-04-25 23:45:54 [INFO]: GET /api/environments/status
+2025-04-25 23:45:54 [ERROR]: Status check failed:
+2025-04-25 23:45:54 [ERROR]: Failed to fetch environment status
+2025-04-25 23:45:54 [ERROR]: Status check failed:
+2025-04-26 17:28:09 [INFO]: Logger initialized in development mode
+2025-04-26 17:28:09 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-26 17:28:14 [INFO]: Netlify service connected successfully
+2025-04-26 17:28:14 [INFO]: WebSocket server running on path /deployease
+2025-04-26 17:28:14 [INFO]: WebSocket service initialized
+2025-04-26 17:28:14 [INFO]: Server running in development mode on port 3000
+2025-04-26 17:28:14 [INFO]: GET /api/environments/status
+2025-04-26 17:28:14 [INFO]: GET /api/environments/status
+2025-04-26 17:28:16 [ERROR]: Status check failed:
+2025-04-26 17:28:16 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:16 [INFO]: GET /api/environments/status
+2025-04-26 17:28:17 [ERROR]: Status check failed:
+2025-04-26 17:28:17 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:17 [ERROR]: Status check failed:
+2025-04-26 17:28:17 [ERROR]: Status check failed:
+2025-04-26 17:28:17 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:17 [ERROR]: Status check failed:
+2025-04-26 17:28:18 [INFO]: GET /api/environments/status
+2025-04-26 17:28:18 [ERROR]: Status check failed:
+2025-04-26 17:28:18 [ERROR]: Status check failed:
+2025-04-26 17:28:18 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:18 [ERROR]: Status check failed:
+2025-04-26 17:28:20 [INFO]: GET /api/environments/status
+2025-04-26 17:28:20 [ERROR]: Status check failed:
+2025-04-26 17:28:20 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:20 [ERROR]: Status check failed:
+2025-04-26 17:28:21 [INFO]: GET /api/environments/status
+2025-04-26 17:28:21 [ERROR]: Status check failed:
+2025-04-26 17:28:21 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:21 [ERROR]: Status check failed:
+2025-04-26 17:28:45 [INFO]: GET /api/environments/status
+2025-04-26 17:28:47 [ERROR]: Status check failed:
+2025-04-26 17:28:47 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:47 [ERROR]: Status check failed:
+2025-04-26 17:28:49 [INFO]: GET /api/environments/status
+2025-04-26 17:28:49 [ERROR]: Status check failed:
+2025-04-26 17:28:49 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:49 [ERROR]: Status check failed:
+2025-04-26 17:28:51 [INFO]: GET /api/environments/status
+2025-04-26 17:28:51 [ERROR]: Status check failed:
+2025-04-26 17:28:51 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:51 [ERROR]: Status check failed:
+2025-04-26 17:28:53 [INFO]: GET /api/environments/status
+2025-04-26 17:28:53 [ERROR]: Status check failed:
+2025-04-26 17:28:53 [ERROR]: Failed to fetch environment status
+2025-04-26 17:28:53 [ERROR]: Status check failed:
+2025-04-26 17:29:15 [INFO]: GET /api/environments/status
+2025-04-26 17:29:16 [ERROR]: Status check failed:
+2025-04-26 17:29:16 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:16 [ERROR]: Status check failed:
+2025-04-26 17:29:18 [INFO]: GET /api/environments/status
+2025-04-26 17:29:18 [ERROR]: Status check failed:
+2025-04-26 17:29:18 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:18 [ERROR]: Status check failed:
+2025-04-26 17:29:20 [INFO]: GET /api/environments/status
+2025-04-26 17:29:20 [ERROR]: Status check failed:
+2025-04-26 17:29:20 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:20 [ERROR]: Status check failed:
+2025-04-26 17:29:22 [INFO]: GET /api/environments/status
+2025-04-26 17:29:22 [ERROR]: Status check failed:
+2025-04-26 17:29:22 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:22 [ERROR]: Status check failed:
+2025-04-26 17:29:45 [INFO]: GET /api/environments/status
+2025-04-26 17:29:46 [ERROR]: Status check failed:
+2025-04-26 17:29:46 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:46 [ERROR]: Status check failed:
+2025-04-26 17:29:48 [INFO]: GET /api/environments/status
+2025-04-26 17:29:48 [ERROR]: Status check failed:
+2025-04-26 17:29:48 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:48 [ERROR]: Status check failed:
+2025-04-26 17:29:50 [INFO]: GET /api/environments/status
+2025-04-26 17:29:50 [ERROR]: Status check failed:
+2025-04-26 17:29:50 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:50 [ERROR]: Status check failed:
+2025-04-26 17:29:52 [INFO]: GET /api/environments/status
+2025-04-26 17:29:52 [ERROR]: Status check failed:
+2025-04-26 17:29:52 [ERROR]: Failed to fetch environment status
+2025-04-26 17:29:52 [ERROR]: Status check failed:
+2025-04-26 17:30:15 [INFO]: GET /api/environments/status
+2025-04-26 17:30:16 [ERROR]: Status check failed:
+2025-04-26 17:30:16 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:16 [ERROR]: Status check failed:
+2025-04-26 17:30:17 [INFO]: GET /api/environments/status
+2025-04-26 17:30:17 [ERROR]: Status check failed:
+2025-04-26 17:30:17 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:17 [ERROR]: Status check failed:
+2025-04-26 17:30:19 [INFO]: GET /api/environments/status
+2025-04-26 17:30:19 [ERROR]: Status check failed:
+2025-04-26 17:30:19 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:19 [ERROR]: Status check failed:
+2025-04-26 17:30:21 [INFO]: GET /api/environments/status
+2025-04-26 17:30:21 [ERROR]: Status check failed:
+2025-04-26 17:30:21 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:21 [ERROR]: Status check failed:
+2025-04-26 17:30:45 [INFO]: GET /api/environments/status
+2025-04-26 17:30:46 [ERROR]: Status check failed:
+2025-04-26 17:30:46 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:46 [ERROR]: Status check failed:
+2025-04-26 17:30:47 [INFO]: GET /api/environments/status
+2025-04-26 17:30:47 [ERROR]: Status check failed:
+2025-04-26 17:30:47 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:47 [ERROR]: Status check failed:
+2025-04-26 17:30:49 [INFO]: GET /api/environments/status
+2025-04-26 17:30:49 [ERROR]: Status check failed:
+2025-04-26 17:30:49 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:49 [ERROR]: Status check failed:
+2025-04-26 17:30:51 [INFO]: GET /api/environments/status
+2025-04-26 17:30:51 [ERROR]: Status check failed:
+2025-04-26 17:30:51 [ERROR]: Failed to fetch environment status
+2025-04-26 17:30:51 [ERROR]: Status check failed:
+2025-04-26 17:31:46 [INFO]: GET /api/environments/status
+2025-04-26 17:31:49 [ERROR]: Status check failed:
+2025-04-26 17:31:49 [ERROR]: Failed to fetch environment status
+2025-04-26 17:31:49 [ERROR]: Status check failed:
+2025-04-26 17:31:50 [INFO]: GET /api/environments/status
+2025-04-26 17:31:50 [ERROR]: Status check failed:
+2025-04-26 17:31:50 [ERROR]: Failed to fetch environment status
+2025-04-26 17:31:50 [ERROR]: Status check failed:
+2025-04-26 17:31:52 [INFO]: GET /api/environments/status
+2025-04-26 17:31:52 [ERROR]: Status check failed:
+2025-04-26 17:31:52 [ERROR]: Failed to fetch environment status
+2025-04-26 17:31:52 [ERROR]: Status check failed:
+2025-04-26 17:31:54 [INFO]: GET /api/environments/status
+2025-04-26 17:31:54 [ERROR]: Status check failed:
+2025-04-26 17:31:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:31:54 [ERROR]: Status check failed:
+2025-04-26 17:32:47 [INFO]: GET /api/environments/status
+2025-04-26 17:32:49 [ERROR]: Status check failed:
+2025-04-26 17:32:49 [ERROR]: Failed to fetch environment status
+2025-04-26 17:32:49 [ERROR]: Status check failed:
+2025-04-26 17:32:51 [INFO]: GET /api/environments/status
+2025-04-26 17:32:51 [ERROR]: Status check failed:
+2025-04-26 17:32:51 [ERROR]: Failed to fetch environment status
+2025-04-26 17:32:51 [ERROR]: Status check failed:
+2025-04-26 17:32:53 [INFO]: GET /api/environments/status
+2025-04-26 17:32:53 [ERROR]: Status check failed:
+2025-04-26 17:32:53 [ERROR]: Failed to fetch environment status
+2025-04-26 17:32:53 [ERROR]: Status check failed:
+2025-04-26 17:32:55 [INFO]: GET /api/environments/status
+2025-04-26 17:32:55 [ERROR]: Status check failed:
+2025-04-26 17:32:55 [ERROR]: Failed to fetch environment status
+2025-04-26 17:32:55 [ERROR]: Status check failed:
+2025-04-26 17:33:48 [INFO]: GET /api/environments/status
+2025-04-26 17:33:50 [ERROR]: Status check failed:
+2025-04-26 17:33:50 [ERROR]: Failed to fetch environment status
+2025-04-26 17:33:50 [ERROR]: Status check failed:
+2025-04-26 17:33:52 [INFO]: GET /api/environments/status
+2025-04-26 17:33:52 [ERROR]: Status check failed:
+2025-04-26 17:33:52 [ERROR]: Failed to fetch environment status
+2025-04-26 17:33:52 [ERROR]: Status check failed:
+2025-04-26 17:33:54 [INFO]: GET /api/environments/status
+2025-04-26 17:33:54 [ERROR]: Status check failed:
+2025-04-26 17:33:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:33:54 [ERROR]: Status check failed:
+2025-04-26 17:33:56 [INFO]: GET /api/environments/status
+2025-04-26 17:33:56 [ERROR]: Status check failed:
+2025-04-26 17:33:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:33:56 [ERROR]: Status check failed:
+2025-04-26 17:34:49 [INFO]: GET /api/environments/status
+2025-04-26 17:34:51 [ERROR]: Status check failed:
+2025-04-26 17:34:51 [ERROR]: Failed to fetch environment status
+2025-04-26 17:34:51 [ERROR]: Status check failed:
+2025-04-26 17:34:53 [INFO]: GET /api/environments/status
+2025-04-26 17:34:53 [ERROR]: Status check failed:
+2025-04-26 17:34:53 [ERROR]: Failed to fetch environment status
+2025-04-26 17:34:53 [ERROR]: Status check failed:
+2025-04-26 17:34:55 [INFO]: GET /api/environments/status
+2025-04-26 17:34:55 [ERROR]: Status check failed:
+2025-04-26 17:34:55 [ERROR]: Failed to fetch environment status
+2025-04-26 17:34:55 [ERROR]: Status check failed:
+2025-04-26 17:34:57 [INFO]: GET /api/environments/status
+2025-04-26 17:34:57 [ERROR]: Status check failed:
+2025-04-26 17:34:57 [ERROR]: Failed to fetch environment status
+2025-04-26 17:34:57 [ERROR]: Status check failed:
+2025-04-26 17:35:50 [INFO]: GET /api/environments/status
+2025-04-26 17:35:52 [ERROR]: Status check failed:
+2025-04-26 17:35:52 [ERROR]: Failed to fetch environment status
+2025-04-26 17:35:52 [ERROR]: Status check failed:
+2025-04-26 17:35:54 [INFO]: GET /api/environments/status
+2025-04-26 17:35:54 [ERROR]: Status check failed:
+2025-04-26 17:35:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:35:54 [ERROR]: Status check failed:
+2025-04-26 17:35:56 [INFO]: GET /api/environments/status
+2025-04-26 17:35:56 [ERROR]: Status check failed:
+2025-04-26 17:35:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:35:56 [ERROR]: Status check failed:
+2025-04-26 17:35:58 [INFO]: GET /api/environments/status
+2025-04-26 17:35:58 [ERROR]: Status check failed:
+2025-04-26 17:35:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:35:58 [ERROR]: Status check failed:
+2025-04-26 17:36:51 [INFO]: GET /api/environments/status
+2025-04-26 17:36:53 [ERROR]: Status check failed:
+2025-04-26 17:36:53 [ERROR]: Failed to fetch environment status
+2025-04-26 17:36:53 [ERROR]: Status check failed:
+2025-04-26 17:36:55 [INFO]: GET /api/environments/status
+2025-04-26 17:36:55 [ERROR]: Status check failed:
+2025-04-26 17:36:55 [ERROR]: Failed to fetch environment status
+2025-04-26 17:36:55 [ERROR]: Status check failed:
+2025-04-26 17:36:57 [INFO]: GET /api/environments/status
+2025-04-26 17:36:57 [ERROR]: Status check failed:
+2025-04-26 17:36:57 [ERROR]: Failed to fetch environment status
+2025-04-26 17:36:57 [ERROR]: Status check failed:
+2025-04-26 17:36:59 [INFO]: GET /api/environments/status
+2025-04-26 17:36:59 [ERROR]: Status check failed:
+2025-04-26 17:36:59 [ERROR]: Failed to fetch environment status
+2025-04-26 17:36:59 [ERROR]: Status check failed:
+2025-04-26 17:37:52 [INFO]: GET /api/environments/status
+2025-04-26 17:37:53 [ERROR]: Status check failed:
+2025-04-26 17:37:53 [ERROR]: Failed to fetch environment status
+2025-04-26 17:37:54 [ERROR]: Status check failed:
+2025-04-26 17:37:55 [INFO]: GET /api/environments/status
+2025-04-26 17:37:55 [ERROR]: Status check failed:
+2025-04-26 17:37:55 [ERROR]: Failed to fetch environment status
+2025-04-26 17:37:55 [ERROR]: Status check failed:
+2025-04-26 17:37:57 [INFO]: GET /api/environments/status
+2025-04-26 17:37:57 [ERROR]: Status check failed:
+2025-04-26 17:37:57 [ERROR]: Failed to fetch environment status
+2025-04-26 17:37:57 [ERROR]: Status check failed:
+2025-04-26 17:37:59 [INFO]: GET /api/environments/status
+2025-04-26 17:37:59 [ERROR]: Status check failed:
+2025-04-26 17:37:59 [ERROR]: Failed to fetch environment status
+2025-04-26 17:37:59 [ERROR]: Status check failed:
+2025-04-26 17:38:52 [INFO]: GET /api/environments/status
+2025-04-26 17:38:54 [ERROR]: Status check failed:
+2025-04-26 17:38:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:38:54 [ERROR]: Status check failed:
+2025-04-26 17:38:56 [INFO]: GET /api/environments/status
+2025-04-26 17:38:56 [ERROR]: Status check failed:
+2025-04-26 17:38:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:38:56 [ERROR]: Status check failed:
+2025-04-26 17:38:58 [INFO]: GET /api/environments/status
+2025-04-26 17:38:58 [ERROR]: Status check failed:
+2025-04-26 17:38:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:38:58 [ERROR]: Status check failed:
+2025-04-26 17:39:00 [INFO]: GET /api/environments/status
+2025-04-26 17:39:00 [ERROR]: Status check failed:
+2025-04-26 17:39:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:39:00 [ERROR]: Status check failed:
+2025-04-26 17:39:52 [INFO]: GET /api/environments/status
+2025-04-26 17:39:54 [ERROR]: Status check failed:
+2025-04-26 17:39:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:39:54 [ERROR]: Status check failed:
+2025-04-26 17:39:56 [INFO]: GET /api/environments/status
+2025-04-26 17:39:56 [ERROR]: Status check failed:
+2025-04-26 17:39:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:39:56 [ERROR]: Status check failed:
+2025-04-26 17:39:58 [INFO]: GET /api/environments/status
+2025-04-26 17:39:58 [ERROR]: Status check failed:
+2025-04-26 17:39:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:39:58 [ERROR]: Status check failed:
+2025-04-26 17:40:00 [INFO]: GET /api/environments/status
+2025-04-26 17:40:00 [ERROR]: Status check failed:
+2025-04-26 17:40:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:40:00 [ERROR]: Status check failed:
+2025-04-26 17:40:52 [INFO]: GET /api/environments/status
+2025-04-26 17:40:54 [ERROR]: Status check failed:
+2025-04-26 17:40:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:40:54 [ERROR]: Status check failed:
+2025-04-26 17:40:56 [INFO]: GET /api/environments/status
+2025-04-26 17:40:56 [ERROR]: Status check failed:
+2025-04-26 17:40:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:40:56 [ERROR]: Status check failed:
+2025-04-26 17:40:58 [INFO]: GET /api/environments/status
+2025-04-26 17:40:58 [ERROR]: Status check failed:
+2025-04-26 17:40:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:40:58 [ERROR]: Status check failed:
+2025-04-26 17:41:00 [INFO]: GET /api/environments/status
+2025-04-26 17:41:00 [ERROR]: Status check failed:
+2025-04-26 17:41:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:41:00 [ERROR]: Status check failed:
+2025-04-26 17:41:52 [INFO]: GET /api/environments/status
+2025-04-26 17:41:54 [ERROR]: Status check failed:
+2025-04-26 17:41:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:41:54 [ERROR]: Status check failed:
+2025-04-26 17:41:56 [INFO]: GET /api/environments/status
+2025-04-26 17:41:56 [ERROR]: Status check failed:
+2025-04-26 17:41:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:41:56 [ERROR]: Status check failed:
+2025-04-26 17:41:58 [INFO]: GET /api/environments/status
+2025-04-26 17:41:58 [ERROR]: Status check failed:
+2025-04-26 17:41:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:41:58 [ERROR]: Status check failed:
+2025-04-26 17:42:00 [INFO]: GET /api/environments/status
+2025-04-26 17:42:00 [ERROR]: Status check failed:
+2025-04-26 17:42:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:42:00 [ERROR]: Status check failed:
+2025-04-26 17:42:52 [INFO]: GET /api/environments/status
+2025-04-26 17:42:54 [ERROR]: Status check failed:
+2025-04-26 17:42:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:42:54 [ERROR]: Status check failed:
+2025-04-26 17:42:56 [INFO]: GET /api/environments/status
+2025-04-26 17:42:56 [ERROR]: Status check failed:
+2025-04-26 17:42:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:42:56 [ERROR]: Status check failed:
+2025-04-26 17:42:58 [INFO]: GET /api/environments/status
+2025-04-26 17:42:58 [ERROR]: Status check failed:
+2025-04-26 17:42:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:42:58 [ERROR]: Status check failed:
+2025-04-26 17:43:00 [INFO]: GET /api/environments/status
+2025-04-26 17:43:00 [ERROR]: Status check failed:
+2025-04-26 17:43:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:43:00 [ERROR]: Status check failed:
+2025-04-26 17:43:52 [INFO]: GET /api/environments/status
+2025-04-26 17:43:54 [ERROR]: Status check failed:
+2025-04-26 17:43:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:43:54 [ERROR]: Status check failed:
+2025-04-26 17:43:56 [INFO]: GET /api/environments/status
+2025-04-26 17:43:56 [ERROR]: Status check failed:
+2025-04-26 17:43:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:43:56 [ERROR]: Status check failed:
+2025-04-26 17:43:58 [INFO]: GET /api/environments/status
+2025-04-26 17:43:58 [ERROR]: Status check failed:
+2025-04-26 17:43:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:43:58 [ERROR]: Status check failed:
+2025-04-26 17:44:00 [INFO]: GET /api/environments/status
+2025-04-26 17:44:00 [ERROR]: Status check failed:
+2025-04-26 17:44:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:44:00 [ERROR]: Status check failed:
+2025-04-26 17:44:52 [INFO]: GET /api/environments/status
+2025-04-26 17:44:54 [ERROR]: Status check failed:
+2025-04-26 17:44:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:44:54 [ERROR]: Status check failed:
+2025-04-26 17:44:56 [INFO]: GET /api/environments/status
+2025-04-26 17:44:56 [ERROR]: Status check failed:
+2025-04-26 17:44:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:44:56 [ERROR]: Status check failed:
+2025-04-26 17:44:58 [INFO]: GET /api/environments/status
+2025-04-26 17:44:58 [ERROR]: Status check failed:
+2025-04-26 17:44:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:44:58 [ERROR]: Status check failed:
+2025-04-26 17:45:00 [INFO]: GET /api/environments/status
+2025-04-26 17:45:00 [ERROR]: Status check failed:
+2025-04-26 17:45:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:45:00 [ERROR]: Status check failed:
+2025-04-26 17:45:52 [INFO]: GET /api/environments/status
+2025-04-26 17:45:54 [ERROR]: Status check failed:
+2025-04-26 17:45:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:45:54 [ERROR]: Status check failed:
+2025-04-26 17:45:56 [INFO]: GET /api/environments/status
+2025-04-26 17:45:56 [ERROR]: Status check failed:
+2025-04-26 17:45:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:45:56 [ERROR]: Status check failed:
+2025-04-26 17:45:58 [INFO]: GET /api/environments/status
+2025-04-26 17:45:58 [ERROR]: Status check failed:
+2025-04-26 17:45:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:45:58 [ERROR]: Status check failed:
+2025-04-26 17:46:00 [INFO]: GET /api/environments/status
+2025-04-26 17:46:00 [ERROR]: Status check failed:
+2025-04-26 17:46:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:46:00 [ERROR]: Status check failed:
+2025-04-26 17:46:52 [INFO]: GET /api/environments/status
+2025-04-26 17:46:54 [ERROR]: Status check failed:
+2025-04-26 17:46:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:46:54 [ERROR]: Status check failed:
+2025-04-26 17:46:56 [INFO]: GET /api/environments/status
+2025-04-26 17:46:56 [ERROR]: Status check failed:
+2025-04-26 17:46:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:46:56 [ERROR]: Status check failed:
+2025-04-26 17:46:58 [INFO]: GET /api/environments/status
+2025-04-26 17:46:58 [ERROR]: Status check failed:
+2025-04-26 17:46:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:46:58 [ERROR]: Status check failed:
+2025-04-26 17:47:00 [INFO]: GET /api/environments/status
+2025-04-26 17:47:00 [ERROR]: Status check failed:
+2025-04-26 17:47:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:47:00 [ERROR]: Status check failed:
+2025-04-26 17:47:52 [INFO]: GET /api/environments/status
+2025-04-26 17:47:54 [ERROR]: Status check failed:
+2025-04-26 17:47:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:47:54 [ERROR]: Status check failed:
+2025-04-26 17:47:56 [INFO]: GET /api/environments/status
+2025-04-26 17:47:56 [ERROR]: Status check failed:
+2025-04-26 17:47:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:47:56 [ERROR]: Status check failed:
+2025-04-26 17:47:58 [INFO]: GET /api/environments/status
+2025-04-26 17:47:58 [ERROR]: Status check failed:
+2025-04-26 17:47:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:47:58 [ERROR]: Status check failed:
+2025-04-26 17:48:00 [INFO]: GET /api/environments/status
+2025-04-26 17:48:00 [ERROR]: Status check failed:
+2025-04-26 17:48:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:48:00 [ERROR]: Status check failed:
+2025-04-26 17:48:52 [INFO]: GET /api/environments/status
+2025-04-26 17:48:54 [ERROR]: Status check failed:
+2025-04-26 17:48:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:48:54 [ERROR]: Status check failed:
+2025-04-26 17:48:56 [INFO]: GET /api/environments/status
+2025-04-26 17:48:56 [ERROR]: Status check failed:
+2025-04-26 17:48:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:48:56 [ERROR]: Status check failed:
+2025-04-26 17:48:58 [INFO]: GET /api/environments/status
+2025-04-26 17:48:58 [ERROR]: Status check failed:
+2025-04-26 17:48:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:48:58 [ERROR]: Status check failed:
+2025-04-26 17:49:00 [INFO]: GET /api/environments/status
+2025-04-26 17:49:00 [ERROR]: Status check failed:
+2025-04-26 17:49:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:49:00 [ERROR]: Status check failed:
+2025-04-26 17:49:52 [INFO]: GET /api/environments/status
+2025-04-26 17:49:54 [ERROR]: Status check failed:
+2025-04-26 17:49:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:49:54 [ERROR]: Status check failed:
+2025-04-26 17:49:56 [INFO]: GET /api/environments/status
+2025-04-26 17:49:56 [ERROR]: Status check failed:
+2025-04-26 17:49:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:49:56 [ERROR]: Status check failed:
+2025-04-26 17:49:58 [INFO]: GET /api/environments/status
+2025-04-26 17:49:58 [ERROR]: Status check failed:
+2025-04-26 17:49:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:49:58 [ERROR]: Status check failed:
+2025-04-26 17:50:00 [INFO]: GET /api/environments/status
+2025-04-26 17:50:00 [ERROR]: Status check failed:
+2025-04-26 17:50:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:50:00 [ERROR]: Status check failed:
+2025-04-26 17:50:52 [INFO]: GET /api/environments/status
+2025-04-26 17:50:54 [ERROR]: Status check failed:
+2025-04-26 17:50:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:50:54 [ERROR]: Status check failed:
+2025-04-26 17:50:56 [INFO]: GET /api/environments/status
+2025-04-26 17:50:56 [ERROR]: Status check failed:
+2025-04-26 17:50:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:50:56 [ERROR]: Status check failed:
+2025-04-26 17:50:58 [INFO]: GET /api/environments/status
+2025-04-26 17:50:58 [ERROR]: Status check failed:
+2025-04-26 17:50:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:50:58 [ERROR]: Status check failed:
+2025-04-26 17:51:00 [INFO]: GET /api/environments/status
+2025-04-26 17:51:00 [ERROR]: Status check failed:
+2025-04-26 17:51:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:51:00 [ERROR]: Status check failed:
+2025-04-26 17:51:52 [INFO]: GET /api/environments/status
+2025-04-26 17:51:55 [ERROR]: Status check failed:
+2025-04-26 17:51:55 [ERROR]: Failed to fetch environment status
+2025-04-26 17:51:56 [INFO]: GET /api/environments/status
+2025-04-26 17:51:56 [ERROR]: Status check failed:
+2025-04-26 17:51:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:51:58 [INFO]: GET /api/environments/status
+2025-04-26 17:51:58 [ERROR]: Status check failed:
+2025-04-26 17:51:58 [ERROR]: Status check failed:
+2025-04-26 17:51:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:51:59 [ERROR]: Status check failed:
+2025-04-26 17:52:00 [INFO]: GET /api/environments/status
+2025-04-26 17:52:00 [ERROR]: Status check failed:
+2025-04-26 17:52:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:52:00 [ERROR]: Status check failed:
+2025-04-26 17:52:01 [ERROR]: Status check failed:
+2025-04-26 17:52:52 [INFO]: GET /api/environments/status
+2025-04-26 17:52:54 [ERROR]: Status check failed:
+2025-04-26 17:52:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:52:54 [ERROR]: Status check failed:
+2025-04-26 17:52:56 [INFO]: GET /api/environments/status
+2025-04-26 17:52:56 [ERROR]: Status check failed:
+2025-04-26 17:52:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:52:56 [ERROR]: Status check failed:
+2025-04-26 17:52:58 [INFO]: GET /api/environments/status
+2025-04-26 17:52:58 [ERROR]: Status check failed:
+2025-04-26 17:52:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:52:58 [ERROR]: Status check failed:
+2025-04-26 17:53:00 [INFO]: GET /api/environments/status
+2025-04-26 17:53:00 [ERROR]: Status check failed:
+2025-04-26 17:53:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:53:00 [ERROR]: Status check failed:
+2025-04-26 17:53:52 [INFO]: GET /api/environments/status
+2025-04-26 17:53:55 [ERROR]: Status check failed:
+2025-04-26 17:53:55 [ERROR]: Failed to fetch environment status
+2025-04-26 17:53:55 [ERROR]: Status check failed:
+2025-04-26 17:53:57 [INFO]: GET /api/environments/status
+2025-04-26 17:53:58 [ERROR]: Status check failed:
+2025-04-26 17:53:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:53:58 [ERROR]: Status check failed:
+2025-04-26 17:53:59 [INFO]: GET /api/environments/status
+2025-04-26 17:53:59 [ERROR]: Status check failed:
+2025-04-26 17:53:59 [ERROR]: Failed to fetch environment status
+2025-04-26 17:53:59 [ERROR]: Status check failed:
+2025-04-26 17:54:01 [INFO]: GET /api/environments/status
+2025-04-26 17:54:01 [ERROR]: Status check failed:
+2025-04-26 17:54:01 [ERROR]: Failed to fetch environment status
+2025-04-26 17:54:01 [ERROR]: Status check failed:
+2025-04-26 17:54:52 [INFO]: GET /api/environments/status
+2025-04-26 17:54:55 [ERROR]: Status check failed:
+2025-04-26 17:54:55 [ERROR]: Failed to fetch environment status
+2025-04-26 17:54:55 [ERROR]: Status check failed:
+2025-04-26 17:54:56 [INFO]: GET /api/environments/status
+2025-04-26 17:54:56 [ERROR]: Status check failed:
+2025-04-26 17:54:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:54:56 [ERROR]: Status check failed:
+2025-04-26 17:54:58 [INFO]: GET /api/environments/status
+2025-04-26 17:54:58 [ERROR]: Status check failed:
+2025-04-26 17:54:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:54:58 [ERROR]: Status check failed:
+2025-04-26 17:55:00 [INFO]: GET /api/environments/status
+2025-04-26 17:55:00 [ERROR]: Status check failed:
+2025-04-26 17:55:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:55:00 [ERROR]: Status check failed:
+2025-04-26 17:55:52 [INFO]: GET /api/environments/status
+2025-04-26 17:55:54 [ERROR]: Status check failed:
+2025-04-26 17:55:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:55:54 [ERROR]: Status check failed:
+2025-04-26 17:55:56 [INFO]: GET /api/environments/status
+2025-04-26 17:55:56 [ERROR]: Status check failed:
+2025-04-26 17:55:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:55:56 [ERROR]: Status check failed:
+2025-04-26 17:55:58 [INFO]: GET /api/environments/status
+2025-04-26 17:55:58 [ERROR]: Status check failed:
+2025-04-26 17:55:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:55:58 [ERROR]: Status check failed:
+2025-04-26 17:56:00 [INFO]: GET /api/environments/status
+2025-04-26 17:56:00 [ERROR]: Status check failed:
+2025-04-26 17:56:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:56:00 [ERROR]: Status check failed:
+2025-04-26 17:56:52 [INFO]: GET /api/environments/status
+2025-04-26 17:56:54 [ERROR]: Status check failed:
+2025-04-26 17:56:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:56:54 [ERROR]: Status check failed:
+2025-04-26 17:56:56 [INFO]: GET /api/environments/status
+2025-04-26 17:56:56 [ERROR]: Status check failed:
+2025-04-26 17:56:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:56:56 [ERROR]: Status check failed:
+2025-04-26 17:56:58 [INFO]: GET /api/environments/status
+2025-04-26 17:56:58 [ERROR]: Status check failed:
+2025-04-26 17:56:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:56:58 [ERROR]: Status check failed:
+2025-04-26 17:57:00 [INFO]: GET /api/environments/status
+2025-04-26 17:57:00 [ERROR]: Status check failed:
+2025-04-26 17:57:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:57:00 [ERROR]: Status check failed:
+2025-04-26 17:57:52 [INFO]: GET /api/environments/status
+2025-04-26 17:57:54 [ERROR]: Status check failed:
+2025-04-26 17:57:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:57:55 [ERROR]: Status check failed:
+2025-04-26 17:57:56 [INFO]: GET /api/environments/status
+2025-04-26 17:57:56 [ERROR]: Status check failed:
+2025-04-26 17:57:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:57:56 [ERROR]: Status check failed:
+2025-04-26 17:57:58 [INFO]: GET /api/environments/status
+2025-04-26 17:57:58 [ERROR]: Status check failed:
+2025-04-26 17:57:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:57:58 [ERROR]: Status check failed:
+2025-04-26 17:58:00 [INFO]: GET /api/environments/status
+2025-04-26 17:58:00 [ERROR]: Status check failed:
+2025-04-26 17:58:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:58:00 [ERROR]: Status check failed:
+2025-04-26 17:58:52 [INFO]: GET /api/environments/status
+2025-04-26 17:58:54 [ERROR]: Status check failed:
+2025-04-26 17:58:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:58:54 [ERROR]: Status check failed:
+2025-04-26 17:58:56 [INFO]: GET /api/environments/status
+2025-04-26 17:58:56 [ERROR]: Status check failed:
+2025-04-26 17:58:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:58:56 [ERROR]: Status check failed:
+2025-04-26 17:58:58 [INFO]: GET /api/environments/status
+2025-04-26 17:58:58 [ERROR]: Status check failed:
+2025-04-26 17:58:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:58:58 [ERROR]: Status check failed:
+2025-04-26 17:59:00 [INFO]: GET /api/environments/status
+2025-04-26 17:59:00 [ERROR]: Status check failed:
+2025-04-26 17:59:00 [ERROR]: Failed to fetch environment status
+2025-04-26 17:59:00 [ERROR]: Status check failed:
+2025-04-26 17:59:52 [INFO]: GET /api/environments/status
+2025-04-26 17:59:54 [ERROR]: Status check failed:
+2025-04-26 17:59:54 [ERROR]: Failed to fetch environment status
+2025-04-26 17:59:54 [ERROR]: Status check failed:
+2025-04-26 17:59:56 [INFO]: GET /api/environments/status
+2025-04-26 17:59:56 [ERROR]: Status check failed:
+2025-04-26 17:59:56 [ERROR]: Failed to fetch environment status
+2025-04-26 17:59:56 [ERROR]: Status check failed:
+2025-04-26 17:59:58 [INFO]: GET /api/environments/status
+2025-04-26 17:59:58 [ERROR]: Status check failed:
+2025-04-26 17:59:58 [ERROR]: Failed to fetch environment status
+2025-04-26 17:59:58 [ERROR]: Status check failed:
+2025-04-26 18:00:00 [INFO]: GET /api/environments/status
+2025-04-26 18:00:00 [ERROR]: Status check failed:
+2025-04-26 18:00:00 [ERROR]: Failed to fetch environment status
+2025-04-26 18:00:00 [ERROR]: Status check failed:
+2025-04-26 18:00:52 [INFO]: GET /api/environments/status
+2025-04-26 18:00:55 [ERROR]: Status check failed:
+2025-04-26 18:00:55 [ERROR]: Failed to fetch environment status
+2025-04-26 18:00:55 [ERROR]: Status check failed:
+2025-04-26 18:00:56 [INFO]: GET /api/environments/status
+2025-04-26 18:00:56 [ERROR]: Status check failed:
+2025-04-26 18:00:56 [ERROR]: Failed to fetch environment status
+2025-04-26 18:00:56 [ERROR]: Status check failed:
+2025-04-26 18:00:58 [INFO]: GET /api/environments/status
+2025-04-26 18:00:58 [ERROR]: Status check failed:
+2025-04-26 18:00:58 [ERROR]: Failed to fetch environment status
+2025-04-26 18:00:58 [ERROR]: Status check failed:
+2025-04-26 18:01:00 [INFO]: GET /api/environments/status
+2025-04-26 18:01:00 [ERROR]: Status check failed:
+2025-04-26 18:01:00 [ERROR]: Failed to fetch environment status
+2025-04-26 18:01:00 [ERROR]: Status check failed:
+2025-04-26 18:01:52 [INFO]: GET /api/environments/status
+2025-04-26 18:01:54 [ERROR]: Status check failed:
+2025-04-26 18:01:54 [ERROR]: Failed to fetch environment status
+2025-04-26 18:01:54 [ERROR]: Status check failed:
+2025-04-26 18:01:56 [INFO]: GET /api/environments/status
+2025-04-26 18:01:56 [ERROR]: Status check failed:
+2025-04-26 18:01:56 [ERROR]: Failed to fetch environment status
+2025-04-26 18:01:56 [ERROR]: Status check failed:
+2025-04-26 18:01:58 [INFO]: GET /api/environments/status
+2025-04-26 18:01:58 [ERROR]: Status check failed:
+2025-04-26 18:01:58 [ERROR]: Failed to fetch environment status
+2025-04-26 18:01:58 [ERROR]: Status check failed:
+2025-04-26 18:02:00 [INFO]: GET /api/environments/status
+2025-04-26 18:02:00 [ERROR]: Status check failed:
+2025-04-26 18:02:00 [ERROR]: Failed to fetch environment status
+2025-04-26 18:02:00 [ERROR]: Status check failed:
+2025-04-26 18:02:52 [INFO]: GET /api/environments/status
+2025-04-26 18:02:53 [ERROR]: Status check failed:
+2025-04-26 18:02:53 [ERROR]: Failed to fetch environment status
+2025-04-26 18:02:53 [ERROR]: Status check failed:
+2025-04-26 18:02:55 [INFO]: GET /api/environments/status
+2025-04-26 18:02:55 [ERROR]: Status check failed:
+2025-04-26 18:02:55 [ERROR]: Failed to fetch environment status
+2025-04-26 18:02:55 [ERROR]: Status check failed:
+2025-04-26 18:02:57 [INFO]: GET /api/environments/status
+2025-04-26 18:02:57 [ERROR]: Status check failed:
+2025-04-26 18:02:57 [ERROR]: Failed to fetch environment status
+2025-04-26 18:02:57 [ERROR]: Status check failed:
+2025-04-26 18:02:59 [INFO]: GET /api/environments/status
+2025-04-26 18:02:59 [ERROR]: Status check failed:
+2025-04-26 18:02:59 [ERROR]: Failed to fetch environment status
+2025-04-26 18:02:59 [ERROR]: Status check failed:
+2025-04-26 18:03:52 [INFO]: GET /api/environments/status
+2025-04-26 18:03:54 [ERROR]: Status check failed:
+2025-04-26 18:03:54 [ERROR]: Failed to fetch environment status
+2025-04-26 18:03:54 [ERROR]: Status check failed:
+2025-04-26 18:03:56 [INFO]: GET /api/environments/status
+2025-04-26 18:03:56 [ERROR]: Status check failed:
+2025-04-26 18:03:56 [ERROR]: Failed to fetch environment status
+2025-04-26 18:03:56 [ERROR]: Status check failed:
+2025-04-26 18:03:58 [INFO]: GET /api/environments/status
+2025-04-26 18:03:58 [ERROR]: Status check failed:
+2025-04-26 18:03:58 [ERROR]: Failed to fetch environment status
+2025-04-26 18:03:58 [ERROR]: Status check failed:
+2025-04-26 18:04:00 [INFO]: GET /api/environments/status
+2025-04-26 18:04:00 [ERROR]: Status check failed:
+2025-04-26 18:04:00 [ERROR]: Failed to fetch environment status
+2025-04-26 18:04:00 [ERROR]: Status check failed:
+2025-04-26 19:12:41 [INFO]: Logger initialized in development mode
+2025-04-26 19:12:41 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-26 19:12:43 [INFO]: Netlify service connected successfully
+2025-04-26 19:12:43 [INFO]: WebSocket server running on path /deployease
+2025-04-26 19:12:43 [INFO]: WebSocket service initialized
+2025-04-26 19:12:43 [INFO]: Server running in development mode on port 3000
+2025-04-26 19:13:03 [INFO]: GET /api/environments/status
+2025-04-26 19:13:03 [INFO]: GET /api/environments/status
+2025-04-26 19:13:04 [ERROR]: Status check failed:
+2025-04-26 19:13:04 [ERROR]: Failed to fetch environment status
+2025-04-26 19:13:04 [ERROR]: Status check failed:
+2025-04-26 19:13:05 [ERROR]: Status check failed:
+2025-04-26 19:13:05 [ERROR]: Failed to fetch environment status
+2025-04-26 19:13:05 [INFO]: GET /api/environments/status
+2025-04-26 19:13:05 [ERROR]: Status check failed:
+2025-04-26 19:13:05 [ERROR]: Failed to fetch environment status
+2025-04-26 19:13:05 [ERROR]: Status check failed:
+2025-04-26 19:13:05 [ERROR]: Status check failed:
+2025-04-26 19:13:06 [INFO]: GET /api/environments/status
+2025-04-26 19:13:06 [ERROR]: Status check failed:
+2025-04-26 19:13:06 [ERROR]: Failed to fetch environment status
+2025-04-26 19:13:06 [ERROR]: Status check failed:
+2025-04-26 19:13:07 [INFO]: GET /api/environments/status
+2025-04-26 19:13:07 [ERROR]: Status check failed:
+2025-04-26 19:13:07 [ERROR]: Failed to fetch environment status
+2025-04-26 19:13:07 [ERROR]: Status check failed:
+2025-04-26 19:13:08 [INFO]: GET /api/environments/status
+2025-04-26 19:13:08 [ERROR]: Status check failed:
+2025-04-26 19:13:08 [ERROR]: Failed to fetch environment status
+2025-04-26 19:13:08 [ERROR]: Status check failed:
+2025-04-26 22:09:19 [INFO]: Logger initialized in development mode
+2025-04-26 22:09:19 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-26 22:09:20 [INFO]: Netlify connection verified
+2025-04-26 22:09:20 [INFO]: Netlify service connected successfully
+2025-04-26 22:09:20 [INFO]: WebSocket server initialized
+2025-04-26 22:09:20 [INFO]: WebSocket service initialized
+2025-04-26 22:09:20 [INFO]: Server running in development mode on port 3000
+2025-04-26 22:09:29 [INFO]: GET /api/environments/status
+2025-04-26 22:09:29 [INFO]: GET /api/environments/status
+2025-04-26 22:09:30 [ERROR]: Status check failed:
+2025-04-26 22:09:30 [ERROR]: Status check failed:
+2025-04-26 22:09:30 [ERROR]: Status check failed:
+2025-04-26 22:09:30 [ERROR]: Status check failed:
+2025-04-26 22:09:30 [INFO]: GET /api/environments/status
+2025-04-26 22:09:59 [INFO]: GET /api/environments/status
+2025-04-26 22:10:29 [INFO]: GET /api/environments/status
+2025-04-26 22:10:30 [ERROR]: Status check failed:
+2025-04-26 22:10:30 [ERROR]: Status check failed:
+2025-04-26 22:10:38 [INFO]: POST /api/environments/switch
+2025-04-26 22:10:38 [INFO]: POST /api/environments/switch
+2025-04-26 22:10:43 [INFO]: POST /api/environments/switch
+2025-04-26 22:10:43 [INFO]: POST /api/environments/switch
+2025-04-26 22:10:47 [INFO]: POST /api/environments/switch
+2025-04-26 22:10:47 [INFO]: POST /api/environments/switch
+2025-04-26 22:10:57 [INFO]: GET /api/environments/status
+2025-04-26 22:10:57 [INFO]: GET /api/environments/status
+2025-04-26 22:10:59 [INFO]: GET /api/environments/status
+2025-04-26 22:11:00 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:01 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:02 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:02 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:02 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:03 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:03 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:04 [INFO]: GET /api/deployments/history/green
+2025-04-26 22:11:05 [INFO]: GET /api/environments/status
+2025-04-26 22:11:06 [ERROR]: Status check failed:
+2025-04-26 22:11:06 [ERROR]: Status check failed:
+2025-04-26 22:11:30 [INFO]: GET /api/environments/status
+2025-04-26 22:12:00 [INFO]: GET /api/environments/status
+2025-04-26 22:12:01 [ERROR]: Status check failed:
+2025-04-26 22:12:01 [ERROR]: Status check failed:
+2025-04-27 12:11:16 [INFO]: Logger initialized in development mode
+2025-04-27 12:11:16 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 12:11:19 [INFO]: Netlify connection verified
+2025-04-27 12:11:19 [INFO]: Netlify service connected successfully
+2025-04-27 12:11:19 [INFO]: WebSocket server initialized
+2025-04-27 12:11:19 [INFO]: WebSocket service initialized
+2025-04-27 12:11:19 [INFO]: Server running in development mode on port 3000
+2025-04-27 12:11:22 [INFO]: GET /api/environments/status
+2025-04-27 12:11:22 [INFO]: GET /api/environments/status
+2025-04-27 12:11:22 [ERROR]: Status check failed:
+2025-04-27 12:11:24 [ERROR]: Status check failed:
+2025-04-27 12:11:24 [ERROR]: Status check failed:
+2025-04-27 12:11:24 [ERROR]: Status check failed:
+2025-04-27 12:11:24 [INFO]: GET /api/environments/status
+2025-04-27 12:11:50 [INFO]: POST /api/environments/switch
+2025-04-27 12:11:50 [INFO]: POST /api/environments/switch
+2025-04-27 12:11:52 [INFO]: GET /api/environments/status
+2025-04-27 12:11:54 [INFO]: POST /api/environments/switch
+2025-04-27 12:11:54 [INFO]: POST /api/environments/switch
+2025-04-27 21:26:36 [INFO]: Logger initialized in development mode
+2025-04-27 21:26:36 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:27:19 [INFO]: Logger initialized in development mode
+2025-04-27 21:27:19 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:27:44 [INFO]: Logger initialized in development mode
+2025-04-27 21:27:44 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:28:11 [INFO]: Logger initialized in development mode
+2025-04-27 21:28:11 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:28:51 [INFO]: Logger initialized in development mode
+2025-04-27 21:28:51 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:29:29 [INFO]: Logger initialized in development mode
+2025-04-27 21:29:29 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:29:44 [INFO]: Logger initialized in development mode
+2025-04-27 21:29:44 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:45:35 [INFO]: Logger initialized in development mode
+2025-04-27 21:45:35 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-27 21:45:48 [INFO]: Logger initialized in development mode
+2025-04-27 21:45:48 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 16:54:12 [INFO]: Logger initialized in development mode
+2025-04-28 16:54:12 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 16:57:24 [INFO]: Logger initialized in development mode
+2025-04-28 16:57:24 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 16:58:38 [INFO]: Logger initialized in development mode
+2025-04-28 16:58:38 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 16:58:51 [INFO]: Logger initialized in development mode
+2025-04-28 16:58:51 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 16:59:05 [INFO]: Logger initialized in development mode
+2025-04-28 16:59:05 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 16:59:36 [INFO]: Logger initialized in development mode
+2025-04-28 16:59:36 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 17:01:49 [INFO]: Logger initialized in development mode
+2025-04-28 17:01:49 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 17:02:03 [INFO]: Logger initialized in development mode
+2025-04-28 17:02:03 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 17:02:17 [INFO]: Logger initialized in development mode
+2025-04-28 17:02:17 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 17:02:20 [INFO]: Netlify connection verified
+2025-04-28 17:19:36 [INFO]: Logger initialized in development mode
+2025-04-28 17:19:36 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 17:19:38 [INFO]: Netlify connection verified
+2025-04-28 17:59:14 [INFO]: Logger initialized in development mode
+2025-04-28 17:59:14 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 17:59:17 [INFO]: Netlify connection verified
+2025-04-28 17:59:51 [INFO]: Logger initialized in development mode
+2025-04-28 17:59:51 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-28 17:59:54 [INFO]: Netlify connection verified
+2025-04-29 12:00:56 [INFO]: Logger initialized in development mode
+2025-04-29 12:00:56 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-29 12:00:58 [INFO]: Netlify connection verified
+2025-04-29 16:47:19 [INFO]: Logger initialized in development mode
+2025-04-29 16:47:19 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-29 16:47:24 [INFO]: Netlify connection verified
+2025-04-29 16:47:24 [INFO]: Netlify service connected successfully
+2025-04-29 16:47:24 [INFO]: WebSocket server initialized
+2025-04-29 16:47:24 [INFO]: WebSocket service initialized at /deployease
+2025-04-29 16:47:24 [INFO]: Server running in development mode on port 3000
+2025-04-29 16:47:24 [INFO]: WebSocket available at ws://localhost:3000/deployease
+2025-04-29 16:47:36 [INFO]: New WebSocket connection from ::1
+2025-04-29 16:47:36 [INFO]: Client disconnected: aLyVXVZZwIpTC2Fuc+kCzA==
+2025-04-29 16:47:36 [INFO]: New WebSocket connection from ::1
+2025-04-29 16:47:36 [ERROR]: Error processing message from u0iwoiAq1LdWacm6IES1uw==: this.send is not a function
+2025-04-29 16:47:36 [ERROR]: Error processing message from u0iwoiAq1LdWacm6IES1uw==: this.send is not a function
+2025-04-29 16:47:38 [INFO]: GET /api/environments/status - 200 (2663ms)
+2025-04-29 16:47:38 [INFO]: GET /api/environments/status - 200 (1ms)
+2025-04-29 16:47:39 [ERROR]: Failed to get deployment history: Not Found
+2025-04-29 16:47:39 [INFO]: GET /api/deployments/history/all - 500 (389ms)
+2025-04-29 16:48:01 [ERROR]: Error processing message from u0iwoiAq1LdWacm6IES1uw==: this.send is not a function
+2025-04-29 16:48:04 [INFO]: Client disconnected: u0iwoiAq1LdWacm6IES1uw==
+2025-04-29 16:48:09 [INFO]: SIGINT received. Shutting down gracefully...
+2025-04-30 16:15:48 [INFO]: Logger initialized in development mode
+2025-04-30 16:15:48 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-04-30 16:15:49 [INFO]: Netlify connection verified
+2025-04-30 16:15:49 [INFO]: Netlify service connected successfully
+2025-04-30 16:15:49 [INFO]: WebSocket server initialized
+2025-04-30 16:15:49 [INFO]: WebSocket service initialized at /deployease
+2025-04-30 16:15:49 [INFO]: Server running in development mode on port 3000
+2025-04-30 16:15:49 [INFO]: WebSocket available at ws://localhost:3000/deployease
+2025-04-30 16:15:53 [INFO]: New WebSocket connection from ::1
+2025-04-30 16:15:53 [INFO]: Client disconnected: il9WdJBo4q+3ECdNlzV/vw==
+2025-04-30 16:15:53 [INFO]: New WebSocket connection from ::1
+2025-04-30 16:15:53 [ERROR]: Error processing message from ZNDo9OT0Av/GhlrugVOG6g==: this.send is not a function
+2025-04-30 16:15:53 [ERROR]: Error processing message from ZNDo9OT0Av/GhlrugVOG6g==: this.send is not a function
+2025-04-30 16:15:56 [INFO]: GET /api/environments/status - 200 (2812ms)
+2025-04-30 16:15:56 [INFO]: GET /api/environments/status - 200 (1ms)
+2025-04-30 16:15:56 [ERROR]: Failed to get deployment history: Not Found
+2025-04-30 16:15:56 [INFO]: GET /api/deployments/history/all - 500 (465ms)
+2025-04-30 16:16:18 [ERROR]: Error processing message from ZNDo9OT0Av/GhlrugVOG6g==: this.send is not a function
+2025-04-30 16:16:23 [INFO]: GET /api/environments/status - 304 (1ms)
+2025-04-30 16:16:44 [ERROR]: Error processing message from ZNDo9OT0Av/GhlrugVOG6g==: this.send is not a function
+2025-04-30 16:16:56 [INFO]: GET /api/environments/status - 200 (2647ms)
+2025-04-30 16:17:09 [ERROR]: Error processing message from ZNDo9OT0Av/GhlrugVOG6g==: this.send is not a function
+2025-04-30 16:17:23 [INFO]: GET /api/environments/status - 200 (1ms)
+2025-04-30 16:17:34 [ERROR]: Error processing message from ZNDo9OT0Av/GhlrugVOG6g==: this.send is not a function
+2025-04-30 16:17:56 [INFO]: GET /api/environments/status - 200 (2792ms)
+2025-04-30 16:17:59 [ERROR]: Error processing message from ZNDo9OT0Av/GhlrugVOG6g==: this.send is not a function
+2025-04-30 16:18:01 [INFO]: Client disconnected: ZNDo9OT0Av/GhlrugVOG6g==
+2025-04-30 16:18:01 [INFO]: New WebSocket connection from ::1
+2025-04-30 16:18:01 [INFO]: Client disconnected: pmYzW8GWqMAAR/F/+9Om8Q==
+2025-04-30 16:18:01 [INFO]: GET /api/environments/status - 200 (2ms)
+2025-04-30 16:18:01 [INFO]: New WebSocket connection from ::1
+2025-04-30 16:18:01 [INFO]: GET /api/environments/status - 304 (3ms)
+2025-04-30 16:18:01 [INFO]: GET /api/environments/status - 304 (1ms)
+2025-04-30 16:18:01 [ERROR]: Error processing message from qnOjkCt0ENzMobsXR47qfA==: this.send is not a function
+2025-04-30 16:18:01 [ERROR]: Error processing message from qnOjkCt0ENzMobsXR47qfA==: this.send is not a function
+2025-04-30 16:18:02 [ERROR]: Failed to get deployment history: Not Found
+2025-04-30 16:18:02 [INFO]: GET /api/deployments/history/all - 500 (839ms)
+2025-04-30 16:18:27 [ERROR]: Error processing message from qnOjkCt0ENzMobsXR47qfA==: this.send is not a function
+2025-04-30 16:18:35 [INFO]: GET /api/environments/status - 200 (2713ms)
+2025-04-30 16:18:52 [ERROR]: Error processing message from qnOjkCt0ENzMobsXR47qfA==: this.send is not a function
+2025-04-30 16:19:01 [INFO]: GET /api/environments/status - 200 (1ms)
+2025-04-30 16:19:17 [ERROR]: Error processing message from qnOjkCt0ENzMobsXR47qfA==: this.send is not a function
+2025-04-30 16:19:31 [INFO]: Client disconnected: qnOjkCt0ENzMobsXR47qfA==
+2025-04-30 16:19:31 [INFO]: New WebSocket connection from ::1
+2025-04-30 16:19:31 [INFO]: Client disconnected: O5u3O14BsfUpWgLh0nPTMw==
+2025-04-30 16:19:31 [INFO]: New WebSocket connection from ::1
+2025-04-30 16:19:31 [ERROR]: Error processing message from GX+Ub4BiPU443Eakh5bHEg==: this.send is not a function
+2025-04-30 16:19:31 [ERROR]: Error processing message from GX+Ub4BiPU443Eakh5bHEg==: this.send is not a function
+2025-04-30 16:19:33 [INFO]: GET /api/environments/status - 200 (2492ms)
+2025-04-30 16:19:33 [INFO]: GET /api/environments/status - 200 (0ms)
+2025-04-30 16:19:34 [ERROR]: Failed to get deployment history: Not Found
+2025-04-30 16:19:34 [INFO]: GET /api/deployments/history/all - 500 (512ms)
+2025-04-30 16:19:56 [ERROR]: Error processing message from GX+Ub4BiPU443Eakh5bHEg==: this.send is not a function
+2025-04-30 16:20:01 [INFO]: GET /api/environments/status - 304 (0ms)
+2025-04-30 16:20:21 [ERROR]: Error processing message from GX+Ub4BiPU443Eakh5bHEg==: this.send is not a function
+2025-04-30 16:20:34 [INFO]: GET /api/environments/status - 200 (2854ms)
+2025-04-30 16:20:46 [ERROR]: Error processing message from GX+Ub4BiPU443Eakh5bHEg==: this.send is not a function
+2025-04-30 16:21:01 [INFO]: GET /api/environments/status - 200 (0ms)
+2025-04-30 16:21:08 [INFO]: Client disconnected: GX+Ub4BiPU443Eakh5bHEg==
