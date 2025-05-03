@@ -18,7 +18,8 @@ const elements = {
     refreshButton: null,
     darkModeToggle: null,
     toast: null,
-    deployModal: null
+    deployModal: null,
+    historySection: null
 };
 
 // Initialize DOM elements with null checks
@@ -35,6 +36,7 @@ function initializeElements() {
     elements.darkModeToggle = document.getElementById("darkModeToggle");
     elements.toast = document.getElementById('toast') || document.body;
     elements.deployModal = document.getElementById('deployModal');
+    elements.historySection = document.getElementById('deploymentHistoryTableBody');
 }
 
 // Improved refresh guard
@@ -91,9 +93,64 @@ async function updateEnvironmentStatus() {
             if (elements.greenReplicas) elements.greenReplicas.textContent = status.green?.replicas || "0/0";
         }
         
+        // Also update the deployment history when environment status is refreshed
+        fetchDeploymentHistory();
+        
     } catch (error) {
         console.error("Update error:", error);
     }
+}
+
+// ==================== Deployment History Functions ====================
+async function fetchDeploymentHistory(retries = 3) {
+    try {
+        const response = await fetch(`${config.apiBaseUrl}/api/deployments/history/all`);
+        if (!response.ok) {
+            throw new Error(`Failed to get deployment history: ${response.statusText}`);
+        }
+        const history = await response.json();
+        updateDeploymentHistoryUI(history);
+        return history;
+    } catch (error) {
+        console.error("Deployment history fetch error:", error);
+        
+        // Show a user-friendly error message
+        if (elements.historySection) {
+            elements.historySection.innerHTML = `
+                <tr>
+                    <td colspan="4" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i> 
+                        Failed to load deployment history. ${error.message}
+                    </td>
+                </tr>
+            `;
+        }
+        
+        if (retries > 0) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return fetchDeploymentHistory(retries - 1);
+        }
+        return null;
+    }
+}
+
+function updateDeploymentHistoryUI(history) {
+    if (!elements.historySection || !history) return;
+    
+    // Clear existing content
+    elements.historySection.innerHTML = '';
+    
+    // Add deployment history rows
+    history.forEach(deployment => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${deployment.id || 'N/A'}</td>
+            <td>${new Date(deployment.timestamp).toLocaleString()}</td>
+            <td>${deployment.branch || 'N/A'}</td>
+            <td class="status-${deployment.status.toLowerCase()}">${deployment.status}</td>
+        `;
+        elements.historySection.appendChild(row);
+    });
 }
 
 // ==================== Deployment Functions ====================
@@ -122,23 +179,27 @@ async function showDeployModal() {
     const deployBtn = document.getElementById('confirmDeployBtn');
     if (deployBtn) {
         deployBtn.onclick = async () => {
-            const image = document.getElementById('deployImage')?.value;
-            const environment = document.getElementById('deployEnvironment')?.value;
-            const replicas = document.getElementById('deployReplicas')?.value;
-            const switchAfter = document.getElementById('switchAfterDeploy')?.checked;
+            const deploymentType = document.getElementById('deploymentType')?.value;
+            const commitMessage = document.getElementById('commitMessage')?.value;
+            const files = document.getElementById('fileUpload')?.files;
 
             try {
                 deployBtn.disabled = true;
                 deployBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deploying...';
 
+                const formData = new FormData();
+                formData.append('type', deploymentType);
+                formData.append('message', commitMessage);
+                
+                if (files) {
+                    for (let i = 0; i < files.length; i++) {
+                        formData.append('files', files[i]);
+                    }
+                }
+
                 const response = await fetch(`${config.apiBaseUrl}/api/deployments`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        image, 
-                        environment: environment === 'auto' ? getInactiveEnvironment() : environment,
-                        replicas 
-                    })
+                    body: formData
                 });
 
                 if (!response.ok) {
@@ -148,10 +209,6 @@ async function showDeployModal() {
                 
                 const result = await response.json();
                 showToast(`Deployed: ${result.message}`, 'success');
-                
-                if (switchAfter) {
-                    await switchTraffic();
-                }
                 
                 elements.deployModal.style.display = 'none';
                 await updateEnvironmentStatus();
@@ -282,7 +339,7 @@ async function switchTraffic() {
         const response = await fetch(`${config.apiBaseUrl}/api/environments/switch`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ targetBranch }) // Added proper payload
+            body: JSON.stringify({ targetBranch })
         });
         
         if (!response.ok) {
@@ -325,7 +382,10 @@ function initializeDashboard() {
     // Button event listeners with null checks
     elements.rollbackButton?.addEventListener("click", showRollbackOptions);
     elements.switchTraffic?.addEventListener("click", switchTraffic);
-    elements.refreshButton?.addEventListener("click", updateEnvironmentStatus);
+    elements.refreshButton?.addEventListener("click", () => {
+        updateEnvironmentStatus();
+        fetchDeploymentHistory();
+    });
     
     // Initialize dark mode toggle
     if (elements.darkModeToggle) {
@@ -341,9 +401,13 @@ function initializeDashboard() {
     
     // Initial data load
     updateEnvironmentStatus();
+    fetchDeploymentHistory();
     
     // Auto-refresh with cleanup
-    refreshIntervalId = setInterval(updateEnvironmentStatus, REFRESH_INTERVAL);
+    refreshIntervalId = setInterval(() => {
+        updateEnvironmentStatus();
+        fetchDeploymentHistory();
+    }, REFRESH_INTERVAL);
     
     // Cleanup
     window.addEventListener('beforeunload', () => {

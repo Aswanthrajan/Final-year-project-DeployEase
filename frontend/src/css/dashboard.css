@@ -121,3 +121,40 @@ body.dark-mode .deployment-list th {
 body.dark-mode .deployment-list tr:hover {
     background-color: #555;
 }
+
+/* Dashboard grid layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Environment status card */
+.environment-status {
+    grid-column: 1 / -1;
+}
+
+/* Logs card */
+.logs-card {
+    height: 400px;
+}
+
+.logs-container {
+    height: 300px;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+body.dark-mode .logs-container {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}

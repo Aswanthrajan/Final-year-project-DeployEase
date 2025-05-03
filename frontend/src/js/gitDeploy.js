@@ -6,12 +6,15 @@ class GitDeployer {
         this.initializeElements();
         this.uploadedFiles = [];
         this.isDeploying = false;
+        this.ws = null;
+        this.wsReconnectAttempts = 0;
+        this.maxWsReconnectAttempts = 5;
         
         this.initEventListeners();
         this.loadInitialData();
+        this.initWebSocket();
     }
 
-    // Safely initialize all DOM elements with null checks
     initializeElements() {
         this.elements = {
             modal: document.getElementById('deployModal'),
@@ -37,10 +40,104 @@ class GitDeployer {
         };
     }
 
+    initWebSocket() {
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
+
+        this.ws = new WebSocket(config.websocketUrl);
+
+        this.ws.onopen = () => {
+            console.log('WebSocket connected');
+            this.wsReconnectAttempts = 0;
+            
+            // Send initial handshake
+            this.ws.send(JSON.stringify({
+                type: "subscribe",
+                channels: ["deployment_logs"],
+                client: "deployease-web",
+                timestamp: Date.now()
+            }));
+
+            // Clear log content on new connection
+            if (this.elements.logContent) {
+                this.elements.logContent.textContent = '✅ Connected to deployment logs\n';
+            }
+        };
+
+        this.ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                this.handleWsMessage(data);
+            } catch (error) {
+                console.error('Error parsing WebSocket message:', error);
+            }
+        };
+
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+            this.showToast('Connection error', 'error');
+        };
+
+        this.ws.onclose = (event) => {
+            if (event.code === 1000) return;
+
+            if (this.wsReconnectAttempts < this.maxWsReconnectAttempts) {
+                const delay = Math.min(3000 * Math.pow(2, this.wsReconnectAttempts), 30000);
+                console.log(`Reconnecting in ${delay/1000} seconds...`);
+                
+                setTimeout(() => {
+                    this.wsReconnectAttempts++;
+                    this.initWebSocket();
+                }, delay);
+            } else {
+                console.error('Max reconnection attempts reached');
+                this.showToast('Disconnected from logs', 'error');
+            }
+        };
+    }
+
+    handleWsMessage(data) {
+        if (!this.elements.logContent) return;
+
+        // Skip connection acknowledgements
+        if (data.type === "connection_ack" || data.type === "subscription_ack") {
+            return;
+        }
+
+        // Format timestamp for display
+        const timestamp = data.timestamp ? 
+            new Date(data.timestamp).toLocaleTimeString() : 
+            new Date().toLocaleTimeString();
+
+        // Handle different message types
+        switch(data.type) {
+            case "log":
+                this.elements.logContent.textContent += `[${timestamp}] ${data.message}\n`;
+                break;
+            case "system":
+                this.elements.logContent.textContent += `[${timestamp}] SYSTEM: ${data.message}\n`;
+                break;
+            case "deploy_status":
+                this.showToast(`Deployment ${data.status}: ${data.message}`, 
+                             data.status === 'success' ? 'success' : 'error');
+                this.elements.logContent.textContent += `[${timestamp}] DEPLOYMENT: ${data.message}\n`;
+                if (data.status === 'success' || data.status === 'failed') {
+                    this.loadInitialData();
+                }
+                break;
+            default:
+                console.log('Unhandled message type:', data.type, data);
+        }
+
+        // Scroll to bottom
+        this.elements.logContent.scrollTop = this.elements.logContent.scrollHeight;
+    }
+
     initEventListeners() {
         console.log('Initializing event listeners...');
         
-        // New Deployment buttons
         document.querySelectorAll('#newDeploymentBtn, #newDeploymentBtn2').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -48,7 +145,6 @@ class GitDeployer {
             });
         });
 
-        // File upload handling
         this.elements.fileUpload?.addEventListener('change', (e) => {
             this.handleFileSelect(e);
         });
@@ -57,7 +153,6 @@ class GitDeployer {
             this.elements.fileUpload?.click();
         });
         
-        // Drag and drop events
         const handleDrag = (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -78,7 +173,6 @@ class GitDeployer {
             this.handleFileSelect({ target: { files: e.dataTransfer.files } });
         });
         
-        // Modal close handlers
         document.querySelector('.close-modal')?.addEventListener('click', () => {
             this.hideModal();
         });
@@ -94,22 +188,26 @@ class GitDeployer {
             this.hideModal();
         });
         
-        // Form submission
         this.elements.deployForm?.addEventListener('submit', (e) => {
             e.preventDefault();
             this.handleDeploy();
         });
         
-        // Traffic switching - updated with proper payload
         this.elements.switchBtn?.addEventListener('click', async () => {
             await this.switchTraffic();
         });
         
-        // Refresh buttons
-        document.querySelectorAll('.refresh-card, #refreshButton, #refreshDeployments').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.loadInitialData();
-            });
+        const debounce = (func, delay) => {
+            let timer;
+            return function() {
+                clearTimeout(timer);
+                timer = setTimeout(() => func.apply(this, arguments), delay);
+            };
+        };
+        
+        const debouncedLoad = debounce(() => this.loadInitialData(), 500);
+        document.querySelectorAll('.refresh-card, #refreshButton').forEach(btn => {
+            btn.addEventListener('click', debouncedLoad);
         });
     }
 
@@ -148,7 +246,6 @@ class GitDeployer {
         const validTypes = ['text/html', 'text/css', 'application/javascript'];
         
         files.forEach(file => {
-            // Validate file type
             if (!validTypes.includes(file.type)) {
                 const ext = file.name.split('.').pop().toLowerCase();
                 if (!['html', 'css', 'js'].includes(ext)) {
@@ -157,13 +254,11 @@ class GitDeployer {
                 }
             }
 
-            // Validate file size
             if (file.size > 5 * 1024 * 1024) {
                 this.showToast(`Skipped ${file.name}: File too large (max 5MB)`, 'error');
                 return;
             }
 
-            // Check for duplicates
             if (!this.uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
                 this.uploadedFiles.push(file);
                 this.renderFileItem(file);
@@ -229,7 +324,6 @@ class GitDeployer {
                 this.elements.confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deploying...';
             }
 
-            // Read file contents
             const fileContents = await Promise.all(
                 this.uploadedFiles.map(async file => ({
                     path: file.name,
@@ -255,7 +349,14 @@ class GitDeployer {
             const result = await response.json();
             this.showToast(`Deployment to ${branch} started`, 'success');
             
-            this.monitorDeployment(result.deployId, branch);
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(JSON.stringify({
+                    type: 'subscribe',
+                    deployId: result.deployId,
+                    branch
+                }));
+            }
+            
             this.hideModal();
         } catch (error) {
             this.showToast(error.message, 'error');
@@ -296,7 +397,7 @@ class GitDeployer {
             const response = await fetch(`${config.apiBaseUrl}/api/environments/switch`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ targetBranch }) // Added proper payload
+                body: JSON.stringify({ targetBranch })
             });
 
             if (!response.ok) {
@@ -322,52 +423,13 @@ class GitDeployer {
         }
     }
 
-    monitorDeployment(deployId, branch) {
-        // Connect to WebSocket for real updates
-        const ws = new WebSocket(config.websocketUrl);
-        
-        ws.onopen = () => {
-            ws.send(JSON.stringify({
-                type: 'subscribe',
-                deployId,
-                branch
-            }));
-        };
-
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'deploy_status') {
-                this.showToast(`Deployment ${data.status}: ${data.message}`, data.status === 'success' ? 'success' : 'error');
-                if (data.status === 'success' || data.status === 'failed') {
-                    ws.close();
-                    this.loadInitialData();
-                }
-            }
-        };
-
-        ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-            // Fallback to timeout if WS fails
-            setTimeout(() => {
-                this.showToast(`Deployment to ${branch} complete!`, 'success');
-                this.loadInitialData();
-            }, 5000);
-        };
-    }
-
     async loadInitialData() {
         try {
-            // Load environment status
             const statusResponse = await fetch(`${config.apiBaseUrl}/api/environments/status`);
             if (!statusResponse.ok) throw new Error('Failed to fetch environment status');
             const status = await statusResponse.json();
             this.updateEnvironmentStatus(status);
             
-            // Load deployment history
-            const historyResponse = await fetch(`${config.apiBaseUrl}/api/deployments/history/all`);
-            if (!historyResponse.ok) throw new Error('Failed to fetch deployment history');
-            const history = await historyResponse.json();
-            this.updateDeploymentHistory(history);
         } catch (error) {
             this.showToast('Failed to load data', 'error');
             console.error('Initial data load error:', error);
@@ -394,38 +456,6 @@ class GitDeployer {
         if (this.elements.switchBtn) {
             this.elements.switchBtn.textContent = `Switch to ${status.blue?.status === "active" ? "Green" : "Blue"}`;
         }
-    }
-
-    updateDeploymentHistory(deployments) {
-        if (!this.elements.deploymentHistoryTable || !this.elements.recentDeploymentsTable) return;
-        
-        this.elements.deploymentHistoryTable.innerHTML = '';
-        this.elements.recentDeploymentsTable.innerHTML = '';
-        
-        const recentDeployments = deployments?.slice(0, 5) || [];
-        
-        deployments?.forEach(deploy => {
-            const row = this.createDeploymentRow(deploy);
-            if (row) this.elements.deploymentHistoryTable.appendChild(row.cloneNode(true));
-        });
-        
-        recentDeployments.forEach(deploy => {
-            const row = this.createDeploymentRow(deploy);
-            if (row) this.elements.recentDeploymentsTable.appendChild(row);
-        });
-    }
-
-    createDeploymentRow(deploy) {
-        if (!deploy) return null;
-        
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${deploy.id?.slice(0, 8) || 'N/A'}</td>
-            <td>${deploy.timestamp ? new Date(deploy.timestamp).toLocaleString() : 'Unknown'}</td>
-            <td>${deploy.branch || 'N/A'}</td>
-            <td><span class="status-badge ${deploy.status || 'unknown'}">${deploy.status || 'unknown'}</span></td>
-        `;
-        return row;
     }
 
     showToast(message, type = 'info') {

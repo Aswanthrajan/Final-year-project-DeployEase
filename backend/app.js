@@ -1,4 +1,3 @@
-// backend/app.js
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
@@ -59,10 +58,10 @@ app.get('/api/health', async (req, res) => {
   try {
     const [netlifyStatus, wsStatus] = await Promise.all([
       netlifyService.verifyConnection(),
-      Promise.resolve({
+      {
         connectedClients: websocketService.getConnectedClients(),
         status: websocketService.isInitialized() ? 'active' : 'inactive'
-      })
+      }
     ]);
 
     res.json({
@@ -73,7 +72,7 @@ app.get('/api/health', async (req, res) => {
       services: {
         netlify: netlifyStatus,
         websocket: wsStatus,
-        database: 'ok' // Add other services as needed
+        database: 'ok'
       },
       timestamp: new Date().toISOString()
     });
@@ -155,7 +154,9 @@ const startServer = async () => {
     // Start HTTP server
     server.listen(PORT, () => {
       logger.info(`Server running in ${NODE_ENV} mode on port ${PORT}`);
-      logger.info(`WebSocket available at ws://localhost:${PORT}/deployease`);
+      if (websocketService.isInitialized()) {
+        logger.info(`WebSocket available at ws://localhost:${PORT}/deployease`);
+      }
     });
 
     // Enhanced graceful shutdown
@@ -200,4 +201,4 @@ const startServer = async () => {
 // Start the server
 startServer();
 
-module.exports = app; // For testing purposes
+module.exports = app;

@@ -5,6 +5,36 @@ const logger = require('../utils/logger');
 
 class DeploymentController {
     /**
+     * Get deployment history for all environments (blue and green)
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     */
+    async getAllDeploymentHistory(req, res) {
+        try {
+            // Get history for both blue and green branches
+            const blueHistory = await gitService.getDeploymentHistory('blue');
+            const greenHistory = await gitService.getDeploymentHistory('green');
+            
+            res.status(200).json({
+                success: true,
+                blue: blueHistory,
+                green: greenHistory,
+                repository: process.env.REPOSITORY_URL
+            });
+        } catch (error) {
+            logger.error('Failed to get deployment history', {
+                error: error.message,
+                stack: error.stack
+            });
+            res.status(500).json({
+                success: false,
+                message: "Failed to get deployment history",
+                error: error.message
+            });
+        }
+    }
+
+    /**
      * Get deployment history for an environment (blue/green)
      * @param {Object} req - Express request object
      * @param {Object} res - Express response object

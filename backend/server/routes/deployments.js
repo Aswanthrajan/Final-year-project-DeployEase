@@ -1,10 +1,10 @@
 // backend/server/routes/deployments.js
-// backend/server/routes/deployments.js
 const express = require("express");
 const router = express.Router();
 const gitService = require("../services/gitService");
 const netlifyService = require("../services/netlifyService");
 const logger = require("../utils/logger");
+const deploymentController = require("../controllers/deploymentController");
 
 /**
  * @route POST /api/deployments
@@ -73,6 +73,35 @@ router.post("/", async (req, res) => {
         });
     }
 });
+
+/**
+ * @route GET /api/deployments/history/all
+ * @desc Get deployment history for all branches
+ */
+router.get("/history/all", async (req, res) => {
+  try {
+    // Get history for both blue and green branches
+    const blueHistory = await gitService.getDeploymentHistory('blue');
+    const greenHistory = await gitService.getDeploymentHistory('green');
+    
+    res.json({
+      success: true,
+      blue: blueHistory,
+      green: greenHistory,
+      repository: process.env.REPOSITORY_URL
+    });
+  } catch (error) {
+    logger.error('Failed to get deployment history', {
+      error: error.message,
+      stack: error.stack
+    });
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
 /**
  * @route GET /api/deployments/history/:branch
  * @desc Get deployment history for a branch
