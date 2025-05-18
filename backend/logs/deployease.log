@@ -20653,3 +20653,128 @@
 2025-05-18 10:22:52 [INFO]: WebSocket server is running on port 3001
 2025-05-18 10:22:52 [INFO]: WebSocket server successfully initialized on port 3001
 2025-05-18 10:24:04 [INFO]: SIGINT received - shutting down
+2025-05-18 12:26:34 [INFO]: Logger initialized in development mode
+2025-05-18 12:26:34 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 12:26:34 [INFO]: Server running in development mode on port 3000
+2025-05-18 12:26:34 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 12:26:34 [INFO]: WebSocket server is running on port 3001
+2025-05-18 12:26:34 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-18 14:48:34 [INFO]: SIGINT received - shutting down
+2025-05-18 14:48:43 [INFO]: Logger initialized in development mode
+2025-05-18 14:48:43 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 14:48:44 [INFO]: Server running in development mode on port 3000
+2025-05-18 14:48:44 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 14:48:44 [INFO]: WebSocket server is running on port 3001
+2025-05-18 14:48:44 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-18 14:48:45 [INFO]: New WebSocket connection from ::1 (ID: 1lqfju34avxnpr12h659cr)
+2025-05-18 14:48:45 [INFO]: Received subscribe message from 1lqfju34avxnpr12h659cr
+2025-05-18 14:49:05 [INFO]: SIGINT received - shutting down
+2025-05-18 14:49:05 [INFO]: WebSocket server closed gracefully
+2025-05-18 14:49:15 [INFO]: Logger initialized in development mode
+2025-05-18 14:49:15 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 14:49:15 [INFO]: Server running in development mode on port 3000
+2025-05-18 14:49:15 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 14:49:15 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-18 14:49:15 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:15 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:15 [ERROR]: WebSocket initialization failed (attempt 1/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:15 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-18 14:49:20 [INFO]: WebSocket initialization attempt 2/5
+2025-05-18 14:49:20 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-18 14:49:20 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:20 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:20 [ERROR]: WebSocket initialization failed (attempt 2/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:20 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-18 14:49:25 [INFO]: WebSocket initialization attempt 3/5
+2025-05-18 14:49:25 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-18 14:49:25 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:25 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:25 [ERROR]: WebSocket initialization failed (attempt 3/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:25 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-18 14:49:30 [INFO]: WebSocket initialization attempt 4/5
+2025-05-18 14:49:30 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-18 14:49:31 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:31 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:31 [ERROR]: WebSocket initialization failed (attempt 4/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:31 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-18 14:49:35 [INFO]: SIGINT received - shutting down
+2025-05-18 14:49:45 [INFO]: Logger initialized in development mode
+2025-05-18 14:49:45 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 14:49:45 [INFO]: Server running in development mode on port 3000
+2025-05-18 14:49:45 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 14:49:45 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-18 14:49:45 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:45 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:45 [ERROR]: WebSocket initialization failed (attempt 1/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:45 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-18 14:49:51 [INFO]: WebSocket initialization attempt 2/5
+2025-05-18 14:49:51 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-18 14:49:51 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:51 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:51 [ERROR]: WebSocket initialization failed (attempt 2/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-18 14:49:51 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-18 14:49:55 [INFO]: SIGINT received - shutting down
+2025-05-18 14:53:49 [INFO]: Logger initialized in development mode
+2025-05-18 14:53:49 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 14:53:49 [INFO]: Server running in development mode on port 3000
+2025-05-18 14:53:49 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 14:53:49 [INFO]: WebSocket server is running on port 3001
+2025-05-18 14:53:49 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-18 14:53:57 [INFO]: New WebSocket connection from ::1 (ID: r3uo01qvasmugczsrlaot)
+2025-05-18 14:53:57 [INFO]: Received subscribe message from r3uo01qvasmugczsrlaot
+2025-05-18 14:54:15 [INFO]: WebSocket connection closed: r3uo01qvasmugczsrlaot
+2025-05-18 14:54:18 [INFO]: SIGINT received - shutting down
