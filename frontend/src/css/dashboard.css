@@ -158,3 +158,106 @@ body.dark-mode .logs-container {
     background-color: #2d2d2d;
     color: #e0e0e0;
 }
+
+/* Add these new styles at the end of your dashboard.css file */
+
+/* Scrollable History Table */
+.scrollable-history {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+body.dark-mode .scrollable-history {
+    border-color: #555;
+}
+
+/* Current Environment Card */
+.current-environment {
+    background-color: #f8f9fa;
+    border-left: 4px solid #3498db;
+}
+
+body.dark-mode .current-environment {
+    background-color: #3c3c3c;
+    border-left-color: #2980b9;
+}
+
+.current-environment .active-environment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+}
+
+.active-env-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    color: #3498db;
+}
+
+body.dark-mode .active-env-badge {
+    color: #2980b9;
+}
+
+.active-env-badge i {
+    font-size: 1.5rem;
+}
+
+.site-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #3498db;
+    text-decoration: none;
+    padding: 8px 15px;
+    border: 1px solid #3498db;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.site-link:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+body.dark-mode .site-link {
+    color: #2980b9;
+    border-color: #2980b9;
+}
+
+body.dark-mode .site-link:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+/* Update dashboard grid layout */
+@media (min-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "status status"
+            "current logs";
+    }
+    
+    .environment-status {
+        grid-area: status;
+    }
+    
+    .current-environment {
+        grid-area: current;
+    }
+    
+    .logs-card {
+        grid-area: logs;
+    }
+}
+
+/* Remove section actions from deployment history */
+.section-actions {
+    display: none;
+}

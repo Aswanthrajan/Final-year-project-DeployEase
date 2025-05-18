@@ -1,204 +1,249 @@
-require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const logger = require('./server/utils/logger');
-const http = require('http');
+/**
+ * Main application server for DeployEase
+ * Handles Express server initialization, routes setup, and WebSocket integration
+ */
 
-// Initialize services first
-const netlifyService = require('./server/services/netlifyService');
+// Core dependencies
+const express = require('express');
+const cors = require('cors');
+const http = require('http');
+const path = require('path');
+const morgan = require('morgan');
+const dotenv = require('dotenv');
+const fs = require('fs');
+
+// Load environment variables
+dotenv.config();
+
+// Initialize logger
+const logger = require('./server/utils/logger');
+
+// Import services
 const websocketService = require('./server/services/websocketService');
 
-// Import routes
-const deploymentsRouter = require('./server/routes/deployments');
-const environmentsRouter = require('./server/routes/environments.js');
-const gitRouter = require('./server/routes/git');
+// Import route handlers
+const deploymentRoutes = require('./server/routes/deployments');
+const environmentRoutes = require('./server/routes/environments');
+const gitRoutes = require('./server/routes/git');
+
+// Constants
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const PORT = process.env.PORT || 3000;
+const WS_PORT = process.env.WS_PORT || 3001;
+const CONNECTION_RETRY_LIMIT = 5;
+const CONNECTION_RETRY_TIMEOUT = 5000; // 5 seconds
+
+// Application state
+let retryCount = 0;
+let retryTimeout = null;
+let deploymentStatusCache = {
+  blue: null,
+  green: null,
+  lastChecked: null
+};
 
 // Create Express app
 const app = express();
 
-// Configuration
-const PORT = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
-
-// Create HTTP server explicitly for WebSocket
+// Create HTTP server
 const server = http.createServer(app);
 
-// Enhanced CORS configuration
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN || '*',
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Socket-ID'],
-  credentials: true,
-  exposedHeaders: ['X-Socket-ID']
-};
-app.use(cors(corsOptions));
+// Configure middleware
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Body parser middleware with limits
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Set up request logging
+if (NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+} else {
+  // Create a write stream for access logs in production
+  const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'logs', 'access.log'),
+    { flags: 'a' }
+  );
+  app.use(morgan('combined', { stream: accessLogStream }));
+}
 
-// Enhanced request logging
-app.use((req, res, next) => {
-  const start = Date.now();
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    logger.info(`${req.method} ${req.originalUrl} - ${res.statusCode} (${duration}ms)`);
-  });
-  next();
-});
+// Configure routes
+app.use('/api/deployments', deploymentRoutes);
+app.use('/api/environments', environmentRoutes);
+app.use('/api/git', gitRoutes);
 
-// API Routes
-app.use('/api/deployments', deploymentsRouter);
-app.use('/api/environments', environmentsRouter);
-app.use('/api/git', gitRouter);
-
-// Enhanced Health Check Endpoint
-app.get('/api/health', async (req, res) => {
-  try {
-    const [netlifyStatus, wsStatus] = await Promise.all([
-      netlifyService.verifyConnection(),
-      {
-        connectedClients: websocketService.getConnectedClients(),
-        status: websocketService.isInitialized() ? 'active' : 'inactive'
-      }
-    ]);
-
-    res.json({
-      status: 'healthy',
-      version: process.env.npm_package_version || '1.0.0',
-      environment: NODE_ENV,
-      uptime: process.uptime(),
-      services: {
-        netlify: netlifyStatus,
-        websocket: wsStatus,
-        database: 'ok'
-      },
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    logger.error('Health check failed:', error);
-    res.status(503).json({
-      status: 'degraded',
-      error: 'Service unavailable',
-      details: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-});
-
-// WebSocket status endpoint
-app.get('/api/websocket', (req, res) => {
-  res.json({
-    enabled: process.env.ENABLE_WEBSOCKET !== 'false',
-    path: '/deployease',
-    connectedClients: websocketService.getConnectedClients(),
-    status: websocketService.isInitialized() ? 'active' : 'inactive'
-  });
-});
-
-// Enhanced Error Handling Middleware
-app.use((err, req, res, next) => {
-  const statusCode = err.status || 500;
-  const errorId = require('crypto').randomBytes(8).toString('hex');
-  
-  logger.error(`Request Error [${errorId}]: ${req.method} ${req.originalUrl}`, {
-    error: err.message,
-    stack: err.stack,
-    statusCode,
-    body: req.body,
-    params: req.params
-  });
-
-  res.status(statusCode).json({
-    error: NODE_ENV === 'development' ? {
-      message: err.message,
-      stack: err.stack,
-      errorId
-    } : {
-      message: 'An unexpected error occurred',
-      errorId
+// Health check endpoint
+app.get('/health', (req, res) => {
+  const healthData = {
+    status: 'UP',
+    timestamp: new Date().toISOString(),
+    environment: NODE_ENV,
+    websocket: {
+      connected: websocketService.isConnected(),
+      clients: websocketService.getClientCount(),
+      retryCount: retryCount
     },
-    timestamp: new Date().toISOString()
+    server: {
+      uptime: process.uptime(),
+      port: PORT
+    }
+  };
+  res.json(healthData);
+});
+
+// 404 handler
+app.use((req, res, next) => {
+  res.status(404).json({
+    message: 'Route not found',
+    path: req.originalUrl
   });
 });
 
-// Frontend Fallback (if serving frontend from backend)
-if (process.env.SERVE_FRONTEND === 'true') {
-  const frontendPath = path.join(__dirname, '../../frontend/public');
+// Error handler
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  logger.error(`Error: ${err.message}`);
+  logger.error(err.stack);
   
-  // Serve static files with cache control
-  app.use(express.static(frontendPath, {
-    maxAge: process.env.NODE_ENV === 'production' ? '1d' : '0'
-  }));
+  res.status(statusCode).json({
+    message: err.message,
+    error: NODE_ENV === 'development' ? err : {}
+  });
+});
 
-  // Handle SPA routing
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
+/**
+ * Initialize WebSocket service with retry capability
+ */
+function initializeWebSocket() {
+  if (retryCount >= CONNECTION_RETRY_LIMIT) {
+    logger.warn(`WebSocket initialization failed after ${CONNECTION_RETRY_LIMIT} attempts. Continuing without WebSocket functionality.`);
+    return Promise.resolve(false);
+  }
+
+  retryCount++;
+  logger.info(`WebSocket initialization attempt ${retryCount}/${CONNECTION_RETRY_LIMIT}`);
+
+  return websocketService.init(WS_PORT)
+    .then(() => {
+      logger.info(`WebSocket server successfully initialized on port ${WS_PORT}`);
+      retryCount = 0; // Reset counter on success
+      return true;
+    })
+    .catch(err => {
+      logger.error(`WebSocket initialization failed (attempt ${retryCount}/${CONNECTION_RETRY_LIMIT}): ${err.message || 'Unknown error'}`);
+      
+      if (retryCount < CONNECTION_RETRY_LIMIT) {
+        logger.info(`Retrying WebSocket initialization in ${CONNECTION_RETRY_TIMEOUT / 1000} seconds...`);
+        
+        // Clear any existing timeout to prevent memory leaks
+        if (retryTimeout) {
+          clearTimeout(retryTimeout);
+        }
+        
+        // Set up retry
+        return new Promise(resolve => {
+          retryTimeout = setTimeout(() => {
+            initializeWebSocket().then(resolve);
+          }, CONNECTION_RETRY_TIMEOUT);
+        });
+      }
+      return false;
+    });
+}
+
+/**
+ * Get cached deployment status or fetch new status
+ * Implements circuit breaker pattern to prevent continuous failing calls
+ */
+function getDeploymentStatus(branch) {
+  // Check if we have a recent cache (less than 60 seconds old)
+  const now = Date.now();
+  if (
+    deploymentStatusCache[branch] && 
+    deploymentStatusCache.lastChecked && 
+    now - deploymentStatusCache.lastChecked < 60000
+  ) {
+    return Promise.resolve(deploymentStatusCache[branch]);
+  }
+
+  // Fetch new status (implementation would be in a service)
+  // This is a placeholder for your actual implementation
+  return Promise.resolve({ status: 'unknown' })
+    .then(status => {
+      // Update cache
+      deploymentStatusCache[branch] = status;
+      deploymentStatusCache.lastChecked = now;
+      return status;
+    })
+    .catch(err => {
+      logger.error(`Failed to get deployment status for branch ${branch}: ${err.message}`);
+      // On error, return cached value if available, otherwise unknown
+      return deploymentStatusCache[branch] || { status: 'unknown' };
+    });
+}
+
+/**
+ * Start the server and initialize services
+ */
+function startServer() {
+  return new Promise((resolve, reject) => {
+    // Start HTTP server
+    server.listen(PORT, err => {
+      if (err) {
+        logger.error(`Error starting server: ${err.message}`);
+        return reject(err);
+      }
+      
+      logger.info(`Server running in ${NODE_ENV} mode on port ${PORT}`);
+      resolve();
+    });
   });
 }
 
-// Server Initialization
-const startServer = async () => {
-  try {
-    // Verify Netlify connection first
-    await netlifyService.verifyConnection();
-    logger.info('Netlify service connected successfully');
-
-    // Initialize WebSocket server before starting HTTP server
-    if (process.env.ENABLE_WEBSOCKET !== 'false') {
-      websocketService.init(server);
-      logger.info('WebSocket service initialized at /deployease');
-    }
-
-    // Start HTTP server
-    server.listen(PORT, () => {
-      logger.info(`Server running in ${NODE_ENV} mode on port ${PORT}`);
-      if (websocketService.isInitialized()) {
-        logger.info(`WebSocket available at ws://localhost:${PORT}/deployease`);
-      }
-    });
-
-    // Enhanced graceful shutdown
-    const shutdown = (signal) => {
-      logger.info(`${signal} received. Shutting down gracefully...`);
+/**
+ * Graceful shutdown handler
+ */
+function shutdown() {
+  logger.info('SIGINT received - shutting down');
+  
+  // Close WebSocket server
+  websocketService.close()
+    .then(() => {
+      logger.info('WebSocket server closed gracefully');
       
-      // Close WebSocket server first
-      if (websocketService.isInitialized()) {
-        websocketService.close();
-      }
-
+      // Close HTTP server
       server.close(() => {
-        logger.info('HTTP server closed');
+        logger.info('Server stopped');
         process.exit(0);
       });
-
-      // Force shutdown after timeout
+    })
+    .catch(err => {
+      logger.error(`Error during WebSocket shutdown: ${err.message}`);
+      // Force exit after timeout
       setTimeout(() => {
-        logger.error('Could not close connections in time, forcefully shutting down');
+        logger.warn('Forcing exit after failed graceful shutdown');
         process.exit(1);
-      }, 10000);
-    };
-
-    process.on('SIGTERM', () => shutdown('SIGTERM'));
-    process.on('SIGINT', () => shutdown('SIGINT'));
-
-    process.on('unhandledRejection', (reason, promise) => {
-      logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+      }, 3000);
     });
+}
 
-    process.on('uncaughtException', (error) => {
-      logger.error('Uncaught Exception:', error);
-      shutdown('uncaughtException');
-    });
+// Handle shutdown signals
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
-  } catch (error) {
-    logger.error('Server startup failed:', error);
+// Handle uncaught exceptions
+process.on('uncaughtException', err => {
+  logger.error(`uncaughtException: ${err.message}`);
+  logger.error(err.stack);
+  
+  // Attempt graceful shutdown
+  shutdown();
+});
+
+// Start the server and initialize WebSocket
+startServer()
+  .then(() => initializeWebSocket())
+  .catch(err => {
+    logger.error(`Failed to start the application: ${err.message}`);
     process.exit(1);
-  }
-};
-
-// Start the server
-startServer();
+  });
 
 module.exports = app;

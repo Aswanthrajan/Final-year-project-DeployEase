@@ -1,11 +1,10 @@
-// backend/server/services/gitService.js
 const { Octokit } = require('@octokit/rest');
 const crypto = require('crypto');
 const logger = require('../utils/logger');
 const path = require('path');
 
 // Configuration constants
-const REPOSITORY_URL = 'https://github.com/Aswanthrajan/blue';
+const REPOSITORY_URL = process.env.REPOSITORY_URL || 'https://github.com/Aswanthrajan/blue';
 const DEFAULT_BRANCHES = {
   MAIN: 'main',
   BLUE: 'blue',
@@ -13,23 +12,30 @@ const DEFAULT_BRANCHES = {
 };
 const REDIRECTS_FILE = '_redirects';
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const VALID_FILE_EXTENSIONS = ['.html', '.css', '.js'];
+const VALID_FILE_EXTENSIONS = ['.html', '.css', '.js', '.json', '.txt', '.md'];
+const CACHE_TTL = 300000; // 5 minutes
 
 class GitService {
   constructor() {
+    if (!process.env.GITHUB_TOKEN) {
+      throw new Error('GitHub token is required');
+    }
+
     this.octokit = new Octokit({
       auth: process.env.GITHUB_TOKEN,
       userAgent: 'DeployEase v2.0',
       baseUrl: 'https://api.github.com',
       log: logger,
-      timeZone: 'UTC',
       request: {
-        timeout: 5000
+        timeout: 10000 // 10 seconds
       }
     });
 
-    // Cache for reducing API calls
     this.cache = new Map();
+    this.rateLimit = {
+      remaining: 5000,
+      reset: 0
+    };
   }
 
   /**
@@ -39,6 +45,10 @@ class GitService {
   async initializeRepository() {
     try {
       const { owner, repo } = this.parseRepositoryUrl();
+      
+      // Verify repository exists and we have access
+      await this.verifyRepositoryAccess(owner, repo);
+
       const branches = await this.listBranches(owner, repo);
 
       const results = {
@@ -54,7 +64,8 @@ class GitService {
 
       return {
         status: 'success',
-        branches: results
+        branches: results,
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       this.handleError('Repository initialization failed', error);
@@ -66,11 +77,11 @@ class GitService {
    * @param {string} branch - Target branch (blue/green)
    * @param {Array<{path: string, content: string}>} files - Files to deploy
    * @param {string} commitMessage - Custom commit message
-   * @returns {Promise<{commitUrl: string, branch: string, deployId: string}>}
+   * @returns {Promise<{commitUrl: string, branch: string, deployId: string, timestamp: string}>}
    */
   async deployToBranch(branch, files, commitMessage = 'DeployEase automated deployment') {
     if (![DEFAULT_BRANCHES.BLUE, DEFAULT_BRANCHES.GREEN].includes(branch)) {
-      throw new Error(`Invalid deployment branch: ${branch}`);
+      throw new Error(`Invalid deployment branch: ${branch}. Must be 'blue' or 'green'`);
     }
 
     try {
@@ -78,6 +89,9 @@ class GitService {
       
       // Validate files before deployment
       this.validateFiles(files);
+
+      // Check rate limits
+      await this.checkRateLimit();
 
       const commitHash = crypto.createHash('sha256')
         .update(JSON.stringify(files) + Date.now())
@@ -99,23 +113,25 @@ class GitService {
       );
 
       // Generate deploy ID for tracking
-      const deployId = `deploy-${Date.now()}-${commitHash.slice(0, 8)}`;
+      const deployId = `deploy-${branch}-${Date.now()}-${commitHash.slice(0, 4)}`;
+      const commitUrl = `https://github.com/${owner}/${repo}/commit/${commitResult.sha}`;
 
       const result = {
-        commitUrl: `https://github.com/${owner}/${repo}/commit/${commitResult.sha}`,
-        branch: branch,
-        deployId: deployId,
+        commitUrl,
+        branch,
+        deployId,
         timestamp: new Date().toISOString()
       };
 
-      // Cache result for 5 minutes
+      // Cache result
       this.cache.set(cacheKey, result);
-      setTimeout(() => this.cache.delete(cacheKey), 300000);
+      setTimeout(() => this.cache.delete(cacheKey), CACHE_TTL);
 
       logger.info(`Deployment successful to ${branch} branch`, {
         repository: REPOSITORY_URL,
-        commitUrl: result.commitUrl,
-        deployId: deployId
+        commitUrl,
+        deployId,
+        fileCount: files.length
       });
 
       return result;
@@ -125,22 +141,68 @@ class GitService {
   }
 
   /**
+   * Verify repository access
+   * @private
+   */
+  async verifyRepositoryAccess(owner, repo) {
+    try {
+      await this.octokit.repos.get({
+        owner,
+        repo
+      });
+    } catch (error) {
+      if (error.status === 404) {
+        throw new Error(`Repository not found: ${owner}/${repo}`);
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Check and handle GitHub rate limits
+   * @private
+   */
+  async checkRateLimit() {
+    if (this.rateLimit.remaining < 10 && Date.now() < this.rateLimit.reset * 1000) {
+      const waitTime = Math.ceil((this.rateLimit.reset * 1000 - Date.now()) / 1000);
+      throw new Error(`GitHub rate limit exceeded. Try again in ${waitTime} seconds`);
+    }
+
+    const { data } = await this.octokit.rateLimit.get();
+    this.rateLimit = {
+      remaining: data.resources.core.remaining,
+      reset: data.resources.core.reset
+    };
+  }
+
+  /**
    * Validate files before deployment
    * @param {Array} files - Files to validate
+   * @throws {Error} If validation fails
    */
   validateFiles(files) {
     if (!files || !Array.isArray(files) || files.length === 0) {
       throw new Error('No files provided for deployment');
     }
 
+    if (files.length > 100) {
+      throw new Error('Cannot deploy more than 100 files at once');
+    }
+
+    const seenPaths = new Set();
     files.forEach(file => {
       if (!file.path || !file.content) {
         throw new Error('Each file must have path and content properties');
       }
 
+      if (seenPaths.has(file.path)) {
+        throw new Error(`Duplicate file path: ${file.path}`);
+      }
+      seenPaths.add(file.path);
+
       const ext = path.extname(file.path).toLowerCase();
       if (!VALID_FILE_EXTENSIONS.includes(ext)) {
-        throw new Error(`Invalid file extension for ${file.path}. Only HTML, CSS, JS files are allowed`);
+        throw new Error(`Invalid file extension for ${file.path}. Allowed: ${VALID_FILE_EXTENSIONS.join(', ')}`);
       }
 
       if (Buffer.byteLength(file.content, 'utf8') > MAX_FILE_SIZE) {
@@ -152,14 +214,14 @@ class GitService {
   /**
    * Switch active environment by updating redirects
    * @param {string} targetBranch - Branch to switch to (blue/green)
-   * @returns {Promise<{redirectsUrl: string, activeBranch: string, commitUrl: string}>}
+   * @returns {Promise<{redirectsUrl: string, activeBranch: string, commitUrl: string, timestamp: string}>}
    */
   async switchEnvironment(targetBranch) {
     try {
       const { owner, repo } = this.parseRepositoryUrl();
       
       if (![DEFAULT_BRANCHES.BLUE, DEFAULT_BRANCHES.GREEN].includes(targetBranch)) {
-        throw new Error(`Invalid target branch: ${targetBranch}`);
+        throw new Error(`Invalid target branch: ${targetBranch}. Must be 'blue' or 'green'`);
       }
 
       const currentBranch = await this.getActiveBranch();
@@ -167,7 +229,8 @@ class GitService {
         return {
           redirectsUrl: `https://github.com/${owner}/${repo}/blob/${DEFAULT_BRANCHES.MAIN}/${REDIRECTS_FILE}`,
           activeBranch: targetBranch,
-          status: 'no_change'
+          status: 'no_change',
+          timestamp: new Date().toISOString()
         };
       }
 
@@ -181,7 +244,8 @@ class GitService {
       return {
         redirectsUrl: `https://github.com/${owner}/${repo}/blob/${DEFAULT_BRANCHES.MAIN}/${REDIRECTS_FILE}`,
         activeBranch: targetBranch,
-        commitUrl: result.commitUrl
+        commitUrl: result.commitUrl,
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       this.handleError('Environment switch failed', error);
@@ -191,17 +255,20 @@ class GitService {
   /**
    * Get deployment history for a branch
    * @param {string} branch - Target branch
-   * @returns {Promise<Array>} - Deployment history
+   * @param {number} limit - Number of commits to return
+   * @returns {Promise<Array<{id: string, message: string, timestamp: string, author: string, url: string, branch: string, status: string}>>}
    */
-  async getDeploymentHistory(branch) {
+  async getDeploymentHistory(branch, limit = 10) {
     try {
       const { owner, repo } = this.parseRepositoryUrl();
       
+      await this.checkRateLimit();
+
       const { data: commits } = await this.octokit.repos.listCommits({
         owner,
         repo,
         sha: branch,
-        per_page: 10
+        per_page: Math.min(limit, 100) // GitHub max is 100 per page
       });
 
       return commits.map(commit => ({
@@ -211,7 +278,7 @@ class GitService {
         author: commit.commit.author.name,
         url: commit.html_url,
         branch: branch,
-        status: 'success' // Default status
+        status: 'success'
       }));
     } catch (error) {
       this.handleError('Failed to get deployment history', error);
@@ -220,7 +287,7 @@ class GitService {
 
   /**
    * Get currently active branch from redirects file
-   * @returns {Promise<string>} - Active branch name
+   * @returns {Promise<string>} - Active branch name (blue/green)
    */
   async getActiveBranch() {
     try {
@@ -240,6 +307,10 @@ class GitService {
       }
       return DEFAULT_BRANCHES.BLUE; // Default fallback
     } catch (error) {
+      if (error.status === 404) {
+        // Redirects file doesn't exist yet
+        return DEFAULT_BRANCHES.BLUE;
+      }
       this.handleError('Failed to detect active branch', error);
     }
   }
@@ -252,7 +323,10 @@ class GitService {
     if (!match || !match[1] || !match[2]) {
       throw new Error(`Invalid repository URL: ${REPOSITORY_URL}`);
     }
-    return { owner: match[1], repo: match[2].replace(/\.git$/, '') };
+    return { 
+      owner: match[1], 
+      repo: match[2].replace(/\.git$/, '') 
+    };
   }
 
   /** Check if file exists in repository */
@@ -298,11 +372,12 @@ class GitService {
       return 'exists';
     }
 
+    const mainSha = await this.getBranchSha(owner, repo, DEFAULT_BRANCHES.MAIN);
     await this.octokit.git.createRef({
       owner,
       repo,
       ref: `refs/heads/${branch}`,
-      sha: await this.getBranchSha(owner, repo, DEFAULT_BRANCHES.MAIN)
+      sha: mainSha
     });
 
     return 'created';
@@ -339,8 +414,8 @@ class GitService {
         this.octokit.git.createBlob({
           owner,
           repo,
-          content: Buffer.from(file.content).toString('base64'),
-          encoding: 'base64'
+          content: file.content,
+          encoding: 'utf-8'
         })
       )
     );
@@ -372,7 +447,8 @@ class GitService {
       owner,
       repo,
       ref: `heads/${branch}`,
-      sha: newCommit.data.sha
+      sha: newCommit.data.sha,
+      force: false
     });
 
     return newCommit.data;
@@ -397,16 +473,28 @@ class GitService {
   generateRedirectsContent(activeBranch) {
     return `# DeployEase Traffic Routing
 /*  /${activeBranch}/:splat  200
-/   /${activeBranch}/index.html  200`;
+/   /${activeBranch}/index.html  200
+
+# Additional redirect rules can be added below
+# /old-path /new-path 301
+`;
   }
 
-  /** Error handling wrapper */
+  /** Standardized error handling */
   handleError(context, error) {
-    logger.error(`${context}: ${error.message}`, {
+    const errorId = crypto.randomBytes(4).toString('hex');
+    const errorMessage = error.response?.data?.message || error.message;
+    
+    logger.error(`${context} [${errorId}]: ${errorMessage}`, {
       repository: REPOSITORY_URL,
-      stack: error.stack
+      stack: error.stack,
+      status: error.status,
+      timestamp: new Date().toISOString()
     });
-    throw new Error(`${context}. ${error.message}`);
+
+    const customError = new Error(`${context}. Error ID: ${errorId}`);
+    customError.statusCode = error.status || 500;
+    throw customError;
   }
 }
 

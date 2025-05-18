@@ -1,12 +1,8 @@
-# backend/netlify/_redirects
+# DeployEase Blue-Green Traffic Routing
 /*  /blue/:splat  200
 /   /blue/index.html  200
 
-# Fallback for blue environment
-/blue/*  /blue/index.html  404
-
-# Fallback for green environment
-/green/*  /green/index.html  404
-
-# API proxy
-/api/*  https://your-api-domain.com/api/:splat  200
+# API and static assets (no redirection)
+/.netlify/*  /.netlify/:splat  200
+/api/*  /api/:splat  200
+/assets/*  /assets/:splat  200

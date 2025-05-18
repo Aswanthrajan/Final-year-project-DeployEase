@@ -4,66 +4,70 @@ import config from './config.js';
 class WebSocketManager {
   constructor() {
     this.socket = null;
-    this.reconnectAttempts = 0;
-    this.maxReconnectAttempts = 5;
-    this.baseReconnectDelay = 3000; // 3 seconds base delay
-    this.heartbeatInterval = null;
     this.logOutput = document.getElementById("logContent");
     this.isManualClose = false;
-    this.messageQueue = [];
-    this.subscribedChannels = new Set();
+    this.connectionAttempts = 0;
+    this.maxConnectionAttempts = 1; // Set to 1 for single attempt, or 5 for max 5 attempts
+    this.connectionState = 'disconnected';
+    this.connectionTimeout = null;
+    this.heartbeatInterval = null;
   }
 
-  // Initialize WebSocket connection
+  // Initialize WebSocket connection (will only try once or up to maxConnectionAttempts)
   connect() {
-    // Clear any existing connection
-    if (this.socket) {
-      this.socket.close();
-      this.cleanup();
+    if (this.connectionState === 'connected' || 
+        this.connectionState === 'connecting' || 
+        this.connectionAttempts >= this.maxConnectionAttempts) {
+      return;
     }
 
-    // Reset manual close flag
-    this.isManualClose = false;
+    this.connectionState = 'connecting';
+    this.connectionAttempts++;
+    this.disconnect(); // Clean up any existing connection
 
     try {
-      // Create WebSocket URL with proper path
       const wsUrl = new URL(config.websocketUrl);
-      if (!wsUrl.pathname.endsWith('/deployease')) {
-        wsUrl.pathname = '/deployease';
-      }
+      wsUrl.pathname = '/deployease';
 
       this.socket = new WebSocket(wsUrl.toString());
-
-      // Set up event handlers
       this.socket.onopen = this.handleOpen.bind(this);
       this.socket.onmessage = this.handleMessage.bind(this);
       this.socket.onerror = this.handleError.bind(this);
       this.socket.onclose = this.handleClose.bind(this);
 
+      this.log(`Attempting connection (${this.connectionAttempts}/${this.maxConnectionAttempts})...`);
+      
+      // Set connection timeout (10 seconds)
+      this.connectionTimeout = setTimeout(() => {
+        if (this.connectionState !== 'connected') {
+          this.handleConnectionFailure('Connection timeout');
+        }
+      }, 10000);
+
     } catch (error) {
-      console.error("WebSocket initialization error:", error);
-      this.scheduleReconnect();
+      this.handleConnectionFailure(`Initialization error: ${error.message}`);
     }
   }
 
-  // Handle WebSocket open event
+  // Handle successful connection
   handleOpen() {
-    this.reconnectAttempts = 0;
-    this.log("✅ Connected to deployment logs");
+    clearTimeout(this.connectionTimeout);
+    this.connectionState = 'connected';
+    this.log("WebSocket connection established");
 
-    // Send initial handshake
+    // Send initial subscription message
     this.send({
       type: "subscribe",
       channels: ["deployment_logs"],
-      client: "deployease-web",
-      timestamp: Date.now()
+      client: "deployease-web"
     });
 
     // Start heartbeat
-    this.startHeartbeat();
-
-    // Process any queued messages
-    this.processMessageQueue();
+    this.heartbeatInterval = setInterval(() => {
+      if (this.socket?.readyState === WebSocket.OPEN) {
+        this.send({ type: "ping" });
+      }
+    }, 30000); // 30 second heartbeat
   }
 
   // Handle incoming messages
@@ -71,179 +75,137 @@ class WebSocketManager {
     try {
       const data = JSON.parse(event.data);
       
-      // Skip connection acknowledgements
-      if (data.type === "connection_ack" || data.type === "subscription_ack") {
+      // Filter out system messages
+      if (["connection_ack", "subscription_ack", "pong"].includes(data.type)) {
         return;
       }
 
-      // Handle different message types
+      // Format different message types
+      let logMessage = '';
       switch(data.type) {
         case "log":
-          this.log(`[${new Date(data.timestamp).toLocaleTimeString()}] ${data.message}`);
-          break;
-        case "system":
-          this.log(`[SYSTEM] ${data.message}`);
-          break;
-        case "pong":
-          // No action needed for pong responses
+          logMessage = `[${new Date(data.timestamp).toLocaleTimeString()}] ${data.message}`;
           break;
         case "deploy_status":
-          this.log(`[DEPLOYMENT] ${data.status.toUpperCase()}: ${data.message}`);
+          logMessage = `[DEPLOY] ${data.status.toUpperCase()}: ${data.message}`;
           break;
         default:
-          this.log(`[UNKNOWN] ${event.data}`);
+          logMessage = `[${data.type}] ${JSON.stringify(data)}`;
       }
+      
+      this.log(logMessage);
     } catch (error) {
       this.log(`[ERROR] Failed to parse message: ${event.data}`);
-      console.error("Message parsing error:", error);
     }
   }
 
-  // Handle errors
+  // Handle connection errors
   handleError(error) {
-    console.error("WebSocket error:", error);
-    this.log(`⚠️ Connection error: ${error.message || 'Unknown error'}`);
+    this.log(`WebSocket error: ${error.message || 'Unknown error'}`);
+    this.handleConnectionFailure('Connection error');
   }
 
-  // Handle connection close
+  // Handle connection closure
   handleClose(event) {
-    // Clear heartbeat
-    if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
-      this.heartbeatInterval = null;
+    this.cleanup();
+    this.connectionState = 'disconnected';
+    
+    if (event.code !== 1000 || !this.isManualClose) {
+      this.log(`Connection closed: ${event.reason || 'Unknown reason'}`);
+      this.showConnectionError();
     }
+  }
 
-    if (event.code === 1000 && this.isManualClose) {
-      // Normal closure initiated by us
-      this.log("🔌 Connection closed by client");
-      return;
+  // Handle connection failures
+  handleConnectionFailure(reason) {
+    this.cleanup();
+    this.connectionState = 'disconnected';
+    this.log(`Connection failed: ${reason}`);
+    
+    if (this.connectionAttempts < this.maxConnectionAttempts) {
+      // If we want to try multiple times (up to maxConnectionAttempts)
+      setTimeout(() => this.connect(), 1000);
+    } else {
+      this.showConnectionError();
     }
+  }
 
-    if (this.reconnectAttempts < this.maxReconnectAttempts && !this.isManualClose) {
-      const delay = this.getReconnectDelay();
-      this.log(`⌛ Reconnecting in ${delay/1000}s... (Attempt ${this.reconnectAttempts + 1}/${this.maxReconnectAttempts})`);
-      
-      setTimeout(() => {
-        this.reconnectAttempts++;
-        this.connect();
-      }, delay);
-    } else if (!this.isManualClose) {
-      this.log("❌ Max reconnection attempts reached");
+  // Show user-friendly error message
+  showConnectionError() {
+    const errorElement = document.createElement('div');
+    errorElement.className = 'connection-error';
+    errorElement.innerHTML = `
+      <p>Connection failed after ${this.connectionAttempts} attempt(s). Please <a href="javascript:location.reload()">refresh</a> to try again.</p>
+    `;
+    
+    if (this.logOutput) {
+      this.logOutput.appendChild(errorElement);
     }
   }
 
   // Send data through WebSocket
   send(data) {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+    if (this.socket?.readyState === WebSocket.OPEN) {
       try {
         this.socket.send(JSON.stringify(data));
+        return true;
       } catch (error) {
-        console.error("WebSocket send error:", error);
-        // Queue message if sending fails
-        this.messageQueue.push(data);
+        this.log(`Failed to send message: ${error.message}`);
+        return false;
       }
-    } else {
-      // Queue message if not connected
-      this.messageQueue.push(data);
+    }
+    return false;
+  }
+
+  // Clean up resources
+  cleanup() {
+    clearTimeout(this.connectionTimeout);
+    clearInterval(this.heartbeatInterval);
+    
+    if (this.socket) {
+      this.socket.close();
+      this.socket = null;
     }
   }
 
-  // Process queued messages
-  processMessageQueue() {
-    while (this.messageQueue.length > 0 && this.socket.readyState === WebSocket.OPEN) {
-      const message = this.messageQueue.shift();
-      try {
-        this.socket.send(JSON.stringify(message));
-      } catch (error) {
-        console.error("Failed to send queued message:", error);
-        this.messageQueue.unshift(message); // Put back if fails
-        break;
-      }
-    }
-  }
-
-  // Close connection properly
+  // Disconnect manually
   disconnect() {
     this.isManualClose = true;
-    if (this.socket) {
-      this.socket.close(1000, "User initiated disconnect");
-    }
     this.cleanup();
+    this.connectionState = 'disconnected';
   }
 
-  // Reconnect manually
-  reconnect() {
-    this.reconnectAttempts = 0;
-    this.connect();
-  }
-
-  // Cleanup resources
-  cleanup() {
-    if (this.heartbeatInterval) {
-      clearInterval(this.heartbeatInterval);
-      this.heartbeatInterval = null;
-    }
-    this.messageQueue = [];
-  }
-
-  // Start heartbeat to keep connection alive
-  startHeartbeat() {
-    this.heartbeatInterval = setInterval(() => {
-      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-        this.send({ type: "ping" });
-      }
-    }, 25000); // 25 seconds
-  }
-
-  // Calculate reconnect delay with exponential backoff
-  getReconnectDelay() {
-    return Math.min(this.baseReconnectDelay * Math.pow(2, this.reconnectAttempts), 30000); // Max 30 seconds
-  }
-
-  // Log message to output element and console
+  // Log messages to output
   log(message) {
+    console.log(message);
     if (this.logOutput) {
       this.logOutput.textContent += `${message}\n`;
       this.logOutput.scrollTop = this.logOutput.scrollHeight;
     }
-    console.log(message);
   }
 
-  // Subscribe to specific channels
-  subscribe(channels) {
-    if (!Array.isArray(channels)) channels = [channels];
-    channels.forEach(channel => this.subscribedChannels.add(channel));
-    
-    this.send({
-      type: "subscribe",
-      channels: Array.from(this.subscribedChannels),
-      timestamp: Date.now()
-    });
+  // Get connection state
+  getConnectionState() {
+    return this.connectionState;
   }
 
-  // Unsubscribe from channels
-  unsubscribe(channels) {
-    if (!Array.isArray(channels)) channels = [channels];
-    channels.forEach(channel => this.subscribedChannels.delete(channel));
-    
-    this.send({
-      type: "unsubscribe",
-      channels: channels,
-      timestamp: Date.now()
-    });
+  // Get connection attempts count
+  getConnectionAttempts() {
+    return this.connectionAttempts;
   }
 }
 
-// Create and export singleton instance
+// Singleton instance
 const webSocketManager = new WebSocketManager();
 
-// Initialize connection when imported
+// Initialize when DOM is ready
 if (typeof window !== 'undefined') {
-  webSocketManager.connect();
-}
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set maxConnectionAttempts to 1 for single attempt, or 5 for max 5 attempts
+    webSocketManager.maxConnectionAttempts = 1; // CHANGE TO 5 IF YOU WANT UP TO 5 ATTEMPTS
+    webSocketManager.connect();
+  });
 
-// Clean up on page unload
-if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', () => {
     webSocketManager.disconnect();
   });

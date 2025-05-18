@@ -636,3 +636,24 @@ body.dark-mode .form-group select {
   to { transform: rotate(360deg); }
 }
 
+/* Add these to your existing style.css */
+
+/* Make sure logs card has consistent height */
+.logs-card {
+  height: 100%;
+}
+
+/* Adjust card spacing */
+.card {
+  margin-bottom: 20px;
+}
+
+/* Ensure proper dark mode for new elements */
+body.dark-mode .current-environment {
+  background-color: #3c3c3c;
+  color: #f4f4f9;
+}
+
+body.dark-mode .scrollable-history {
+  background-color: #4c4c4c;
+}

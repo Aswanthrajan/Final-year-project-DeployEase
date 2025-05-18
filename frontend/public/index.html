@@ -12,7 +12,7 @@
     <script>
         window.AppConfig = {
             apiBaseUrl: "http://localhost:3000",
-            websocketUrl: "ws://localhost:8080"
+            websocketUrl: "ws://localhost:3000/deployease"
         };
     </script>
 </head>
@@ -87,10 +87,6 @@
                                                 <span class="label">Status:</span>
                                                 <span id="blueHealthStatus" class="value">Healthy</span>
                                             </div>
-                                            <div class="env-detail">
-                                                <span class="label">URL:</span>
-                                                <a id="blueUrl" class="value" target="_blank">View Site</a>
-                                            </div>
                                         </div>
                                     </div>
                                     
@@ -114,10 +110,6 @@
                                                 <span class="label">Status:</span>
                                                 <span id="greenHealthStatus" class="value">Healthy</span>
                                             </div>
-                                            <div class="env-detail">
-                                                <span class="label">URL:</span>
-                                                <a id="greenUrl" class="value" target="_blank">View Site</a>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -125,6 +117,26 @@
                             <div class="card-footer">
                                 <button id="newDeploymentBtn" class="primary-button">New Deployment</button>
                                 <button id="rollbackButton" class="secondary-button">Rollback</button>
+                            </div>
+                        </div>
+
+                        <!-- Current Environment Card -->
+                        <div class="card current-environment">
+                            <div class="card-header">
+                                <h3>Live Environment</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="active-environment-info">
+                                    <div class="active-env-badge">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span id="currentActiveEnv">Blue</span> is currently active
+                                    </div>
+                                    <div class="view-site-link">
+                                        <a href="https://deployeaselive.netlify.app/" target="_blank" class="site-link">
+                                            <i class="fas fa-external-link-alt"></i> View Live Site
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -149,18 +161,10 @@
                 <section id="deployments" class="content-section">
                     <div class="section-header">
                         <h3>Deployment History</h3>
-                        <div class="section-actions">
-                            <button id="refreshDeployments" class="refresh-button">
-                                <i class="fas fa-sync-alt"></i> Refresh
-                            </button>
-                            <button id="newDeploymentBtn2" class="primary-button">
-                                <i class="fas fa-plus"></i> New Deployment
-                            </button>
-                        </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <div class="deployment-list">
+                            <div class="deployment-list scrollable-history">
                                 <table>
                                     <thead>
                                         <tr>

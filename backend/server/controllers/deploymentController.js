@@ -6,20 +6,35 @@ const logger = require('../utils/logger');
 class DeploymentController {
     /**
      * Get deployment history for all environments (blue and green)
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
      */
     async getAllDeploymentHistory(req, res) {
         try {
-            // Get history for both blue and green branches
-            const blueHistory = await gitService.getDeploymentHistory('blue');
-            const greenHistory = await gitService.getDeploymentHistory('green');
-            
+            // Get history for both branches in parallel
+            const [blueHistory, greenHistory] = await Promise.all([
+                gitService.getDeploymentHistory('blue'),
+                gitService.getDeploymentHistory('green')
+            ]);
+
+            // Standardize the history format
+            const formatDeployment = (deployment, branch) => {
+                return {
+                    id: deployment.id || deployment.sha?.slice(0, 7),
+                    branch: branch,
+                    status: deployment.state || 'success',
+                    timestamp: deployment.timestamp || deployment.commit?.committer?.date || new Date().toISOString(),
+                    commitSha: deployment.sha,
+                    commitUrl: deployment.html_url,
+                    commitMessage: deployment.commit?.message || `Deployment to ${branch}`,
+                    committer: deployment.commit?.committer?.name || 'DeployEase System'
+                };
+            };
+
             res.status(200).json({
                 success: true,
-                blue: blueHistory,
-                green: greenHistory,
-                repository: process.env.REPOSITORY_URL
+                blue: blueHistory.map(d => formatDeployment(d, 'blue')),
+                green: greenHistory.map(d => formatDeployment(d, 'green')),
+                repository: process.env.REPOSITORY_URL,
+                timestamp: new Date().toISOString()
             });
         } catch (error) {
             logger.error('Failed to get deployment history', {
@@ -35,9 +50,7 @@ class DeploymentController {
     }
 
     /**
-     * Get deployment history for an environment (blue/green)
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
+     * Get deployment history for a specific branch
      */
     async getDeploymentHistory(req, res) {
         try {
@@ -52,11 +65,24 @@ class DeploymentController {
 
             const history = await gitService.getDeploymentHistory(branch);
             
+            // Format the response consistently
+            const formattedHistory = history.map(deployment => ({
+                id: deployment.id || deployment.sha?.slice(0, 7),
+                branch: branch,
+                status: deployment.state || 'success',
+                timestamp: deployment.timestamp || deployment.commit?.committer?.date || new Date().toISOString(),
+                commitSha: deployment.sha,
+                commitUrl: deployment.html_url,
+                commitMessage: deployment.commit?.message || `Deployment to ${branch}`,
+                committer: deployment.commit?.committer?.name || 'DeployEase System'
+            }));
+
             res.status(200).json({
                 success: true,
                 branch,
-                deployments: history,
-                repository: process.env.REPOSITORY_URL
+                deployments: formattedHistory,
+                repository: process.env.REPOSITORY_URL,
+                timestamp: new Date().toISOString()
             });
         } catch (error) {
             logger.error('Failed to fetch deployment history', {
@@ -72,9 +98,7 @@ class DeploymentController {
     }
 
     /**
-     * Create a new deployment to specified environment
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
+     * Create a new deployment
      */
     async createDeployment(req, res) {
         try {
@@ -108,7 +132,8 @@ class DeploymentController {
             logger.info('Deployment successful', {
                 branch,
                 commitUrl: gitResult.commitUrl,
-                deployId: netlifyResult.deployId
+                deployId: netlifyResult.deployId,
+                files: files.map(f => f.path)
             });
 
             res.status(200).json({
@@ -134,8 +159,6 @@ class DeploymentController {
 
     /**
      * Rollback to a specific commit
-     * @param {Object} req - Express request object
-     * @param {Object} res - Express response object
      */
     async rollbackToRevision(req, res) {
         try {

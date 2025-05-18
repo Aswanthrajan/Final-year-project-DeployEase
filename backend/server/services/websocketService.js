@@ -1,415 +1,432 @@
+/**
+ * WebSocket Service for DeployEase
+ * Handles real-time communication for deployment status and logs
+ */
+
 const WebSocket = require('ws');
+const http = require('http');
 const logger = require('../utils/logger');
+const { exec } = require('child_process');
 
 class WebSocketService {
-    constructor() {
-        this.wss = null;
-        this.clients = new Map();
-        this.messageHandlers = new Map();
-        this.pingInterval = null;
-        this.connectionTimeout = 30000; // 30 seconds timeout
-        this.maxPayload = 1048576; // 1MB max message size
-        this._isInitialized = false;
-    }
+  constructor() {
+    this.wss = null;
+    this.server = null;
+    this.clients = new Map(); // Map to store client connections with unique IDs
+    this.isInitialized = false;
+    this.pingInterval = null;
+    this.retryCount = 0;
+    this.retryLimit = 5;
+    this.retryTimeout = null;
+  }
 
-    /**
-     * Check if WebSocket service is initialized
-     * @returns {boolean} True if initialized
-     */
-    isInitialized() {
-        return this._isInitialized;
-    }
+  /**
+   * Initialize the WebSocket server
+   * @param {number} port - Port for WebSocket server (default: 3001)
+   * @returns {Promise<boolean>} - Resolves to true if initialization successful
+   */
+  init(port = 3001) {
+    return new Promise((resolve, reject) => {
+      try {
+        // Check if already initialized
+        if (this.isInitialized) {
+          logger.info('WebSocket server already initialized');
+          return resolve(true);
+        }
 
-    /**
-     * Initialize WebSocket server
-     * @param {http.Server} server - HTTP server instance
-     */
-    init(server) {
-        try {
-            if (this._isInitialized) {
-                logger.warn('WebSocket server already initialized');
-                return;
-            }
-
-            // Initialize WebSocket server with configuration
-            this.wss = new WebSocket.Server({ 
-                server,
-                path: '/deployease',
-                clientTracking: false,
-                maxPayload: this.maxPayload,
-                perMessageDeflate: {
-                    zlibDeflateOptions: {
-                        chunkSize: 1024,
-                        memLevel: 7,
-                        level: 3
-                    },
-                    zlibInflateOptions: {
-                        chunkSize: 10 * 1024
-                    },
-                    clientNoContextTakeover: true,
-                    serverNoContextTakeover: true,
-                    concurrencyLimit: 10
-                }
-            });
-
-            this._isInitialized = true;
-
-            // Setup ping interval (25 seconds - less than timeout)
-            this.pingInterval = setInterval(() => {
-                this._pingClients();
-            }, 25000);
-
-            this.wss.on('connection', (ws, req) => {
-                const clientId = this._generateClientId(req);
-                const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-                
-                logger.info(`New WebSocket connection from ${ip}`, { clientId });
-
-                // Set up connection timeout
-                const timeout = setTimeout(() => {
-                    if (ws.readyState === WebSocket.OPEN) {
-                        logger.warn(`Terminating stale connection: ${clientId}`);
-                        ws.terminate();
-                    }
-                }, this.connectionTimeout);
-
-                // Store client with metadata
-                this.clients.set(clientId, {
-                    ws,
-                    ip,
-                    connectedAt: new Date(),
-                    lastActivity: new Date(),
-                    isAlive: true,
-                    subscriptions: []
-                });
-
-                // Setup message handler
-                ws.on('message', (message) => {
-                    clearTimeout(timeout); // Reset timeout on activity
-                    this.clients.get(clientId).lastActivity = new Date();
-                    this._handleMessage(clientId, message);
-                });
-
-                // Handle pong responses
-                ws.on('pong', () => {
-                    this.clients.get(clientId).isAlive = true;
-                });
-
-                // Handle connection close
-                ws.on('close', () => {
-                    clearTimeout(timeout);
-                    this._handleDisconnect(clientId);
-                });
-
-                // Handle errors
-                ws.on('error', (error) => {
-                    clearTimeout(timeout);
-                    this._handleError(clientId, error);
-                });
-
-                // Send connection acknowledgement
-                this.send(clientId, {
-                    type: 'connection_ack',
-                    status: 'connected',
-                    clientId,
-                    timestamp: new Date().toISOString(),
-                    config: {
-                        pingInterval: 25000,
-                        maxPayload: this.maxPayload
-                    }
-                });
-            });
+        // Check if port is in use and kill process if necessary
+        this.checkPortAndKillProcess(port)
+          .then(() => {
+            // Create HTTP server for WebSocket
+            const server = http.createServer();
             
-            logger.info('WebSocket server initialized', {
-                path: '/deployease',
-                port: server.listening ? server.address().port : process.env.PORT || 3000,
-                maxPayload: this.maxPayload
+            // Create WebSocket server
+            const wss = new WebSocket.Server({ server });
+            
+            // Store references
+            this.server = server;
+            this.wss = wss;
+
+            // Set up WebSocket event handlers
+            this.setupWebSocketEvents();
+
+            // Start the server
+            server.listen(port, () => {
+              logger.info(`WebSocket server is running on port ${port}`);
+              this.isInitialized = true;
+              this.startPingInterval();
+              resolve(true);
             });
 
-        } catch (error) {
-            this._isInitialized = false;
-            logger.error('WebSocket initialization failed:', {
-                error: error.message,
-                stack: error.stack
-            });
-            throw error;
-        }
-    }
-
-    /**
-     * Send a message to a specific client
-     * @param {string} clientId - ID of the client to send to
-     * @param {Object} message - Message to send
-     * @returns {boolean} True if message was sent successfully
-     */
-    send(clientId, message) {
-        if (!this.clients.has(clientId)) {
-            logger.warn(`Attempted to send message to non-existent client: ${clientId}`);
-            return false;
-        }
-
-        const client = this.clients.get(clientId);
-        try {
-            if (client.ws.readyState === WebSocket.OPEN) {
-                client.ws.send(JSON.stringify(message), (error) => {
-                    if (error) {
-                        logger.error(`Failed to send message to ${clientId}:`, error);
-                        return false;
-                    }
-                });
-                return true;
-            }
-            return false;
-        } catch (error) {
-            logger.error(`Failed to send message to ${clientId}:`, {
-                error: error.message,
-                stack: error.stack
-            });
-            return false;
-        }
-    }
-
-    /**
-     * Broadcast message to all connected clients
-     * @param {Object} message - Message to broadcast
-     * @param {Function} [filter] - Optional filter function (clientId, client) => boolean
-     * @returns {number} Number of clients that received the message
-     */
-    broadcast(message, filter = null) {
-        if (!this._isInitialized) {
-            logger.warn('Attempted to broadcast while WebSocket server is not initialized');
-            return 0;
-        }
-
-        const messageStr = JSON.stringify(message);
-        let sentCount = 0;
-
-        this.clients.forEach((client, clientId) => {
-            try {
-                if (client.ws.readyState === WebSocket.OPEN && 
-                    (!filter || filter(clientId, client))) {
-                    client.ws.send(messageStr, (error) => {
-                        if (error) {
-                            logger.error(`Failed to broadcast to ${clientId}:`, error);
-                        } else {
-                            sentCount++;
-                        }
+            // Handle server errors
+            server.on('error', (err) => {
+              if (err.code === 'EADDRINUSE') {
+                logger.error(`Port ${port} is already in use`);
+                this.checkPortAndKillProcess(port)
+                  .then(() => {
+                    logger.info('Retry after killing process');
+                    this.close().then(() => {
+                      this.init(port).then(resolve).catch(reject);
                     });
-                }
-            } catch (error) {
-                logger.error(`Failed to broadcast to ${clientId}:`, {
-                    error: error.message,
-                    stack: error.stack
-                });
-            }
-        });
+                  })
+                  .catch(reject);
+              } else {
+                logger.error(`WebSocket server error: ${err.message}`);
+                reject(err);
+              }
+            });
+          })
+          .catch(err => {
+            logger.error(`Error checking port: ${err.message}`);
+            reject(err);
+          });
+      } catch (err) {
+        logger.error(`Error during WebSocket server initialization: ${err.message}`);
+        reject(err);
+      }
+    });
+  }
 
-        return sentCount;
+  /**
+   * Set up WebSocket event handlers
+   */
+  setupWebSocketEvents() {
+    if (!this.wss) {
+      logger.error('Cannot setup WebSocket events: WebSocket server not initialized');
+      return;
     }
 
-    /**
-     * Get connected clients count
-     * @returns {number} Number of connected clients
-     */
-    getConnectedClients() {
-        return this.clients.size;
-    }
+    // Connection event
+    this.wss.on('connection', (ws, req) => {
+      const clientId = this.generateClientId();
+      const clientIp = req.socket.remoteAddress;
+      
+      // Store client in map with metadata
+      this.clients.set(clientId, {
+        socket: ws,
+        ip: clientIp,
+        connectedAt: new Date(),
+        lastPing: Date.now()
+      });
 
-    /**
-     * Close WebSocket server
-     */
-    close() {
-        if (!this._isInitialized) return;
+      logger.info(`New WebSocket connection from ${clientIp} (ID: ${clientId})`);
 
-        if (this.pingInterval) {
-            clearInterval(this.pingInterval);
-            this.pingInterval = null;
+      // Set up client event handlers
+      ws.on('message', (message) => {
+        try {
+          const parsedMessage = JSON.parse(message);
+          this.handleClientMessage(clientId, parsedMessage);
+        } catch (err) {
+          logger.error(`Error parsing message from client ${clientId}: ${err.message}`);
         }
+      });
+
+      // Handle close event
+      ws.on('close', () => {
+        logger.info(`WebSocket connection closed: ${clientId}`);
+        this.clients.delete(clientId);
+      });
+
+      // Handle error event
+      ws.on('error', (err) => {
+        logger.error(`WebSocket client error (${clientId}): ${err.message}`);
+        this.clients.delete(clientId);
+      });
+
+      // Handle pong for keep-alive
+      ws.on('pong', () => {
+        if (this.clients.has(clientId)) {
+          this.clients.get(clientId).lastPing = Date.now();
+        }
+      });
+    });
+
+    // Server error event
+    this.wss.on('error', (err) => {
+      logger.error(`WebSocket server error: ${err.message}`);
+    });
+  }
+
+  /**
+   * Handle incoming client messages
+   * @param {string} clientId - Client identifier
+   * @param {object} message - Parsed message from client
+   */
+  handleClientMessage(clientId, message) {
+    const client = this.clients.get(clientId);
+    if (!client) {
+      logger.warn(`Received message from unknown client ${clientId}`);
+      return;
+    }
+
+    // Handle different message types
+    switch (message.type) {
+      case 'subscribe':
+        logger.info(`Received subscribe message from ${clientId}`);
+        // Handle subscription logic
+        break;
         
-        this.clients.forEach(client => {
-            try {
-                if (client.ws.readyState === WebSocket.OPEN) {
-                    client.ws.close(1000, 'Server shutdown');
-                }
-            } catch (error) {
-                logger.error('Error closing client connection:', {
-                    error: error.message,
-                    stack: error.stack
-                });
-            }
-        });
+      case 'ping':
+        // Update last ping time and respond with pong
+        client.lastPing = Date.now();
+        this.sendToClient(clientId, { type: 'pong', timestamp: Date.now() });
+        break;
+        
+      case 'deployment':
+        // Handle deployment status requests
+        logger.info(`Received deployment status request from ${clientId}`);
+        // Implementation for deployment status updates
+        break;
+        
+      default:
+        logger.warn(`Received unknown message type from ${clientId}: ${message.type}`);
+    }
+  }
 
-        if (this.wss) {
-            this.wss.close((error) => {
-                if (error) {
-                    logger.error('Error closing WebSocket server:', {
-                        error: error.message,
-                        stack: error.stack
-                    });
-                } else {
-                    logger.info('WebSocket server closed gracefully');
-                }
-                this._isInitialized = false;
-                this.wss = null;
-            });
-        }
+  /**
+   * Generate a unique client identifier
+   * @returns {string} - Unique client ID
+   */
+  generateClientId() {
+    return Math.random().toString(36).substring(2, 15) + 
+           Math.random().toString(36).substring(2, 15);
+  }
+
+  /**
+   * Start the ping interval to check for stale connections
+   */
+  startPingInterval() {
+    // Clear any existing interval
+    if (this.pingInterval) {
+      clearInterval(this.pingInterval);
     }
 
-    // ==================== PRIVATE METHODS ====================
+    // Set up interval for regular pings
+    this.pingInterval = setInterval(() => {
+      if (!this.isInitialized || !this.wss) return;
 
-    _generateClientId(req) {
-        return req.headers['sec-websocket-key'] || 
-               `client-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
-    }
-
-    _handleMessage(clientId, message) {
-        const client = this.clients.get(clientId);
-        if (!client) return;
-
+      const now = Date.now();
+      
+      // Check each client and remove stale connections
+      this.clients.forEach((client, clientId) => {
         try {
-            const data = JSON.parse(message);
-            logger.debug(`Message from ${clientId}`, { 
-                type: data.type,
-                size: message.length 
-            });
-
-            switch(data.type) {
-                case 'subscribe':
-                    this._handleSubscribe(clientId, data);
-                    break;
-                case 'ping':
-                    this.send(clientId, { 
-                        type: 'pong',
-                        timestamp: new Date().toISOString()
-                    });
-                    break;
-                case 'unsubscribe':
-                    this._handleUnsubscribe(clientId, data);
-                    break;
-                default:
-                    this.broadcast(data);
-            }
-        } catch (error) {
-            logger.error(`Error processing message from ${clientId}:`, {
-                error: error.message,
-                stack: error.stack,
-                message: message.toString()
-            });
+          // Check if client is still alive (30 second timeout)
+          if (now - client.lastPing > 30000) {
+            // Try to ping the client
+            client.socket.ping();
             
-            // Send error response to client
-            this.send(clientId, {
-                type: 'error',
-                message: 'Invalid message format',
-                timestamp: new Date().toISOString()
-            });
-        }
-    }
-
-    _handleSubscribe(clientId, data) {
-        if (!data.channels || !Array.isArray(data.channels)) {
-            this.send(clientId, {
-                type: 'error',
-                message: 'Invalid subscription format',
-                timestamp: new Date().toISOString()
-            });
-            return;
-        }
-
-        // Store subscription channels for the client
-        const client = this.clients.get(clientId);
-        if (client) {
-            client.subscriptions = data.channels;
-        }
-
-        this.send(clientId, {
-            type: 'subscription_ack',
-            status: 'subscribed',
-            channels: data.channels,
-            timestamp: new Date().toISOString()
-        });
-    }
-
-    _handleUnsubscribe(clientId, data) {
-        const client = this.clients.get(clientId);
-        if (client && client.subscriptions) {
-            if (data.channels) {
-                client.subscriptions = client.subscriptions.filter(
-                    channel => !data.channels.includes(channel)
-                );
-            } else {
-                client.subscriptions = [];
-            }
-        }
-
-        this.send(clientId, {
-            type: 'unsubscription_ack',
-            status: 'unsubscribed',
-            timestamp: new Date().toISOString()
-        });
-    }
-
-    _handleDisconnect(clientId) {
-        if (this.clients.has(clientId)) {
-            const client = this.clients.get(clientId);
-            logger.info(`Client disconnected: ${clientId}`, {
-                ip: client.ip,
-                duration: new Date() - client.connectedAt
-            });
-            this.clients.delete(clientId);
-        }
-    }
-
-    _handleError(clientId, error) {
-        logger.error(`WebSocket error (${clientId}):`, {
-            error: error.message,
-            stack: error.stack
-        });
-
-        if (this.clients.has(clientId)) {
-            try {
-                this.clients.get(clientId).ws.terminate();
-            } catch (terminateError) {
-                logger.error(`Error terminating client ${clientId}:`, {
-                    error: terminateError.message,
-                    stack: terminateError.stack
-                });
-            }
-            this.clients.delete(clientId);
-        }
-    }
-
-    _pingClients() {
-        this.clients.forEach((client, clientId) => {
-            if (!client.isAlive) {
-                logger.warn(`Terminating unresponsive client: ${clientId}`, {
-                    ip: client.ip,
-                    lastActivity: client.lastActivity
-                });
-                client.ws.terminate();
-                return this.clients.delete(clientId);
-            }
-
-            client.isAlive = false;
-            try {
-                client.ws.ping(null, false, (err) => {
-                    if (err) {
-                        logger.error(`Ping failed for ${clientId}:`, {
-                            error: err.message,
-                            stack: err.stack
-                        });
-                        client.ws.terminate();
-                        this.clients.delete(clientId);
-                    }
-                });
-            } catch (error) {
-                logger.error(`Error sending ping to ${clientId}:`, {
-                    error: error.message,
-                    stack: error.stack
-                });
+            // If no pong received after 5 more seconds, consider dead
+            setTimeout(() => {
+              if (this.clients.has(clientId) && 
+                  now - this.clients.get(clientId).lastPing > 30000) {
+                logger.warn(`Client ${clientId} is unresponsive, closing connection`);
+                client.socket.terminate();
                 this.clients.delete(clientId);
-            }
-        });
+              }
+            }, 5000);
+          } else {
+            // Regular ping if active
+            client.socket.ping();
+          }
+        } catch (err) {
+          logger.error(`Error pinging client ${clientId}: ${err.message}`);
+          this.clients.delete(clientId);
+        }
+      });
+    }, 15000); // Check every 15 seconds
+  }
+
+  /**
+   * Send message to a specific client
+   * @param {string} clientId - Client identifier
+   * @param {object} data - Data to send
+   * @returns {boolean} - True if sent successfully
+   */
+  sendToClient(clientId, data) {
+    try {
+      const client = this.clients.get(clientId);
+      if (!client) {
+        logger.warn(`Attempted to send message to unknown client: ${clientId}`);
+        return false;
+      }
+
+      client.socket.send(JSON.stringify(data));
+      return true;
+    } catch (err) {
+      logger.error(`Error sending message to client ${clientId}: ${err.message}`);
+      return false;
     }
+  }
+
+  /**
+   * Broadcast message to all connected clients
+   * @param {object} data - Data to broadcast
+   * @param {Function} filter - Optional filter function to select clients
+   */
+  broadcast(data, filter = null) {
+    if (!this.isInitialized || !this.wss) {
+      logger.warn('Cannot broadcast: WebSocket server not initialized');
+      return;
+    }
+
+    const message = JSON.stringify(data);
+    let sentCount = 0;
+
+    this.clients.forEach((client, clientId) => {
+      try {
+        // Apply filter if provided
+        if (filter && !filter(client, clientId)) {
+          return;
+        }
+
+        client.socket.send(message);
+        sentCount++;
+      } catch (err) {
+        logger.error(`Error broadcasting to client ${clientId}: ${err.message}`);
+        // Remove failed client
+        this.clients.delete(clientId);
+      }
+    });
+
+    logger.debug(`Broadcast message sent to ${sentCount} clients`);
+  }
+
+  /**
+   * Check if the WebSocket service is properly connected
+   * @returns {boolean} - Connection status
+   */
+  isConnected() {
+    return this.isInitialized && this.wss !== null;
+  }
+
+  /**
+   * Get the number of connected clients
+   * @returns {number} - Client count
+   */
+  getClientCount() {
+    return this.clients.size;
+  }
+
+  /**
+   * Close the WebSocket server and clean up resources
+   * @returns {Promise<void>}
+   */
+  close() {
+    return new Promise((resolve) => {
+      // If not initialized, nothing to close
+      if (!this.isInitialized) {
+        return resolve();
+      }
+
+      // Clear intervals
+      if (this.pingInterval) {
+        clearInterval(this.pingInterval);
+        this.pingInterval = null;
+      }
+
+      if (this.retryTimeout) {
+        clearTimeout(this.retryTimeout);
+        this.retryTimeout = null;
+      }
+
+      // Close all client connections
+      this.clients.forEach((client, clientId) => {
+        try {
+          logger.debug(`Closing connection to client ${clientId}`);
+          client.socket.close();
+        } catch (err) {
+          logger.error(`Error closing client ${clientId}: ${err.message}`);
+        }
+      });
+      
+      // Clear client map
+      this.clients.clear();
+
+      // Close the server
+      if (this.server) {
+        this.server.close(() => {
+          this.wss = null;
+          this.server = null;
+          this.isInitialized = false;
+          resolve();
+        });
+      } else {
+        // No server to close
+        this.wss = null;
+        this.isInitialized = false;
+        resolve();
+      }
+    });
+  }
+
+  /**
+   * Check if a port is in use and kill the process using it if needed
+   * @param {number} port - Port to check
+   * @returns {Promise<void>}
+   */
+  checkPortAndKillProcess(port) {
+    return new Promise((resolve, reject) => {
+      // Command to find process using the port
+      const command = process.platform === 'win32'
+        ? `netstat -ano | findstr :${port}`
+        : `lsof -i :${port} -t`;
+
+      exec(command, (error, stdout, stderr) => {
+        if (error && error.code !== 1) {
+          // An error occurred, but not "not found"
+          logger.error(`Error checking port ${port}: ${error.message}`);
+          return reject(error);
+        }
+
+        if (!stdout.trim()) {
+          // No process using the port
+          logger.debug(`Port ${port} is available`);
+          return resolve();
+        }
+
+        logger.info(`Port ${port} is in use. Attempting to kill process...`);
+
+        // Extract PID - this is platform-specific
+        let pid;
+        if (process.platform === 'win32') {
+          // For Windows - extract PID from the last column
+          const lines = stdout.trim().split('\n');
+          if (lines.length > 0) {
+            const lastLine = lines[0].trim();
+            const parts = lastLine.split(/\s+/);
+            pid = parts[parts.length - 1];
+          }
+        } else {
+          // For Unix-like systems - PID is returned directly
+          pid = stdout.trim();
+        }
+
+        if (!pid) {
+          logger.warn(`Could not determine PID using port ${port}`);
+          return resolve();
+        }
+
+        // Command to kill the process
+        const killCommand = process.platform === 'win32'
+          ? `taskkill /F /PID ${pid}`
+          : `kill -9 ${pid}`;
+
+        exec(killCommand, (killError, killStdout, killStderr) => {
+          if (killError) {
+            logger.error(`Error killing process using port ${port}: ${killError.message}`);
+            return reject(killError);
+          }
+
+          logger.info(`Successfully killed process ${pid} using port ${port}`);
+          
+          // Wait a moment for the port to be released
+          setTimeout(resolve, 1000);
+        });
+      });
+    });
+  }
 }
 
-module.exports = new WebSocketService();
+// Create and export a singleton instance
+const websocketService = new WebSocketService();
+module.exports = websocketService;
