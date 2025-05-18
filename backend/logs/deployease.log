@@ -20778,3 +20778,39 @@ Reason: This is critical system process. Taskkill cannot end this process.
 2025-05-18 14:53:57 [INFO]: Received subscribe message from r3uo01qvasmugczsrlaot
 2025-05-18 14:54:15 [INFO]: WebSocket connection closed: r3uo01qvasmugczsrlaot
 2025-05-18 14:54:18 [INFO]: SIGINT received - shutting down
+2025-05-18 15:13:28 [INFO]: Logger initialized in development mode
+2025-05-18 15:13:28 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 15:13:28 [INFO]: Server running in development mode on port 3000
+2025-05-18 15:13:28 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 15:13:28 [INFO]: WebSocket server is running on port 3001
+2025-05-18 15:13:28 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-18 15:13:34 [INFO]: New WebSocket connection from ::1 (ID: yspuwvoftd28u4xdwuebe)
+2025-05-18 15:13:34 [INFO]: Received subscribe message from yspuwvoftd28u4xdwuebe
+2025-05-18 15:14:07 [INFO]: WebSocket connection closed: yspuwvoftd28u4xdwuebe
+2025-05-18 15:14:09 [INFO]: SIGINT received - shutting down
+2025-05-18 15:21:18 [INFO]: Logger initialized in development mode
+2025-05-18 15:21:18 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 15:21:18 [INFO]: Server running in development mode on port 3000
+2025-05-18 15:21:18 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 15:21:18 [INFO]: WebSocket server is running on port 3001
+2025-05-18 15:21:18 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-18 15:21:25 [INFO]: New WebSocket connection from ::1 (ID: gnixjxghwsonrf3uuccto9)
+2025-05-18 15:21:25 [INFO]: Received subscribe message from gnixjxghwsonrf3uuccto9
+2025-05-18 15:21:47 [INFO]: WebSocket connection closed: gnixjxghwsonrf3uuccto9
+2025-05-18 15:21:47 [INFO]: New WebSocket connection from ::1 (ID: q856redg9qiol5i005h0yg)
+2025-05-18 15:21:47 [INFO]: Received subscribe message from q856redg9qiol5i005h0yg
+2025-05-18 15:22:04 [INFO]: WebSocket connection closed: q856redg9qiol5i005h0yg
+2025-05-18 15:22:07 [INFO]: SIGINT received - shutting down
+2025-05-18 15:48:41 [INFO]: Logger initialized in development mode
+2025-05-18 15:48:41 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-18 15:48:41 [INFO]: Server running in development mode on port 3000
+2025-05-18 15:48:41 [INFO]: WebSocket initialization attempt 1/5
+2025-05-18 15:48:41 [INFO]: WebSocket server is running on port 3001
+2025-05-18 15:48:41 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-18 15:48:45 [INFO]: New WebSocket connection from ::1 (ID: 4097tvvu1368t8xbvatfx)
+2025-05-18 15:48:45 [INFO]: Received subscribe message from 4097tvvu1368t8xbvatfx
+2025-05-18 15:49:05 [INFO]: WebSocket connection closed: 4097tvvu1368t8xbvatfx
+2025-05-18 15:49:05 [INFO]: New WebSocket connection from ::1 (ID: c4ahfi53m6vd0lt7qwhnt7)
+2025-05-18 15:49:05 [INFO]: Received subscribe message from c4ahfi53m6vd0lt7qwhnt7
+2025-05-18 15:50:43 [INFO]: SIGINT received - shutting down
+2025-05-18 15:50:43 [INFO]: WebSocket server closed gracefully
