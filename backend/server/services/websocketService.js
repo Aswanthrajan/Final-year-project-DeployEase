@@ -1,3 +1,4 @@
+
 /**
  * WebSocket Service for DeployEase
  * Handles real-time communication for deployment status and logs
@@ -7,6 +8,7 @@ const WebSocket = require('ws');
 const http = require('http');
 const logger = require('../utils/logger');
 const { exec } = require('child_process');
+const gitService = require('../services/gitService');
 
 class WebSocketService {
   constructor() {
@@ -110,6 +112,9 @@ class WebSocketService {
       });
 
       logger.info(`New WebSocket connection from ${clientIp} (ID: ${clientId})`);
+      
+      // Send initial deployment history on connection
+      this.sendDeploymentHistory(clientId);
 
       // Set up client event handlers
       ws.on('message', (message) => {
@@ -178,9 +183,87 @@ class WebSocketService {
         // Implementation for deployment status updates
         break;
         
+      case 'request_history':
+        // Send deployment history when requested
+        logger.info(`Received history request from ${clientId}`);
+        this.sendDeploymentHistory(clientId);
+        break;
+        
       default:
         logger.warn(`Received unknown message type from ${clientId}: ${message.type}`);
     }
+  }
+
+  /**
+   * Send deployment history to a specific client
+   * @param {string} clientId - Client identifier
+   */
+  async sendDeploymentHistory(clientId) {
+    try {
+      // Get deployment history directly from gitService instead of through deploymentController
+      const historyBlue = await gitService.getDeploymentHistory('blue') || [];
+      const historyGreen = await gitService.getDeploymentHistory('green') || [];
+      
+      // Format the deployments consistent with what the client expects
+      const formatDeployment = (deployment, branch) => {
+        return {
+          id: deployment.id || deployment.sha?.slice(0, 7) || `${branch}-${Date.now()}`,
+          branch: branch,
+          status: deployment.state || 'success',
+          timestamp: deployment.timestamp || deployment.commit?.committer?.date || new Date().toISOString(),
+          commitSha: deployment.sha || '',
+          commitUrl: deployment.html_url || '',
+          commitMessage: deployment.commit?.message || `Deployment to ${branch}`,
+          committer: deployment.commit?.committer?.name || 'DeployEase System'
+        };
+      };
+      
+      // Format the history data
+      const formattedBlue = Array.isArray(historyBlue) 
+        ? historyBlue.map(d => formatDeployment(d, 'blue')) 
+        : [];
+        
+      const formattedGreen = Array.isArray(historyGreen) 
+        ? historyGreen.map(d => formatDeployment(d, 'green')) 
+        : [];
+      
+      const history = {
+        success: true,
+        blue: formattedBlue,
+        green: formattedGreen,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Send to client
+      this.sendToClient(clientId, { 
+        type: 'deployment_history',
+        data: history
+      });
+      
+      logger.debug(`Sent deployment history to client ${clientId}`);
+    } catch (error) {
+      logger.error(`Failed to fetch deployment history`, {
+        error: error.message,
+        stack: error.stack
+      });
+      logger.error(`Error sending deployment history to client ${clientId}: ${error.message}`);
+      this.sendToClient(clientId, { 
+        type: 'error',
+        message: 'Failed to retrieve deployment history' 
+      });
+    }
+  }
+
+  /**
+   * Broadcast deployment update to all connected clients
+   * @param {object} deployment - Deployment data to broadcast
+   */
+  broadcastDeploymentUpdate(deployment) {
+    this.broadcast({
+      type: 'deployment_update',
+      data: deployment
+    });
+    logger.debug(`Broadcast deployment update to all clients`);
   }
 
   /**
@@ -384,44 +467,74 @@ class WebSocketService {
           return resolve();
         }
 
-        logger.info(`Port ${port} is in use. Attempting to kill process...`);
-
-        // Extract PID - this is platform-specific
-        let pid;
+        // For Windows platforms, try to safely parse the PID
         if (process.platform === 'win32') {
-          // For Windows - extract PID from the last column
+          // Extract PID safely with more sophisticated parsing
           const lines = stdout.trim().split('\n');
-          if (lines.length > 0) {
-            const lastLine = lines[0].trim();
-            const parts = lastLine.split(/\s+/);
-            pid = parts[parts.length - 1];
+          let pid = null;
+          
+          // Look through each line for a valid listen state
+          for (const line of lines) {
+            // Example line: "  TCP    0.0.0.0:3001          0.0.0.0:0              LISTENING       4532"
+            const parts = line.trim().split(/\s+/);
+            if (parts.length >= 5) {
+              const possiblePid = parts[parts.length - 1];
+              // Make sure PID is numeric and not a system process (0, 4, or other common system PIDs)
+              const numericPid = parseInt(possiblePid, 10);
+              if (!isNaN(numericPid) && numericPid > 10) {
+                pid = numericPid;
+                break;
+              }
+            }
           }
+          
+          if (!pid) {
+            logger.warn(`Could not safely determine PID using port ${port}, skipping kill step`);
+            // Continue without killing as we can't be sure which process to kill
+            return resolve();
+          }
+          
+          logger.info(`Identified process ${pid} using port ${port}`);
+          
+          // Command to kill the process
+          const killCommand = `taskkill /F /PID ${pid}`;
+          
+          exec(killCommand, (killError, killStdout, killStderr) => {
+            if (killError) {
+              logger.error(`Error killing process ${pid} using port ${port}: ${killError.message}`);
+              // Continue anyway - we'll try to start the server
+              return resolve();
+            }
+
+            logger.info(`Successfully killed process ${pid} using port ${port}`);
+            
+            // Wait a moment for the port to be released
+            setTimeout(resolve, 1000);
+          });
         } else {
           // For Unix-like systems - PID is returned directly
-          pid = stdout.trim();
-        }
-
-        if (!pid) {
-          logger.warn(`Could not determine PID using port ${port}`);
-          return resolve();
-        }
-
-        // Command to kill the process
-        const killCommand = process.platform === 'win32'
-          ? `taskkill /F /PID ${pid}`
-          : `kill -9 ${pid}`;
-
-        exec(killCommand, (killError, killStdout, killStderr) => {
-          if (killError) {
-            logger.error(`Error killing process using port ${port}: ${killError.message}`);
-            return reject(killError);
+          const pid = stdout.trim();
+          
+          if (!pid) {
+            logger.warn(`Could not determine PID using port ${port}`);
+            return resolve();
           }
 
-          logger.info(`Successfully killed process ${pid} using port ${port}`);
-          
-          // Wait a moment for the port to be released
-          setTimeout(resolve, 1000);
-        });
+          // Command to kill the process
+          const killCommand = `kill -9 ${pid}`;
+
+          exec(killCommand, (killError, killStdout, killStderr) => {
+            if (killError) {
+              logger.error(`Error killing process using port ${port}: ${killError.message}`);
+              return reject(killError);
+            }
+
+            logger.info(`Successfully killed process ${pid} using port ${port}`);
+            
+            // Wait a moment for the port to be released
+            setTimeout(resolve, 1000);
+          });
+        }
       });
     });
   }

@@ -75,3 +75,233 @@ Reason: This is critical system process. Taskkill cannot end this process.
 ERROR: The process with PID 0 could not be terminated.
 Reason: This is critical system process. Taskkill cannot end this process.
 
+2025-05-19 06:19:19 [INFO]: SIGINT received - shutting down
+2025-05-19 06:21:34 [INFO]: Logger initialized in development mode
+2025-05-19 06:21:34 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 06:21:35 [INFO]: Server running in development mode on port 3000
+2025-05-19 06:21:35 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 06:21:35 [INFO]: WebSocket server is running on port 3001
+2025-05-19 06:21:35 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-19 06:21:40 [INFO]: New WebSocket connection from ::1 (ID: g7aefrc64c5h95fcajo6wn)
+2025-05-19 06:21:40 [INFO]: Received subscribe message from g7aefrc64c5h95fcajo6wn
+2025-05-19 06:22:08 [ERROR]: Failed to get deployment status for branch blue:
+2025-05-19 06:22:08 [ERROR]: Failed to get deployment status for branch green:
+2025-05-19 06:24:03 [INFO]: WebSocket connection closed: g7aefrc64c5h95fcajo6wn
+2025-05-19 06:24:03 [INFO]: New WebSocket connection from ::1 (ID: ar095jf8m4cc9lzlap47nm)
+2025-05-19 06:24:03 [INFO]: Received subscribe message from ar095jf8m4cc9lzlap47nm
+2025-05-19 06:24:08 [INFO]: WebSocket connection closed: ar095jf8m4cc9lzlap47nm
+2025-05-19 06:24:08 [INFO]: New WebSocket connection from ::1 (ID: 2pnbc9e29ws0sm2oc93k4ca)
+2025-05-19 06:24:08 [INFO]: Received subscribe message from 2pnbc9e29ws0sm2oc93k4ca
+2025-05-19 06:24:26 [INFO]: WebSocket connection closed: 2pnbc9e29ws0sm2oc93k4ca
+2025-05-19 06:24:26 [INFO]: New WebSocket connection from ::1 (ID: 0rlmcyens3jf4b9gkqawll6)
+2025-05-19 06:24:26 [INFO]: Received subscribe message from 0rlmcyens3jf4b9gkqawll6
+2025-05-19 06:24:29 [INFO]: WebSocket connection closed: 0rlmcyens3jf4b9gkqawll6
+2025-05-19 06:24:29 [INFO]: New WebSocket connection from ::1 (ID: hd9fu740dcibr7xh4nqkgh)
+2025-05-19 06:24:29 [INFO]: Received subscribe message from hd9fu740dcibr7xh4nqkgh
+2025-05-19 06:24:44 [ERROR]: Failed to get deployment status for branch blue:
+2025-05-19 06:24:44 [ERROR]: Failed to get deployment status for branch green:
+2025-05-19 06:24:56 [INFO]: WebSocket connection closed: hd9fu740dcibr7xh4nqkgh
+2025-05-19 06:24:56 [INFO]: New WebSocket connection from ::1 (ID: ouo6hi5paiwdzkynj1p8)
+2025-05-19 06:24:56 [INFO]: Received subscribe message from ouo6hi5paiwdzkynj1p8
+2025-05-19 06:25:24 [ERROR]: Failed to get deployment status for branch blue:
+2025-05-19 06:25:24 [ERROR]: Failed to get deployment status for branch green:
+2025-05-19 06:25:24 [ERROR]: Failed to get deployment history [6c2214db]: fetch failed
+2025-05-19 06:25:24 [ERROR]: Failed to get deployment history
+2025-05-19 06:25:24 [ERROR]: Failed to get deployment history [739be912]: fetch failed
+2025-05-19 07:07:31 [INFO]: WebSocket connection closed: ouo6hi5paiwdzkynj1p8
+2025-05-19 07:07:31 [INFO]: New WebSocket connection from ::1 (ID: hpkz7fjkqsssdemhdsgg7r)
+2025-05-19 07:07:31 [INFO]: Received subscribe message from hpkz7fjkqsssdemhdsgg7r
+2025-05-19 07:07:32 [INFO]: WebSocket connection closed: hpkz7fjkqsssdemhdsgg7r
+2025-05-19 07:07:32 [INFO]: New WebSocket connection from ::1 (ID: lowtptkquwr3verx6hlke)
+2025-05-19 07:07:32 [INFO]: Received subscribe message from lowtptkquwr3verx6hlke
+2025-05-19 07:07:32 [INFO]: WebSocket connection closed: lowtptkquwr3verx6hlke
+2025-05-19 07:07:32 [INFO]: New WebSocket connection from ::1 (ID: c9mure62byov9wr8cmz59s)
+2025-05-19 07:07:32 [INFO]: Received subscribe message from c9mure62byov9wr8cmz59s
+2025-05-19 07:07:32 [INFO]: WebSocket connection closed: c9mure62byov9wr8cmz59s
+2025-05-19 07:07:32 [INFO]: New WebSocket connection from ::1 (ID: luaoyszilfehx4182k6klv)
+2025-05-19 07:07:32 [INFO]: Received subscribe message from luaoyszilfehx4182k6klv
+2025-05-19 07:07:32 [INFO]: WebSocket connection closed: luaoyszilfehx4182k6klv
+2025-05-19 07:07:32 [INFO]: New WebSocket connection from ::1 (ID: olxmuqfpj7kf47lb1oy8)
+2025-05-19 07:07:32 [INFO]: Received subscribe message from olxmuqfpj7kf47lb1oy8
+2025-05-19 07:07:32 [INFO]: WebSocket connection closed: olxmuqfpj7kf47lb1oy8
+2025-05-19 07:07:32 [INFO]: New WebSocket connection from ::1 (ID: eht7m6bzmia5s30ptjqv)
+2025-05-19 07:07:32 [INFO]: Received subscribe message from eht7m6bzmia5s30ptjqv
+2025-05-19 07:07:32 [INFO]: WebSocket connection closed: eht7m6bzmia5s30ptjqv
+2025-05-19 07:07:32 [INFO]: New WebSocket connection from ::1 (ID: zaywz8digvp4gp7mvf34n2)
+2025-05-19 07:07:32 [INFO]: Received subscribe message from zaywz8digvp4gp7mvf34n2
+2025-05-19 07:07:33 [INFO]: WebSocket connection closed: zaywz8digvp4gp7mvf34n2
+2025-05-19 07:07:33 [INFO]: New WebSocket connection from ::1 (ID: y5vo6155wkmjqif1twkxlg)
+2025-05-19 07:07:33 [INFO]: Received subscribe message from y5vo6155wkmjqif1twkxlg
+2025-05-19 07:07:33 [INFO]: WebSocket connection closed: y5vo6155wkmjqif1twkxlg
+2025-05-19 07:07:33 [INFO]: New WebSocket connection from ::1 (ID: 1npndi6df2uq4ii0vuwklh)
+2025-05-19 07:07:33 [INFO]: Received subscribe message from 1npndi6df2uq4ii0vuwklh
+2025-05-19 07:07:33 [INFO]: WebSocket connection closed: 1npndi6df2uq4ii0vuwklh
+2025-05-19 07:07:33 [INFO]: New WebSocket connection from ::1 (ID: vdiycgmycu9w1347blgf9d)
+2025-05-19 07:07:33 [INFO]: Received subscribe message from vdiycgmycu9w1347blgf9d
+2025-05-19 07:07:33 [INFO]: WebSocket connection closed: vdiycgmycu9w1347blgf9d
+2025-05-19 07:07:33 [INFO]: New WebSocket connection from ::1 (ID: 305rqehnq6oe82i0sdm1n5)
+2025-05-19 07:07:33 [INFO]: Received subscribe message from 305rqehnq6oe82i0sdm1n5
+2025-05-19 07:07:33 [INFO]: WebSocket connection closed: 305rqehnq6oe82i0sdm1n5
+2025-05-19 07:07:33 [INFO]: New WebSocket connection from ::1 (ID: sukn25vtwqbepvjxx85hv)
+2025-05-19 07:07:33 [INFO]: Received subscribe message from sukn25vtwqbepvjxx85hv
+2025-05-19 07:07:33 [INFO]: WebSocket connection closed: sukn25vtwqbepvjxx85hv
+2025-05-19 07:07:33 [INFO]: New WebSocket connection from ::1 (ID: 2air4s401r9yvcdiihlvkq)
+2025-05-19 07:07:33 [INFO]: Received subscribe message from 2air4s401r9yvcdiihlvkq
+2025-05-19 07:07:33 [INFO]: WebSocket connection closed: 2air4s401r9yvcdiihlvkq
+2025-05-19 07:07:33 [INFO]: New WebSocket connection from ::1 (ID: mogwwupbqpi9dmq52lu0o)
+2025-05-19 07:07:33 [INFO]: Received subscribe message from mogwwupbqpi9dmq52lu0o
+2025-05-19 07:07:34 [INFO]: WebSocket connection closed: mogwwupbqpi9dmq52lu0o
+2025-05-19 07:07:34 [INFO]: New WebSocket connection from ::1 (ID: qnlbjbzndj8f5s8ayrqlyk)
+2025-05-19 07:07:34 [INFO]: Received subscribe message from qnlbjbzndj8f5s8ayrqlyk
+2025-05-19 07:07:34 [INFO]: WebSocket connection closed: qnlbjbzndj8f5s8ayrqlyk
+2025-05-19 07:07:34 [INFO]: New WebSocket connection from ::1 (ID: 6eewzzug9udxq20gxfys)
+2025-05-19 07:07:34 [INFO]: Received subscribe message from 6eewzzug9udxq20gxfys
+2025-05-19 07:07:34 [INFO]: WebSocket connection closed: 6eewzzug9udxq20gxfys
+2025-05-19 07:07:34 [INFO]: New WebSocket connection from ::1 (ID: ll1xer94249jc0qol5afv)
+2025-05-19 07:07:34 [INFO]: Received subscribe message from ll1xer94249jc0qol5afv
+2025-05-19 07:07:34 [INFO]: WebSocket connection closed: ll1xer94249jc0qol5afv
+2025-05-19 07:07:34 [INFO]: New WebSocket connection from ::1 (ID: objkjys59wlcb7lo37rq)
+2025-05-19 07:07:34 [INFO]: Received subscribe message from objkjys59wlcb7lo37rq
+2025-05-19 07:07:34 [INFO]: WebSocket connection closed: objkjys59wlcb7lo37rq
+2025-05-19 07:07:34 [INFO]: New WebSocket connection from ::1 (ID: puc6m1g7pw2trw7hfvdkl)
+2025-05-19 07:07:34 [INFO]: Received subscribe message from puc6m1g7pw2trw7hfvdkl
+2025-05-19 07:07:34 [INFO]: SIGINT received - shutting down
+2025-05-19 07:07:34 [INFO]: WebSocket server closed gracefully
+2025-05-19 07:07:38 [INFO]: Logger initialized in development mode
+2025-05-19 07:07:38 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 07:07:39 [INFO]: Server running in development mode on port 3000
+2025-05-19 07:07:39 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 07:07:39 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-19 07:07:39 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:07:39 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:07:39 [ERROR]: WebSocket initialization failed (attempt 1/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:07:39 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-19 07:07:41 [INFO]: SIGINT received - shutting down
+2025-05-19 07:07:46 [INFO]: Logger initialized in development mode
+2025-05-19 07:07:46 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 07:07:46 [INFO]: Server running in development mode on port 3000
+2025-05-19 07:07:46 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 07:07:46 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-19 07:07:46 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:07:46 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:07:46 [ERROR]: WebSocket initialization failed (attempt 1/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:07:46 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-19 07:07:48 [INFO]: SIGINT received - shutting down
+2025-05-19 07:08:27 [INFO]: Logger initialized in development mode
+2025-05-19 07:08:27 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 07:08:27 [INFO]: Server running in development mode on port 3000
+2025-05-19 07:08:27 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 07:08:27 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-19 07:08:27 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:08:27 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:08:27 [ERROR]: WebSocket initialization failed (attempt 1/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:08:27 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-19 07:08:30 [INFO]: SIGINT received - shutting down
+2025-05-19 07:09:26 [INFO]: Logger initialized in development mode
+2025-05-19 07:09:26 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 07:09:26 [INFO]: Server running in development mode on port 3000
+2025-05-19 07:09:26 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 07:09:27 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-19 07:09:27 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:09:27 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:09:27 [ERROR]: WebSocket initialization failed (attempt 1/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:09:27 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-19 07:09:31 [INFO]: SIGINT received - shutting down
+2025-05-19 07:11:56 [INFO]: Logger initialized in development mode
+2025-05-19 07:11:56 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 07:11:57 [INFO]: Server running in development mode on port 3000
+2025-05-19 07:11:57 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 07:11:57 [INFO]: WebSocket server is running on port 3001
+2025-05-19 07:11:57 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-19 07:12:02 [INFO]: New WebSocket connection from ::1 (ID: sih4unwr9xb6nwhv1k1w)
+2025-05-19 07:12:02 [ERROR]: Failed to fetch deployment history
+2025-05-19 07:12:02 [ERROR]: Error sending deployment history to client sih4unwr9xb6nwhv1k1w: Cannot read properties of undefined (reading 'status')
+2025-05-19 07:12:02 [INFO]: Received subscribe message from sih4unwr9xb6nwhv1k1w
+2025-05-19 07:16:44 [INFO]: WebSocket connection closed: sih4unwr9xb6nwhv1k1w
+2025-05-19 07:16:44 [INFO]: New WebSocket connection from ::1 (ID: c8rynrn7rjfowru6qyhvs)
+2025-05-19 07:16:44 [ERROR]: Failed to fetch deployment history
+2025-05-19 07:16:44 [ERROR]: Error sending deployment history to client c8rynrn7rjfowru6qyhvs: Cannot read properties of undefined (reading 'status')
+2025-05-19 07:16:44 [INFO]: Received subscribe message from c8rynrn7rjfowru6qyhvs
+2025-05-19 07:17:26 [INFO]: SIGINT received - shutting down
+2025-05-19 07:17:26 [INFO]: WebSocket server closed gracefully
+2025-05-19 07:17:58 [INFO]: Logger initialized in development mode
+2025-05-19 07:17:58 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 07:17:58 [INFO]: Server running in development mode on port 3000
+2025-05-19 07:17:58 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 07:17:58 [INFO]: Port 3001 is in use. Attempting to kill process...
+2025-05-19 07:17:58 [ERROR]: Error killing process using port 3001: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:17:58 [ERROR]: Error checking port: Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:17:58 [ERROR]: WebSocket initialization failed (attempt 1/5): Command failed: taskkill /F /PID 0
+ERROR: The process with PID 0 could not be terminated.
+Reason: This is critical system process. Taskkill cannot end this process.
+
+2025-05-19 07:17:58 [INFO]: Retrying WebSocket initialization in 5 seconds...
+2025-05-19 07:18:02 [INFO]: SIGINT received - shutting down
+2025-05-19 07:18:56 [INFO]: Logger initialized in development mode
+2025-05-19 07:18:56 [INFO]: Log files stored in: C:\Users\Aswanth Rajan\OneDrive\Desktop\project\deployease\backend\logs
+2025-05-19 07:18:57 [INFO]: Server running in development mode on port 3000
+2025-05-19 07:18:57 [INFO]: WebSocket initialization attempt 1/5
+2025-05-19 07:18:57 [WARN]: Could not safely determine PID using port 3001, skipping kill step
+2025-05-19 07:18:57 [INFO]: WebSocket server is running on port 3001
+2025-05-19 07:18:57 [INFO]: WebSocket server successfully initialized on port 3001
+2025-05-19 07:19:10 [INFO]: New WebSocket connection from ::1 (ID: 5t9g2nz0vcp2lwkmroa9pd)
+2025-05-19 07:19:10 [INFO]: Received subscribe message from 5t9g2nz0vcp2lwkmroa9pd
+2025-05-19 07:19:52 [ERROR]: Failed to get deployment status for branch blue:
+2025-05-19 07:19:52 [ERROR]: Failed to get deployment status for branch green:
+2025-05-19 07:20:56 [INFO]: WebSocket connection closed: 5t9g2nz0vcp2lwkmroa9pd
+2025-05-19 07:20:56 [INFO]: New WebSocket connection from ::1 (ID: r049db704sfpzoh16ud88)
+2025-05-19 07:20:56 [INFO]: Received subscribe message from r049db704sfpzoh16ud88
+2025-05-19 07:21:07 [ERROR]: Failed to get deployment history [806ffcd1]: fetch failed
+2025-05-19 07:21:07 [ERROR]: Failed to fetch deployment history
+2025-05-19 07:21:07 [ERROR]: Error sending deployment history to client r049db704sfpzoh16ud88: Failed to get deployment history. Error ID: 806ffcd1
+2025-05-19 07:21:20 [INFO]: WebSocket connection closed: r049db704sfpzoh16ud88
+2025-05-19 07:21:20 [INFO]: New WebSocket connection from ::1 (ID: xcr0mfuhcbpbt4lzgqnqmd)
+2025-05-19 07:21:20 [INFO]: Received subscribe message from xcr0mfuhcbpbt4lzgqnqmd
+2025-05-19 07:21:56 [ERROR]: Failed to get deployment status for branch blue:
+2025-05-19 07:21:56 [ERROR]: Failed to get deployment status for branch green:
+2025-05-19 07:22:06 [ERROR]: Failed to get deployment history [0b3c60e3]: fetch failed
+2025-05-19 07:22:06 [ERROR]: Failed to get deployment history
+2025-05-19 07:22:37 [INFO]: WebSocket connection closed: xcr0mfuhcbpbt4lzgqnqmd
+2025-05-19 07:22:39 [INFO]: SIGINT received - shutting down
