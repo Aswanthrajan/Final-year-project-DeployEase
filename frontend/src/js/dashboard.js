@@ -18,8 +18,15 @@ const elements = {
     currentActiveEnv: document.getElementById('currentActiveEnv'),
     logContent: document.getElementById('logContent'),
     confirmDeployBtn: document.getElementById('confirmDeployBtn'),
-    cancelDeployBtn: document.getElementById('cancelDeployBtn')
+    cancelDeployBtn: document.getElementById('cancelDeployBtn'),
+    // Added new elements for progress bar
+    deploymentProgressBar: document.getElementById('deploymentProgressBar'),
+    deploymentStatusText: document.getElementById('deploymentStatusText')
 };
+
+// Progress bar state
+let progressBarInterval = null;
+let isDeploying = false;
 
 // Initialize dashboard
 function initializeDashboard() {
@@ -59,6 +66,7 @@ function setupEventListeners() {
         elements.refreshButton.addEventListener("click", () => {
             if (webSocketManager.getConnectionState() === 'connected') {
                 updateEnvironmentStatus();
+                showToast("Refreshing data...", "info");
             } else {
                 showToast("Connection lost. Please refresh the page.", "error");
             }
@@ -160,11 +168,12 @@ function closeDeployModal() {
     }
 }
 
-function handleDeployment() {
+async function handleDeployment() {
     // Get form values
     const deploymentType = document.getElementById('deploymentType').value;
     const commitMessage = document.getElementById('commitMessage').value;
     const fileInput = document.getElementById('fileUpload');
+    const branch = deploymentType === 'NEW' ? 'blue' : 'green';
     
     if (!commitMessage) {
         showToast("Please enter a deployment message", "error");
@@ -175,12 +184,205 @@ function handleDeployment() {
         showToast("Please select files to deploy", "error");
         return;
     }
+
+    try {
+        showToast("Preparing deployment...", "info");
+        
+        // Prepare form data
+        const formData = new FormData();
+        formData.append('branch', branch);
+        formData.append('commitMessage', commitMessage);
+        
+        // Append all files (not just the first one)
+        Array.from(fileInput.files).forEach(file => {
+            formData.append('files', file);
+        });
+
+        const baseUrl = window.AppConfig?.apiBaseUrl || config.apiBaseUrl || 'http://localhost:3000';
+        const response = await fetch(`${baseUrl}/api/deployments`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        const result = await response.json();
+        showToast(`Deployment to ${branch} started! ${fileInput.files.length} files uploaded`, "success");
+        closeDeployModal();
+        updateEnvironmentStatus();
+        
+        // Start the deployment progress animation
+        startDeploymentProgress();
+    } catch (error) {
+        console.error("Deployment failed:", error);
+        showToast(`Deployment failed: ${error.message}`, "error");
+    }
+}
+
+// Function to start the deployment progress animation
+function startDeploymentProgress() {
+    // Clear any existing interval
+    if (progressBarInterval) {
+        clearInterval(progressBarInterval);
+    }
     
-    // Here you would typically send the deployment request
-    showToast("Deployment initiated successfully", "success");
-    closeDeployModal();
+    // Reset progress bar state
+    isDeploying = true;
+    const progressBar = elements.deploymentProgressBar;
+    const statusText = elements.deploymentStatusText;
     
-    // Note: Actual deployment logic would go here, likely calling gitDeploy.js functions
+    if (!progressBar || !statusText) return;
+    
+    // Set initial states
+    progressBar.style.width = '0%';
+    progressBar.classList.remove('complete');
+    statusText.textContent = 'Deploying...';
+    
+    // Calculate a random duration between 15-55 seconds
+    const duration = Math.floor(Math.random() * (55 - 15 + 1)) + 15; // 15-55 seconds
+    const intervalTime = 100; // Update every 100ms for smooth animation
+    const steps = (duration * 1000) / intervalTime;
+    let currentStep = 0;
+    
+    progressBarInterval = setInterval(() => {
+        currentStep++;
+        const progress = Math.min((currentStep / steps) * 100, 100);
+        
+        progressBar.style.width = `${progress}%`;
+        
+        // When progress reaches 100%
+        if (progress >= 100) {
+            clearInterval(progressBarInterval);
+            progressBar.classList.add('complete');
+            statusText.textContent = 'Deployment Complete';
+            isDeploying = false;
+            
+            // After a delay, reset the progress bar
+            setTimeout(() => {
+                if (!isDeploying) {
+                    statusText.textContent = 'Ready';
+                    progressBar.style.width = '0%';
+                }
+            }, 5000);
+        }
+    }, intervalTime);
+}
+
+async function switchTraffic() {
+    if (webSocketManager.getConnectionState() !== 'connected') {
+        showToast("Cannot switch traffic - connection lost", "error");
+        return;
+    }
+
+    try {
+        showToast("Switching traffic...", "info");
+        const baseUrl = window.AppConfig?.apiBaseUrl || config.apiBaseUrl || 'http://localhost:3000';
+        const response = await fetch(`${baseUrl}/api/environments/switch`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        const result = await response.json();
+        showToast(`Traffic switched to ${result.activeEnvironment}`, "success");
+        updateEnvironmentStatus();
+        
+        // Start progress bar for the switch operation
+        startDeploymentProgress();
+    } catch (error) {
+        console.error("Failed to switch traffic:", error);
+        showToast(`Switch failed: ${error.message}`, "error");
+    }
+}
+
+async function showRollbackOptions() {
+    if (webSocketManager.getConnectionState() !== 'connected') {
+        showToast("Cannot rollback - connection lost", "error");
+        return;
+    }
+
+    try {
+        const branch = getInactiveEnvironment();
+        showToast(`Fetching rollback points for ${branch}...`, "info");
+        
+        const baseUrl = window.AppConfig?.apiBaseUrl || config.apiBaseUrl || 'http://localhost:3000';
+        const response = await fetch(`${baseUrl}/api/deployments/history/${branch}`);
+        
+        if (!response.ok) throw new Error(await response.text());
+        
+        const rollbackPoints = await response.json();
+        
+        if (!rollbackPoints.length) {
+            showToast("No rollback points available", "info");
+            return;
+        }
+        
+        showRollbackSelectionUI(rollbackPoints, branch);
+    } catch (error) {
+        console.error("Failed to get rollback options:", error);
+        showToast(`Failed to get rollback options: ${error.message}`, "error");
+    }
+}
+
+function showRollbackSelectionUI(rollbackPoints, branch) {
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'rollback-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>Rollback ${branch.toUpperCase()} to:</h3>
+            <ul class="rollback-list">
+                ${rollbackPoints.map(point => `
+                    <li>
+                        <button class="rollback-point" data-sha="${point.commitSha}">
+                            <strong>${new Date(point.timestamp).toLocaleString()}</strong><br>
+                            ${point.commitMessage || 'No message'} (${point.commitSha.slice(0, 7)})
+                        </button>
+                    </li>
+                `).join('')}
+            </ul>
+            <button class="cancel-rollback secondary-button">Cancel</button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Add event listeners
+    modal.querySelectorAll('.rollback-point').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const sha = e.target.dataset.sha;
+            await performRollback(branch, sha);
+            modal.remove();
+        });
+    });
+    
+    modal.querySelector('.cancel-rollback').addEventListener('click', () => {
+        modal.remove();
+    });
+}
+
+async function performRollback(branch, commitSha) {
+    try {
+        showToast(`Rolling back ${branch}...`, "info");
+        const baseUrl = window.AppConfig?.apiBaseUrl || config.apiBaseUrl || 'http://localhost:3000';
+        const response = await fetch(`${baseUrl}/api/deployments/rollback/${branch}/${commitSha}`, {
+            method: 'POST'
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        showToast(`Successfully rolled back ${branch}`, "success");
+        updateEnvironmentStatus();
+        
+        // Start the deployment progress for rollback
+        startDeploymentProgress();
+    } catch (error) {
+        console.error("Rollback failed:", error);
+        showToast(`Rollback failed: ${error.message}`, "error");
+    }
 }
 
 function getInactiveEnvironment() {
@@ -324,31 +526,16 @@ function updateEnvironmentUI(status) {
         if (elements.greenHealthStatus) elements.greenHealthStatus.textContent = status.green?.health || "Unknown";
     }
 
-    // Update current environment indicator
+    // Update current environment indicator - make it dynamic
+    const activeEnvironment = status.blue?.status === "active" ? "Blue" : "Green";
     if (elements.currentActiveEnv) {
-        elements.currentActiveEnv.textContent = status.blue?.status === "active" ? "Blue" : "Green";
+        elements.currentActiveEnv.textContent = activeEnvironment;
     }
     
     // Update switch traffic button
     if (elements.switchTraffic) {
         elements.switchTraffic.textContent = `Switch to ${status.blue?.status === "active" ? "Green" : "Blue"}`;
     }
-}
-
-function showRollbackOptions() {
-    if (webSocketManager.getConnectionState() !== 'connected') {
-        showToast("Cannot rollback - connection lost", "error");
-        return;
-    }
-    // Implementation remains the same
-}
-
-function switchTraffic() {
-    if (webSocketManager.getConnectionState() !== 'connected') {
-        showToast("Cannot switch traffic - connection lost", "error");
-        return;
-    }
-    // Implementation remains the same
 }
 
 document.addEventListener('DOMContentLoaded', initializeDashboard);
