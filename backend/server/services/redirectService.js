@@ -2,7 +2,7 @@
 const gitService = require('./gitService');
 const netlifyService = require('./netlifyService');
 const logger = require('../utils/logger');
-const REPOSITORY_URL = 'https://github.com/Aswanthrajan/blue';
+const REPOSITORY_URL = process.env.REPOSITORY_URL || 'https://github.com/Aswanthrajan/blue';
 
 class RedirectService {
   constructor() {
@@ -135,11 +135,13 @@ class RedirectService {
   /**
    * Parse repository URL into owner and repo
    * @private
+   * @returns {{owner: string, repo: string}}
    */
   parseRepositoryUrl() {
-    const match = REPOSITORY_URL.match(/github\.com\/([^/]+)\/([^/]+)/);
+    const repoUrl = REPOSITORY_URL;
+    const match = repoUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
     if (!match || !match[1] || !match[2]) {
-      throw new Error(`Invalid repository URL: ${REPOSITORY_URL}`);
+      throw new Error(`Invalid repository URL: ${repoUrl}`);
     }
     return { 
       owner: match[1], 

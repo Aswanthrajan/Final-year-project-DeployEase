@@ -12,159 +12,263 @@ const statusCache = {
   ttl: 30000 // 30 seconds cache
 };
 
-const getEnvironmentStatus = async (req, res) => {
-  try {
-    // Check cache first
-    if (statusCache.data && Date.now() - statusCache.lastUpdated < statusCache.ttl) {
-      statusCache.data.cache = { cached: true };
-      return res.status(200).json(statusCache.data);
-    }
-
-    const [activeBranch, blueDeploy, greenDeploy] = await Promise.allSettled([
-      redirectService.getActiveBranch(),
-      netlifyService.getLatestDeploy('blue'),
-      netlifyService.getLatestDeploy('green')
-    ]);
-
-    // Determine active branch with fallback
-    const currentBranch = activeBranch.status === 'fulfilled' ? 
-      activeBranch.value : 'blue';
-
-    // Prepare environment data with fallbacks
-    const environmentData = {
-      blue: {
-        status: currentBranch === 'blue' ? 'active' : 'inactive',
-        branch: 'blue',
-        url: process.env.NETLIFY_BLUE_URL || `${process.env.NETLIFY_SITE_URL}/blue`,
-        deployStatus: blueDeploy.status === 'fulfilled' ? blueDeploy.value : { error: 'Status unavailable' },
-        lastUpdated: new Date().toISOString()
-      },
-      green: {
-        status: currentBranch === 'green' ? 'active' : 'inactive',
-        branch: 'green',
-        url: process.env.NETLIFY_GREEN_URL || `${process.env.NETLIFY_SITE_URL}/green`,
-        deployStatus: greenDeploy.status === 'fulfilled' ? greenDeploy.value : { error: 'Status unavailable' },
-        lastUpdated: new Date().toISOString()
-      },
-      activeBranch: currentBranch,
-      timestamp: new Date().toISOString(),
-      cache: {
-        cached: false,
-        ttl: statusCache.ttl
-      }
-    };
-
-    // Update cache
-    statusCache.data = environmentData;
-    statusCache.lastUpdated = Date.now();
-
-    res.status(200).json(environmentData);
-  } catch (error) {
-    logger.error('Failed to fetch environment status', {
-      error: error.message,
-      stack: error.stack,
-      timestamp: new Date().toISOString()
-    });
-
-    // Return cached data if available
-    if (statusCache.data) {
-      statusCache.data.cache = { cached: true, stale: true };
-      return res.status(200).json(statusCache.data);
-    }
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch environment status",
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
+// Store original branch configuration for rollback capability
+const originalConfig = {
+  blue: 'blue',
+  green: 'green',
+  initialActiveBranch: 'blue' // Default initial active branch is blue
 };
 
-const switchTraffic = async (req, res) => {
-  try {
-    const { targetBranch } = req.body;
-    
-    // Validate target branch
-    if (!['blue', 'green'].includes(targetBranch)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid target branch specified",
-        validBranches: ['blue', 'green'],
-        timestamp: new Date().toISOString()
-      });
+class EnvironmentController {
+    /**
+     * Get status of both environments with caching
+     */
+    async getEnvironmentStatus(req, res) {
+        try {
+            // Check cache first
+            if (statusCache.data && Date.now() - statusCache.lastUpdated < statusCache.ttl) {
+                statusCache.data.cache = { cached: true };
+                return res.status(200).json(statusCache.data);
+            }
+
+            const [activeBranch, blueDeploy, greenDeploy, blueHealth, greenHealth] = await Promise.allSettled([
+                redirectService.getActiveBranch(),
+                netlifyService.getLatestDeploy('blue'),
+                netlifyService.getLatestDeploy('green'),
+                netlifyService.getBranchHealth('blue'),
+                netlifyService.getBranchHealth('green')
+            ]);
+
+            // Determine active branch with fallback
+            const currentBranch = activeBranch.status === 'fulfilled' ? 
+                activeBranch.value : 'blue';
+
+            // Prepare environment data with fallbacks
+            const environmentData = {
+                success: true,
+                blue: {
+                    status: currentBranch === 'blue' ? 'active' : 'inactive',
+                    branch: 'blue',
+                    url: process.env.NETLIFY_BLUE_URL || `${process.env.NETLIFY_SITE_URL}/blue`,
+                    deployStatus: blueDeploy.status === 'fulfilled' ? blueDeploy.value : { error: 'Status unavailable' },
+                    health: blueHealth.status === 'fulfilled' ? blueHealth.value : 'unknown',
+                    lastUpdated: new Date().toISOString()
+                },
+                green: {
+                    status: currentBranch === 'green' ? 'active' : 'inactive',
+                    branch: 'green',
+                    url: process.env.NETLIFY_GREEN_URL || `${process.env.NETLIFY_SITE_URL}/green`,
+                    deployStatus: greenDeploy.status === 'fulfilled' ? greenDeploy.value : { error: 'Status unavailable' },
+                    health: greenHealth.status === 'fulfilled' ? greenHealth.value : 'unknown',
+                    lastUpdated: new Date().toISOString()
+                },
+                activeBranch: currentBranch,
+                isSwapped: currentBranch !== originalConfig.initialActiveBranch,
+                timestamp: new Date().toISOString(),
+                cache: {
+                    cached: false,
+                    ttl: statusCache.ttl
+                }
+            };
+
+            // Update cache
+            statusCache.data = environmentData;
+            statusCache.lastUpdated = Date.now();
+
+            res.status(200).json(environmentData);
+        } catch (error) {
+            logger.error('Failed to fetch environment status', {
+                error: error.message,
+                stack: error.stack,
+                timestamp: new Date().toISOString()
+            });
+
+            // Return cached data if available
+            if (statusCache.data) {
+                statusCache.data.cache = { cached: true, stale: true };
+                return res.status(200).json(statusCache.data);
+            }
+
+            res.status(500).json({
+                success: false,
+                message: "Failed to fetch environment status",
+                error: error.message,
+                timestamp: new Date().toISOString()
+            });
+        }
     }
 
-    // Get current branch
-    const currentBranch = await redirectService.getActiveBranch();
-    
-    // Check if already on target branch
-    if (currentBranch === targetBranch) {
-      return res.status(200).json({
-        success: true,
-        message: `Already on ${targetBranch} environment`,
-        activeBranch: targetBranch,
-        changed: false,
-        timestamp: new Date().toISOString()
-      });
+    /**
+     * Switch traffic between blue and green environments
+     */
+    async switchTraffic(req, res) {
+        try {
+            const { targetBranch } = req.body;
+            
+            // Validate target branch
+            if (!['blue', 'green'].includes(targetBranch)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid target branch specified",
+                    validBranches: ['blue', 'green'],
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            // Get current branch
+            const currentBranch = await redirectService.getActiveBranch();
+            
+            // Check if already on target branch
+            if (currentBranch === targetBranch) {
+                return res.status(200).json({
+                    success: true,
+                    message: `Already on ${targetBranch} environment`,
+                    activeBranch: targetBranch,
+                    changed: false,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            // Execute switch operations in parallel
+            const [redirectResult, purgeResult, deployResult] = await Promise.all([
+                redirectService.updateRedirects(targetBranch),
+                netlifyService.purgeCache(),
+                netlifyService.triggerDeploy('main')
+            ]);
+
+            // Invalidate cache
+            statusCache.lastUpdated = null;
+
+            // Notify all connected clients via WebSocket
+            websocketService.broadcast({
+                type: 'environment_switch',
+                newActive: targetBranch,
+                timestamp: new Date().toISOString()
+            });
+
+            logger.info(`Traffic switched to ${targetBranch}`, {
+                repository: process.env.REPOSITORY_URL,
+                commitUrl: redirectResult.commitUrl,
+                branch: targetBranch,
+                timestamp: new Date().toISOString()
+            });
+
+            res.status(200).json({
+                success: true,
+                message: `Traffic switched to ${targetBranch}`,
+                previousEnvironment: currentBranch,
+                activeEnvironment: targetBranch,
+                changed: true,
+                redirects: {
+                    commitUrl: redirectResult.commitUrl,
+                    rulesPreview: redirectResult.rulesPreview,
+                    updated: redirectResult.updated
+                },
+                cachePurge: {
+                    purgedAt: new Date().toISOString(),
+                    success: purgeResult.success
+                },
+                deployTriggered: deployResult.success,
+                timestamp: new Date().toISOString()
+            });
+        } catch (error) {
+            logger.error('Environment switch failed', {
+                error: error.message,
+                stack: error.stack,
+                repository: process.env.REPOSITORY_URL,
+                timestamp: new Date().toISOString()
+            });
+
+            res.status(500).json({
+                success: false,
+                message: "Environment switch failed",
+                error: error.message,
+                timestamp: new Date().toISOString()
+            });
+        }
     }
 
-    // Execute switch operations in parallel
-    const [redirectResult, purgeResult] = await Promise.all([
-      redirectService.updateRedirects(targetBranch),
-      netlifyService.purgeCache()
-    ]);
+    /**
+     * Get status of both environments (legacy version)
+     * @deprecated Use getEnvironmentStatus instead
+     */
+    async getEnvironmentsStatus(req, res) {
+        try {
+            // Get current active branch from redirect rules
+            const activeBranch = await redirectService.getActiveBranch();
+            
+            // Get health status from Netlify for both branches
+            const [blueHealth, greenHealth] = await Promise.all([
+                netlifyService.getBranchHealth('blue'),
+                netlifyService.getBranchHealth('green')
+            ]);
+            
+            res.status(200).json({
+                success: true,
+                blue: {
+                    status: activeBranch === 'blue' ? 'active' : 'inactive',
+                    health: blueHealth || 'unknown',
+                    url: `${process.env.NETLIFY_SITE_URL}/blue`
+                },
+                green: {
+                    status: activeBranch === 'green' ? 'active' : 'inactive',
+                    health: greenHealth || 'unknown',
+                    url: `${process.env.NETLIFY_SITE_URL}/green`
+                },
+                timestamp: new Date().toISOString()
+            });
+        } catch (error) {
+            logger.error('Failed to get environment status', {
+                error: error.message,
+                stack: error.stack
+            });
+            res.status(500).json({
+                success: false,
+                message: "Failed to get environment status",
+                error: error.message
+            });
+        }
+    }
 
-    // Invalidate cache
-    statusCache.lastUpdated = null;
+    /**
+     * Switch traffic between blue and green environments (legacy version)
+     * @deprecated Use switchTraffic instead
+     */
+    async legacySwitchTraffic(req, res) {
+        try {
+            // Get current active branch
+            const currentActive = await redirectService.getActiveBranch();
+            
+            // Switch to the other branch
+            const targetBranch = currentActive === 'blue' ? 'green' : 'blue';
+            
+            // Update redirects in GitHub and trigger Netlify rebuild
+            const result = await redirectService.updateRedirects(targetBranch);
+            
+            // Force Netlify to rebuild the site to pick up the new redirects
+            await netlifyService.triggerDeploy('main');
+            
+            // Return updated status
+            res.status(200).json({
+                success: true,
+                message: `Traffic switched to ${targetBranch}`,
+                previousEnvironment: currentActive,
+                activeEnvironment: targetBranch,
+                updated: result.updated,
+                redirectsUrl: result.commitUrl
+            });
+        } catch (error) {
+            logger.error('Failed to switch traffic', {
+                error: error.message,
+                stack: error.stack
+            });
+            res.status(500).json({
+                success: false,
+                message: "Failed to switch traffic",
+                error: error.message
+            });
+        }
+    }
+}
 
-    // Notify all connected clients via WebSocket
-    websocketService.broadcast({
-      type: 'environment_switch',
-      newActive: targetBranch,
-      timestamp: new Date().toISOString()
-    });
-
-    logger.info(`Traffic switched to ${targetBranch}`, {
-      repository: process.env.REPOSITORY_URL,
-      commitUrl: redirectResult.commitUrl,
-      branch: targetBranch,
-      timestamp: new Date().toISOString()
-    });
-
-    res.status(200).json({
-      success: true,
-      message: `Traffic switched to ${targetBranch}`,
-      activeBranch: targetBranch,
-      changed: true,
-      redirects: {
-        commitUrl: redirectResult.commitUrl,
-        rulesPreview: redirectResult.rulesPreview
-      },
-      cachePurge: {
-        purgedAt: new Date().toISOString(),
-        success: purgeResult.success
-      },
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    logger.error('Environment switch failed', {
-      error: error.message,
-      stack: error.stack,
-      repository: process.env.REPOSITORY_URL,
-      timestamp: new Date().toISOString()
-    });
-
-    res.status(500).json({
-      success: false,
-      message: "Environment switch failed",
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-};
-
-module.exports = {
-  getEnvironmentStatus,
-  switchTraffic
-};
+module.exports = new EnvironmentController();

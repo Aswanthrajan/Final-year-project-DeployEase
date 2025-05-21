@@ -1,4 +1,3 @@
-
 /**
  * WebSocket Service for DeployEase
  * Handles real-time communication for deployment status and logs
@@ -36,6 +35,16 @@ class WebSocketService {
           return resolve(true);
         }
 
+        // If we've already tried the maximum number of times, don't try again
+        if (this.retryCount >= this.retryLimit) {
+          logger.warn(`Reached retry limit (${this.retryLimit}). Stopping WebSocket initialization attempts.`);
+          return reject(new Error(`Failed to initialize WebSocket server after ${this.retryLimit} attempts`));
+        }
+
+        // Increment retry counter
+        this.retryCount++;
+        logger.info(`WebSocket initialization attempt ${this.retryCount}/${this.retryLimit}`);
+
         // Check if port is in use and kill process if necessary
         this.checkPortAndKillProcess(port)
           .then(() => {
@@ -57,6 +66,8 @@ class WebSocketService {
               logger.info(`WebSocket server is running on port ${port}`);
               this.isInitialized = true;
               this.startPingInterval();
+              // Reset retry counter on successful connection
+              this.retryCount = 0;
               resolve(true);
             });
 
@@ -68,7 +79,13 @@ class WebSocketService {
                   .then(() => {
                     logger.info('Retry after killing process');
                     this.close().then(() => {
-                      this.init(port).then(resolve).catch(reject);
+                      // Only retry if we haven't hit the limit
+                      if (this.retryCount < this.retryLimit) {
+                        this.init(port).then(resolve).catch(reject);
+                      } else {
+                        logger.warn(`Reached retry limit (${this.retryLimit}). Stopping WebSocket initialization attempts.`);
+                        reject(new Error(`Failed to initialize WebSocket server after ${this.retryLimit} attempts`));
+                      }
                     });
                   })
                   .catch(reject);

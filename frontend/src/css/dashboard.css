@@ -99,8 +99,8 @@ body.dark-mode .card-footer {
 }
 
 .green {
-    background-color: rgba(46, 204, 113, 0.1);
-    border-left: 4px solid #2ecc71;
+    background-color: rgba(52, 152, 219, 0.1);  /* Changed from green to blue background */
+    border-left: 4px solid #3498db;  /* Changed from green to blue border */
 }
 
 body.dark-mode .blue {
@@ -108,7 +108,7 @@ body.dark-mode .blue {
 }
 
 body.dark-mode .green {
-    background-color: rgba(46, 204, 113, 0.2);
+    background-color: rgba(52, 152, 219, 0.2);  /* Changed from green to blue background */
 }
 
 .env-header {
@@ -143,7 +143,7 @@ body.dark-mode .env-detail .label {
 }
 
 .active {
-    background-color: #2ecc71;
+    background-color: #3498db;  /* Changed from green to blue */
     color: white;
 }
 
@@ -264,7 +264,7 @@ body.dark-mode .deployment-list tr:hover {
 
 /* Status Indicators */
 .status-success {
-    color: #2ecc71;
+    color: #3498db;  /* Changed from green to blue */
 }
 
 .status-failed {
@@ -474,7 +474,7 @@ body.dark-mode .file-size {
 }
 
 .toast.success {
-    background-color: #2ecc71;
+    background-color: #3498db; /* Changed from green to blue */
 }
 
 .toast.error {
@@ -551,7 +551,7 @@ body.dark-mode .rollback-point:hover {
 
 /* Logs Container */
 .logs-container {
-    height: 300px;
+    height: 250px; /* Reduced from 300px to make it match the live environment height */
     overflow-y: auto;
     background-color: #f8f9fa;
     padding: 10px;
@@ -596,7 +596,7 @@ body.dark-mode .logs-container {
 }
 
 .active-env-badge i {
-    color: #2ecc71;
+    color: #3498db; /* Changed from green to blue */
     font-size: 1.5rem;
 }
 
@@ -608,6 +608,7 @@ body.dark-mode .logs-container {
     margin-bottom: 8px;
     font-weight: 500;
 }
+
 
 .progress-bar-container {
     height: 10px;
@@ -626,7 +627,7 @@ body.dark-mode .logs-container {
 }
 
 .progress-bar.complete {
-    background-color: #2ecc71;
+    background-color: #3498db; /* Changed from green to blue */
 }
 
 .view-site-link {
@@ -675,7 +676,7 @@ body.dark-mode .logs-container {
 }
 
 .sidebar-nav li.active a {
-    background-color: rgba(52, 152, 219, 0.5);
+    background-color: rgba(52, 152, 219, 0.5); /* Changed from green highlight to blue */
     border-left: 4px solid #3498db;
     font-weight: 600;
 }
@@ -755,4 +756,24 @@ body.dark-mode .logs-container {
     .logs-card {
         grid-area: logs;
     }
+}
+
+/* Add these at the end of the file */
+.toast.warning {
+  background-color: #ff9800;
+}
+
+.toast.warning button.retry-now {
+  background: white;
+  color: #ff9800;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toast.warning button.retry-now:hover {
+  background: #f5f5f5;
 }

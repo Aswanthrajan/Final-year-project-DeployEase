@@ -7,17 +7,23 @@ class WebSocketManager {
     this.logOutput = document.getElementById("logContent");
     this.isManualClose = false;
     this.connectionAttempts = 0;
-    this.maxConnectionAttempts = 1; // Set to 1 for single attempt, or 5 for max 5 attempts
+    this.maxConnectionAttempts = 3; // Default to 3 attempts
     this.connectionState = 'disconnected';
     this.connectionTimeout = null;
     this.heartbeatInterval = null;
   }
 
-  // Initialize WebSocket connection (will only try once or up to maxConnectionAttempts)
+  // Initialize WebSocket connection (will only try up to maxConnectionAttempts times)
   connect() {
     if (this.connectionState === 'connected' || 
         this.connectionState === 'connecting' || 
         this.connectionAttempts >= this.maxConnectionAttempts) {
+      
+      // If we've hit the max attempts, show an error message instead of retrying
+      if (this.connectionAttempts >= this.maxConnectionAttempts) {
+        this.log(`Maximum connection attempts reached (${this.maxConnectionAttempts}). Please refresh the page manually to try again.`);
+        this.showMaxAttemptsError();
+      }
       return;
     }
 
@@ -80,23 +86,46 @@ class WebSocketManager {
         return;
       }
 
-      // Format different message types
-      let logMessage = '';
+      // Handle specific message types
       switch(data.type) {
         case "log":
-          logMessage = `[${new Date(data.timestamp).toLocaleTimeString()}] ${data.message}`;
+          this.log(`[${new Date(data.timestamp).toLocaleTimeString()}] ${data.message}`);
           break;
+        
         case "deploy_status":
-          logMessage = `[DEPLOY] ${data.status.toUpperCase()}: ${data.message}`;
+          this.log(`[DEPLOY] ${data.status.toUpperCase()}: ${data.message}`);
           break;
+        
+        case "deployment_history":
+          // Instead of logging raw JSON, handle deployment history separately
+          this.handleDeploymentHistory(data.data);
+          break;
+          
         default:
-          logMessage = `[${data.type}] ${JSON.stringify(data)}`;
+          // For any other message types, just log a simple notification
+          this.log(`[${data.type}] Message received`);
       }
-      
-      this.log(logMessage);
     } catch (error) {
       this.log(`[ERROR] Failed to parse message: ${event.data}`);
     }
+  }
+  
+  // Handle deployment history data specifically
+  handleDeploymentHistory(data) {
+    if (!data || !data.success) {
+      this.log("[ERROR] Failed to load deployment history");
+      return;
+    }
+    
+    // Just log a simple summary instead of the full data
+    const blueCount = data.blue?.length || 0;
+    const greenCount = data.green?.length || 0;
+    
+    this.log(`Deployment history loaded: ${blueCount} blue deployments, ${greenCount} green deployments`);
+    
+    // Dispatch an event so other components can use this data
+    const event = new CustomEvent('deploymentHistoryLoaded', { detail: data });
+    document.dispatchEvent(event);
   }
 
   // Handle connection errors
@@ -112,7 +141,14 @@ class WebSocketManager {
     
     if (event.code !== 1000 || !this.isManualClose) {
       this.log(`Connection closed: ${event.reason || 'Unknown reason'}`);
-      this.showConnectionError();
+      
+      // Only show error and retry if we haven't hit the max attempts
+      if (this.connectionAttempts < this.maxConnectionAttempts) {
+        // Retry connection after a delay
+        setTimeout(() => this.connect(), 3000);
+      } else {
+        this.showMaxAttemptsError();
+      }
     }
   }
 
@@ -123,20 +159,34 @@ class WebSocketManager {
     this.log(`Connection failed: ${reason}`);
     
     if (this.connectionAttempts < this.maxConnectionAttempts) {
-      // If we want to try multiple times (up to maxConnectionAttempts)
-      setTimeout(() => this.connect(), 1000);
+      // Wait for 3 seconds before retry
+      this.log(`Retrying in 3 seconds... (Attempt ${this.connectionAttempts}/${this.maxConnectionAttempts})`);
+      setTimeout(() => this.connect(), 3000);
     } else {
-      this.showConnectionError();
+      this.showMaxAttemptsError();
     }
   }
 
-  // Show user-friendly error message
-  showConnectionError() {
+  // Show user-friendly error message after max retry attempts
+  showMaxAttemptsError() {
     const errorElement = document.createElement('div');
     errorElement.className = 'connection-error';
     errorElement.innerHTML = `
-      <p>Connection failed after ${this.connectionAttempts} attempt(s). Please <a href="javascript:location.reload()">refresh</a> to try again.</p>
+      <p>Connection failed after ${this.maxConnectionAttempts} attempts. Please <button class="retry-button">try again</button> or <a href="javascript:location.reload()">refresh the page</a>.</p>
     `;
+    
+    // Add a manual retry button
+    const retryButton = errorElement.querySelector('.retry-button');
+    if (retryButton) {
+      retryButton.addEventListener('click', () => {
+        // Reset connection attempts and try again
+        this.connectionAttempts = 0;
+        if (errorElement.parentNode) {
+          errorElement.parentNode.removeChild(errorElement);
+        }
+        this.connect();
+      });
+    }
     
     if (this.logOutput) {
       this.logOutput.appendChild(errorElement);
@@ -201,8 +251,8 @@ const webSocketManager = new WebSocketManager();
 // Initialize when DOM is ready
 if (typeof window !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
-    // Set maxConnectionAttempts to 1 for single attempt, or 5 for max 5 attempts
-    webSocketManager.maxConnectionAttempts = 1; // CHANGE TO 5 IF YOU WANT UP TO 5 ATTEMPTS
+    // You can configure the max attempts here
+    // webSocketManager.maxConnectionAttempts = 5; // Uncomment to change from default 3
     webSocketManager.connect();
   });
 

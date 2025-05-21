@@ -28,6 +28,13 @@ const elements = {
 let progressBarInterval = null;
 let isDeploying = false;
 
+// Track original branch assignments for rollback
+let originalBranchConfig = {
+    blue: 'blue',
+    green: 'green',
+    isSwapped: false
+};
+
 // Initialize dashboard
 function initializeDashboard() {
     try {
@@ -55,7 +62,7 @@ function setupEventListeners() {
     }
     
     if (elements.rollbackButton) {
-        elements.rollbackButton.addEventListener("click", showRollbackOptions);
+        elements.rollbackButton.addEventListener("click", handleRollback);
     }
     
     if (elements.switchTraffic) {
@@ -164,7 +171,15 @@ function showDeployModal() {
 function closeDeployModal() {
     const deployModal = document.getElementById('deployModal');
     if (deployModal) {
+        // Ensure display property is set to 'none'
         deployModal.style.display = 'none';
+        
+        // Reset form elements if needed
+        const fileList = document.getElementById('fileList');
+        if (fileList) fileList.innerHTML = '';
+        
+        const commitMessage = document.getElementById('commitMessage');
+        if (commitMessage) commitMessage.value = '';
     }
 }
 
@@ -188,35 +203,97 @@ async function handleDeployment() {
     try {
         showToast("Preparing deployment...", "info");
         
-        // Prepare form data
-        const formData = new FormData();
-        formData.append('branch', branch);
-        formData.append('commitMessage', commitMessage);
+        // Process files to match the expected format in the backend
+        const processedFiles = [];
+        for (const file of fileInput.files) {
+            const reader = new FileReader();
+            const filePromise = new Promise((resolve, reject) => {
+                reader.onload = () => {
+                    resolve({
+                        path: file.name,
+                        content: reader.result
+                    });
+                };
+                reader.onerror = reject;
+            });
+            
+            reader.readAsText(file);
+            processedFiles.push(filePromise);
+        }
         
-        // Append all files (not just the first one)
-        Array.from(fileInput.files).forEach(file => {
-            formData.append('files', file);
-        });
-
+        // Wait for all files to be processed
+        const files = await Promise.all(processedFiles);
+        
+        const deploymentData = {
+            branch,
+            commitMessage,
+            files
+        };
+        
+        // First close the modal before initiating deployment
+        // This ensures the modal is closed even if there's a delay in the network request
+        closeDeployModal();
+        
+        // Start the deployment progress animation immediately
+        // This gives immediate feedback to the user
+        startDeploymentProgress();
+        
         const baseUrl = window.AppConfig?.apiBaseUrl || config.apiBaseUrl || 'http://localhost:3000';
         const response = await fetch(`${baseUrl}/api/deployments`, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(deploymentData)
         });
 
-        if (!response.ok) throw new Error(await response.text());
+        if (!response.ok) {
+            const errorData = await response.json();
+            if (errorData.retryAfter) {
+                showRetryPrompt(errorData.retryAfter);
+            } else {
+                throw new Error(errorData.message || errorData.error || "Deployment failed");
+            }
+            return;
+        }
 
         const result = await response.json();
         showToast(`Deployment to ${branch} started! ${fileInput.files.length} files uploaded`, "success");
-        closeDeployModal();
         updateEnvironmentStatus();
         
-        // Start the deployment progress animation
-        startDeploymentProgress();
     } catch (error) {
         console.error("Deployment failed:", error);
         showToast(`Deployment failed: ${error.message}`, "error");
+        
+        // Even if deployment fails, we should ensure the modal is closed
+        closeDeployModal();
     }
+}
+
+function showRetryPrompt(seconds) {
+    const toast = document.createElement('div');
+    toast.className = 'toast warning';
+    toast.innerHTML = `
+        <p>GitHub rate limit exceeded</p>
+        <p>Auto-retrying in <span class="countdown">${seconds}</span> seconds</p>
+        <button class="retry-now">Retry Now</button>
+    `;
+    
+    const countdown = setInterval(() => {
+        seconds--;
+        toast.querySelector('.countdown').textContent = seconds;
+        if (seconds <= 0) {
+            clearInterval(countdown);
+            handleDeployment();
+        }
+    }, 1000);
+
+    toast.querySelector('.retry-now').addEventListener('click', () => {
+        clearInterval(countdown);
+        handleDeployment();
+    });
+
+    (elements.toast || document.body).appendChild(toast);
 }
 
 // Function to start the deployment progress animation
@@ -275,18 +352,28 @@ async function switchTraffic() {
     }
 
     try {
-        showToast("Switching traffic...", "info");
+        const targetBranch = getInactiveEnvironment();
+        showToast(`Switching traffic to ${targetBranch}...`, "info");
+        
         const baseUrl = window.AppConfig?.apiBaseUrl || config.apiBaseUrl || 'http://localhost:3000';
         const response = await fetch(`${baseUrl}/api/environments/switch`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ targetBranch })
         });
 
         if (!response.ok) throw new Error(await response.text());
 
         const result = await response.json();
+        
+        // Track that branches are swapped for proper rollback functionality
+        originalBranchConfig.isSwapped = !originalBranchConfig.isSwapped;
+        
+        // Update rollback button state
+        updateRollbackButtonState();
+        
         showToast(`Traffic switched to ${result.activeEnvironment}`, "success");
         updateEnvironmentStatus();
         
@@ -295,6 +382,68 @@ async function switchTraffic() {
     } catch (error) {
         console.error("Failed to switch traffic:", error);
         showToast(`Switch failed: ${error.message}`, "error");
+    }
+}
+
+function updateRollbackButtonState() {
+    if (elements.rollbackButton) {
+        // Enable rollback button if branches are swapped, disable if in original state
+        if (originalBranchConfig.isSwapped) {
+            elements.rollbackButton.disabled = false;
+            elements.rollbackButton.classList.remove('disabled');
+            elements.rollbackButton.title = "Rollback to original branch configuration";
+        } else {
+            elements.rollbackButton.disabled = true;
+            elements.rollbackButton.classList.add('disabled');
+            elements.rollbackButton.title = "Currently in original configuration";
+        }
+    }
+}
+
+async function handleRollback() {
+    if (!originalBranchConfig.isSwapped) {
+        showToast("Already in original configuration", "info");
+        return;
+    }
+    
+    if (webSocketManager.getConnectionState() !== 'connected') {
+        showToast("Cannot rollback - connection lost", "error");
+        return;
+    }
+
+    try {
+        // Get original active branch (before any swaps)
+        const originalActiveBranch = 'blue'; // Default to blue as original active branch
+        
+        showToast(`Rolling back to original configuration...`, "info");
+        
+        const baseUrl = window.AppConfig?.apiBaseUrl || config.apiBaseUrl || 'http://localhost:3000';
+        const response = await fetch(`${baseUrl}/api/environments/switch`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ targetBranch: originalActiveBranch })
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        const result = await response.json();
+        
+        // Reset the swap flag
+        originalBranchConfig.isSwapped = false;
+        
+        // Update rollback button state
+        updateRollbackButtonState();
+        
+        showToast(`Successfully rolled back to original configuration`, "success");
+        updateEnvironmentStatus();
+        
+        // Start the deployment progress for rollback
+        startDeploymentProgress();
+    } catch (error) {
+        console.error("Rollback failed:", error);
+        showToast(`Rollback failed: ${error.message}`, "error");
     }
 }
 
@@ -317,7 +466,6 @@ async function showRollbackOptions() {
         
         if (!rollbackPoints.length) {
             showToast("No rollback points available", "info");
-            return;
         }
         
         showRollbackSelectionUI(rollbackPoints, branch);
@@ -337,9 +485,9 @@ function showRollbackSelectionUI(rollbackPoints, branch) {
             <ul class="rollback-list">
                 ${rollbackPoints.map(point => `
                     <li>
-                        <button class="rollback-point" data-sha="${point.commitSha}">
+                        <button class="rollback-point" data-sha="${point.commitSha || point.id}">
                             <strong>${new Date(point.timestamp).toLocaleString()}</strong><br>
-                            ${point.commitMessage || 'No message'} (${point.commitSha.slice(0, 7)})
+                            ${point.commitMessage || point.message || 'No message'} (${(point.commitSha || point.id || '').slice(0, 7)})
                         </button>
                     </li>
                 `).join('')}
@@ -353,7 +501,7 @@ function showRollbackSelectionUI(rollbackPoints, branch) {
     // Add event listeners
     modal.querySelectorAll('.rollback-point').forEach(btn => {
         btn.addEventListener('click', async (e) => {
-            const sha = e.target.dataset.sha;
+            const sha = e.currentTarget.dataset.sha;
             await performRollback(branch, sha);
             modal.remove();
         });
@@ -402,10 +550,11 @@ function createDeploymentRow(deployment) {
     const timestamp = deployment.timestamp ? new Date(deployment.timestamp).toLocaleString() : 'N/A';
     const status = deployment.status?.toLowerCase() || 'unknown';
     const branch = deployment.branch || (deployment.commitUrl?.includes('blue') ? 'blue' : 'green');
+    const id = deployment.id || deployment.commitSha?.slice(0, 7) || 'N/A';
     
     return `
         <tr>
-            <td>${deployment.id || deployment.commitSha?.slice(0, 7) || 'N/A'}</td>
+            <td>${id}</td>
             <td>${timestamp}</td>
             <td>${branch}</td>
             <td class="status-${status}">
@@ -504,6 +653,10 @@ async function updateEnvironmentStatus() {
         
         const status = await response.json();
         updateEnvironmentUI(status);
+        
+        // Update rollback button state based on environment status
+        updateRollbackButtonState();
+        
         await fetchDeploymentHistory();
     } catch (error) {
         console.error("Failed to update environment status:", error);
