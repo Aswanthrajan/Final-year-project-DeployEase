@@ -5,6 +5,21 @@ exports.handler = async (event, context) => {
   const { path } = parse(event.rawUrl);
   const activeBranch = process.env.ACTIVE_BRANCH || 'blue'; // Default to blue
 
+  // New unified message endpoint
+  if (path === '/routing-info') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Environment': activeBranch
+      },
+      body: JSON.stringify({ 
+        message: 'Routing handled by Netlify redirects',
+        activeBranch
+      })
+    };
+  }
+
   // Handle API routes
   if (path.startsWith('/api/')) {
     return {

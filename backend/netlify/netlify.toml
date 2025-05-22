@@ -4,10 +4,10 @@
   base = ""
 
   # Default build command (override per-branch if needed)
-  command = "echo 'Netlify build triggered' && exit 0"
+  command = "echo 'Build complete'"
 
   # Directory to publish (Netlify will auto-detect if omitted)
-  publish = ""
+  publish = "."
 
   # Environment variables available during build
   [build.environment]
@@ -17,9 +17,11 @@
 # Branch-specific build settings
 [context.production]  # Used when deploying main branch
   command = "echo 'Production build (main branch)'"
+  environment = { ACTIVE_BRANCH = "blue" }
 
 [context.branch-deploy]  # Applies to all branch deploys
   command = "echo 'Branch deployment detected'"
+  environment = { ACTIVE_BRANCH = "green" }
 
 # Blue environment settings (priority over branch-deploy)
 [context.blue]
@@ -41,13 +43,6 @@
 [[edge_functions]]
   path = "/*"
   function = "route"
-
-# Redirects configuration (will be overridden by _redirects file)
-[[redirects]]
-  from = "/*"
-  to = "/blue/:splat"
-  status = 200
-  force = false
 
 # Branch-specific headers
 [[headers]]

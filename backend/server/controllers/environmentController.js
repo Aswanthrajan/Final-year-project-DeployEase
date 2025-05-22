@@ -41,7 +41,7 @@ class EnvironmentController {
 
             // Determine active branch with fallback
             const currentBranch = activeBranch.status === 'fulfilled' ? 
-                activeBranch.value : 'blue';
+                activeBranch.value : null;
 
             // Prepare environment data with fallbacks
             const environmentData = {
@@ -49,7 +49,7 @@ class EnvironmentController {
                 blue: {
                     status: currentBranch === 'blue' ? 'active' : 'inactive',
                     branch: 'blue',
-                    url: process.env.NETLIFY_BLUE_URL || `${process.env.NETLIFY_SITE_URL}/blue`,
+                    url: 'https://blue--deployeaselive.netlify.app/',
                     deployStatus: blueDeploy.status === 'fulfilled' ? blueDeploy.value : { error: 'Status unavailable' },
                     health: blueHealth.status === 'fulfilled' ? blueHealth.value : 'unknown',
                     lastUpdated: new Date().toISOString()
@@ -57,7 +57,7 @@ class EnvironmentController {
                 green: {
                     status: currentBranch === 'green' ? 'active' : 'inactive',
                     branch: 'green',
-                    url: process.env.NETLIFY_GREEN_URL || `${process.env.NETLIFY_SITE_URL}/green`,
+                    url: 'https://green--deployeaselive.netlify.app/',
                     deployStatus: greenDeploy.status === 'fulfilled' ? greenDeploy.value : { error: 'Status unavailable' },
                     health: greenHealth.status === 'fulfilled' ? greenHealth.value : 'unknown',
                     lastUpdated: new Date().toISOString()
@@ -189,6 +189,85 @@ class EnvironmentController {
     }
 
     /**
+     * Rollback to the original environment configuration
+     */
+    async rollbackEnvironment(req, res) {
+        try {
+            // Get current active branch
+            const currentBranch = await redirectService.getActiveBranch();
+            
+            // If already on the initial branch, no need to rollback
+            if (currentBranch === originalConfig.initialActiveBranch) {
+                return res.status(200).json({
+                    success: true,
+                    message: `Already on initial environment (${originalConfig.initialActiveBranch})`,
+                    activeBranch: currentBranch,
+                    changed: false,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
+            // Execute rollback to initial branch
+            const [redirectResult, purgeResult, deployResult] = await Promise.all([
+                redirectService.updateRedirects(originalConfig.initialActiveBranch),
+                netlifyService.purgeCache(),
+                netlifyService.triggerDeploy('main')
+            ]);
+
+            // Invalidate cache
+            statusCache.lastUpdated = null;
+
+            // Notify all connected clients via WebSocket
+            websocketService.broadcast({
+                type: 'environment_rollback',
+                newActive: originalConfig.initialActiveBranch,
+                previousActive: currentBranch,
+                timestamp: new Date().toISOString()
+            });
+
+            logger.info(`Environment rolled back to ${originalConfig.initialActiveBranch}`, {
+                repository: process.env.REPOSITORY_URL,
+                commitUrl: redirectResult.commitUrl,
+                previousBranch: currentBranch,
+                timestamp: new Date().toISOString()
+            });
+
+            res.status(200).json({
+                success: true,
+                message: `Environment rolled back to ${originalConfig.initialActiveBranch}`,
+                previousEnvironment: currentBranch,
+                activeEnvironment: originalConfig.initialActiveBranch,
+                changed: true,
+                redirects: {
+                    commitUrl: redirectResult.commitUrl,
+                    rulesPreview: redirectResult.rulesPreview,
+                    updated: redirectResult.updated
+                },
+                cachePurge: {
+                    purgedAt: new Date().toISOString(),
+                    success: purgeResult.success
+                },
+                deployTriggered: deployResult.success,
+                timestamp: new Date().toISOString()
+            });
+        } catch (error) {
+            logger.error('Environment rollback failed', {
+                error: error.message,
+                stack: error.stack,
+                repository: process.env.REPOSITORY_URL,
+                timestamp: new Date().toISOString()
+            });
+
+            res.status(500).json({
+                success: false,
+                message: "Environment rollback failed",
+                error: error.message,
+                timestamp: new Date().toISOString()
+            });
+        }
+    }
+
+    /**
      * Get status of both environments (legacy version)
      * @deprecated Use getEnvironmentStatus instead
      */
@@ -208,13 +287,14 @@ class EnvironmentController {
                 blue: {
                     status: activeBranch === 'blue' ? 'active' : 'inactive',
                     health: blueHealth || 'unknown',
-                    url: `${process.env.NETLIFY_SITE_URL}/blue`
+                    url: 'https://blue--deployeaselive.netlify.app/'
                 },
                 green: {
                     status: activeBranch === 'green' ? 'active' : 'inactive',
                     health: greenHealth || 'unknown',
-                    url: `${process.env.NETLIFY_SITE_URL}/green`
+                    url: 'https://green--deployeaselive.netlify.app/'
                 },
+                activeBranch: activeBranch,
                 timestamp: new Date().toISOString()
             });
         } catch (error) {

@@ -1,12 +1,13 @@
 # DeployEase Blue-Green Traffic Routing
-/*  /:branch/:splat  200
-/   /:branch/index.html  200
-# API and static assets (no redirection)
-/.netlify/*  /.netlify/:splat  200
-/api/*  /api/:splat  200
-/assets/*  /assets/:splat  200
-# Explicitly prevent redirects for certain paths
-/favicon.ico /favicon.ico 200
-/robots.txt /robots.txt 200
+# Route all traffic to blue branch deployment
+/*  https://blue--deployeaselive.netlify.app/:splat  302!
+
+# Root path redirect
+/  https://blue--deployeaselive.netlify.app/  302
+
+# API and static assets from branch deploys
+/api/*  https://blue--deployeaselive.netlify.app/api/:splat  302
+/assets/*  https://blue--deployeaselive.netlify.app/assets/:splat  302
+
 # Configuration marker - DO NOT REMOVE
 # ACTIVE_BRANCH: blue

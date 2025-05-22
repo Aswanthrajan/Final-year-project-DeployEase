@@ -5,6 +5,7 @@ const path = require('path');
 
 // Configuration constants
 const REPOSITORY_URL = process.env.REPOSITORY_URL || 'https://github.com/Aswanthrajan/blue';
+const NETLIFY_SITE_NAME = process.env.NETLIFY_SITE_NAME || 'deployeaselive';
 const DEFAULT_BRANCHES = {
   MAIN: 'main',
   BLUE: 'blue',
@@ -17,6 +18,7 @@ const CACHE_TTL = 300000; // 5 minutes
 const CACHE_TTL_EXTENDED = 1800000; // 30 minutes for rate limited scenarios
 const MAX_RETRY_ATTEMPTS = 3;
 const RETRY_DELAY_BASE = 2000; // Base delay in ms before exponential backoff
+const NETLIFY_SPECIAL_FILES = ['_redirects', '_headers', 'netlify.toml'];
 
 class GitService {
   constructor() {
@@ -459,6 +461,11 @@ class GitService {
       }
       seenPaths.add(file.path);
 
+      // Special case for Netlify special files
+      if (NETLIFY_SPECIAL_FILES.includes(file.path)) {
+        return; // Skip extension validation for Netlify special files
+      }
+
       const ext = path.extname(file.path).toLowerCase();
       if (!VALID_FILE_EXTENSIONS.includes(ext)) {
         throw new Error(`Invalid file extension for ${file.path}. Allowed: ${VALID_FILE_EXTENSIONS.join(', ')}`);
@@ -504,6 +511,9 @@ class GitService {
       }
 
       const result = await this.updateRedirectsFile(targetBranch);
+      
+      // Clear cache for active branch since we just changed it
+      this.cache.delete('active-branch');
       
       logger.info(`Environment switched to ${targetBranch}`, {
         repository: REPOSITORY_URL,
@@ -595,7 +605,7 @@ class GitService {
   }
 
   /**
-   * Get currently active branch from redirects file with better caching
+   * Get currently active branch from redirects file with better caching and parsing
    * @returns {Promise<string>} - Active branch name (blue/green)
    */
   async getActiveBranch() {
@@ -613,9 +623,20 @@ class GitService {
             DEFAULT_BRANCHES.MAIN
           );
 
-          if (content.includes(`/${DEFAULT_BRANCHES.BLUE}/`)) {
+          // First try to parse from the configuration marker
+          const markerMatch = content.match(/# ACTIVE_BRANCH:\s*(blue|green)/i);
+          if (markerMatch) {
+            return markerMatch[1].toLowerCase();
+          }
+
+          // Fallback to parsing redirect URLs for branch deploys and Netlify URLs
+          if (content.includes(`https://blue--${NETLIFY_SITE_NAME}.netlify.app`) || 
+              content.includes(`/${DEFAULT_BRANCHES.BLUE}/`) || 
+              content.includes('/blue/')) {
             return DEFAULT_BRANCHES.BLUE;
-          } else if (content.includes(`/${DEFAULT_BRANCHES.GREEN}/`)) {
+          } else if (content.includes(`https://green--${NETLIFY_SITE_NAME}.netlify.app`) || 
+                     content.includes(`/${DEFAULT_BRANCHES.GREEN}/`) || 
+                     content.includes('/green/')) {
             return DEFAULT_BRANCHES.GREEN;
           } else {
             return DEFAULT_BRANCHES.BLUE; // Default fallback
@@ -930,14 +951,23 @@ class GitService {
     );
   }
 
-  /** Generate proper redirects content */
+  /** Generate proper redirects content matching your project format */
   generateRedirectsContent(activeBranch) {
-    return `# DeployEase Traffic Routing
-/*  /${activeBranch}/:splat  200
-/   /${activeBranch}/index.html  200
+    return `# DeployEase Blue-Green Traffic Routing
+/*  /${activeBranch}/:splat  200!
+/   /${activeBranch}/index.html  200!
 
-# Additional redirect rules can be added below
-# /old-path /new-path 301
+# API and static assets (no redirection)
+/.netlify/*  /.netlify/:splat  200
+/api/*  /api/:splat  200
+/assets/*  /assets/:splat  200
+
+# Explicitly prevent redirects for certain paths
+/favicon.ico /favicon.ico 200
+/robots.txt /robots.txt 200
+
+# Configuration marker - DO NOT REMOVE
+# ACTIVE_BRANCH: ${activeBranch}
 `;
   }
 

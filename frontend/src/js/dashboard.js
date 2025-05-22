@@ -16,6 +16,7 @@ const elements = {
     historySection: document.getElementById('deploymentHistoryTableBody'),
     newDeploymentBtn: document.getElementById('newDeploymentBtn'),
     currentActiveEnv: document.getElementById('currentActiveEnv'),
+    siteLink: document.getElementById('siteLink'), // Add site link element
     logContent: document.getElementById('logContent'),
     confirmDeployBtn: document.getElementById('confirmDeployBtn'),
     cancelDeployBtn: document.getElementById('cancelDeployBtn'),
@@ -252,7 +253,8 @@ async function handleDeployment() {
             if (errorData.retryAfter) {
                 showRetryPrompt(errorData.retryAfter);
             } else {
-                throw new Error(errorData.message || errorData.error || "Deployment failed");
+                // Removed the deployment failure toast notification
+                console.error("Deployment failed:", errorData.message || errorData.error || "Deployment failed");
             }
             return;
         }
@@ -263,7 +265,7 @@ async function handleDeployment() {
         
     } catch (error) {
         console.error("Deployment failed:", error);
-        showToast(`Deployment failed: ${error.message}`, "error");
+        // Removed the deployment failure toast notification
         
         // Even if deployment fails, we should ensure the modal is closed
         closeDeployModal();
@@ -679,10 +681,31 @@ function updateEnvironmentUI(status) {
         if (elements.greenHealthStatus) elements.greenHealthStatus.textContent = status.green?.health || "Unknown";
     }
 
-    // Update current environment indicator - make it dynamic
-    const activeEnvironment = status.blue?.status === "active" ? "Blue" : "Green";
+    // Update current environment indicator with proper message format
+    let environmentMessage = "No environment is active";
+    let siteUrl = "";
+    
+    if (status.blue?.status === "active") {
+        environmentMessage = "Blue environment is active";
+        siteUrl = "https://blue--deployeaselive.netlify.app/";
+    } else if (status.green?.status === "active") {
+        environmentMessage = "Green environment is active";
+        siteUrl = "https://green--deployeaselive.netlify.app/";
+    }
+    
     if (elements.currentActiveEnv) {
-        elements.currentActiveEnv.textContent = activeEnvironment;
+        elements.currentActiveEnv.textContent = environmentMessage;
+    }
+    
+    // Update site link
+    if (elements.siteLink) {
+        if (siteUrl) {
+            elements.siteLink.href = siteUrl;
+            elements.siteLink.textContent = siteUrl;
+            elements.siteLink.style.display = 'inline';
+        } else {
+            elements.siteLink.style.display = 'none';
+        }
     }
     
     // Update switch traffic button
