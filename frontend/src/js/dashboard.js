@@ -29,6 +29,9 @@ const elements = {
 let progressBarInterval = null;
 let isDeploying = false;
 
+// Track current active environment - initialize with default
+let currentActiveEnvironment = 'blue'; // Default to blue
+
 // Track original branch assignments for rollback
 let originalBranchConfig = {
     blue: 'blue',
@@ -318,7 +321,7 @@ function startDeploymentProgress() {
     statusText.textContent = 'Deploying...';
     
     // Calculate a random duration between 15-55 seconds
-    const duration = Math.floor(Math.random() * (55 - 15 + 1)) + 15; // 15-55 seconds
+    const duration = Math.floor(Math.random() * (30 - 10 + 1)) + 10; // 15-55 seconds
     const intervalTime = 100; // Update every 100ms for smooth animation
     const steps = (duration * 1000) / intervalTime;
     let currentStep = 0;
@@ -370,13 +373,21 @@ async function switchTraffic() {
 
         const result = await response.json();
         
+        // Update the current active environment
+        currentActiveEnvironment = result.activeEnvironment || targetBranch;
+        
         // Track that branches are swapped for proper rollback functionality
         originalBranchConfig.isSwapped = !originalBranchConfig.isSwapped;
         
         // Update rollback button state
         updateRollbackButtonState();
         
-        showToast(`Traffic switched to ${result.activeEnvironment}`, "success");
+        showToast(`Traffic switched to ${currentActiveEnvironment}`, "success");
+        
+        // Update UI immediately with new active environment
+        updateEnvironmentUIImmediate(currentActiveEnvironment);
+        
+        // Then fetch full status
         updateEnvironmentStatus();
         
         // Start progress bar for the switch operation
@@ -432,6 +443,9 @@ async function handleRollback() {
 
         const result = await response.json();
         
+        // Update the current active environment
+        currentActiveEnvironment = result.activeEnvironment || originalActiveBranch;
+        
         // Reset the swap flag
         originalBranchConfig.isSwapped = false;
         
@@ -439,6 +453,11 @@ async function handleRollback() {
         updateRollbackButtonState();
         
         showToast(`Successfully rolled back to original configuration`, "success");
+        
+        // Update UI immediately
+        updateEnvironmentUIImmediate(currentActiveEnvironment);
+        
+        // Then fetch full status
         updateEnvironmentStatus();
         
         // Start the deployment progress for rollback
@@ -536,8 +555,7 @@ async function performRollback(branch, commitSha) {
 }
 
 function getInactiveEnvironment() {
-    const currentActive = elements.currentActiveEnv?.textContent?.toLowerCase();
-    return currentActive === 'blue' ? 'green' : 'blue';
+    return currentActiveEnvironment === 'blue' ? 'green' : 'blue';
 }
 
 function updateDeploymentHistoryUI(history) {
@@ -654,6 +672,14 @@ async function updateEnvironmentStatus() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
         const status = await response.json();
+        
+        // Update current active environment based on API response
+        if (status.blue?.status === "active") {
+            currentActiveEnvironment = 'blue';
+        } else if (status.green?.status === "active") {
+            currentActiveEnvironment = 'green';
+        }
+        
         updateEnvironmentUI(status);
         
         // Update rollback button state based on environment status
@@ -666,29 +692,28 @@ async function updateEnvironmentStatus() {
     }
 }
 
-function updateEnvironmentUI(status) {
+// New function for immediate UI updates
+function updateEnvironmentUIImmediate(activeEnv) {
     // Update Blue Environment
     if (elements.blueStatus) {
-        elements.blueStatus.textContent = status.blue?.status === "active" ? "Active" : "Inactive";
-        elements.blueStatus.className = `status-badge ${status.blue?.status === "active" ? "active" : "inactive"}`;
-        if (elements.blueHealthStatus) elements.blueHealthStatus.textContent = status.blue?.health || "Unknown";
+        elements.blueStatus.textContent = activeEnv === "blue" ? "Active" : "Inactive";
+        elements.blueStatus.className = `status-badge ${activeEnv === "blue" ? "active" : "inactive"}`;
     }
     
     // Update Green Environment
     if (elements.greenStatus) {
-        elements.greenStatus.textContent = status.green?.status === "active" ? "Active" : "Inactive";
-        elements.greenStatus.className = `status-badge ${status.green?.status === "active" ? "active" : "inactive"}`;
-        if (elements.greenHealthStatus) elements.greenHealthStatus.textContent = status.green?.health || "Unknown";
+        elements.greenStatus.textContent = activeEnv === "green" ? "Active" : "Inactive";  
+        elements.greenStatus.className = `status-badge ${activeEnv === "green" ? "active" : "inactive"}`;
     }
 
-    // Update current environment indicator with proper message format
+    // Update current environment indicator
     let environmentMessage = "No environment is active";
     let siteUrl = "";
     
-    if (status.blue?.status === "active") {
+    if (activeEnv === "blue") {
         environmentMessage = "Blue environment is active";
         siteUrl = "https://blue--deployeaselive.netlify.app/";
-    } else if (status.green?.status === "active") {
+    } else if (activeEnv === "green") {
         environmentMessage = "Green environment is active";
         siteUrl = "https://green--deployeaselive.netlify.app/";
     }
@@ -710,7 +735,63 @@ function updateEnvironmentUI(status) {
     
     // Update switch traffic button
     if (elements.switchTraffic) {
-        elements.switchTraffic.textContent = `Switch to ${status.blue?.status === "active" ? "Green" : "Blue"}`;
+        elements.switchTraffic.textContent = `Switch to ${activeEnv === "blue" ? "Green" : "Blue"}`;
+    }
+}
+
+function updateEnvironmentUI(status) {
+    // Determine active environment from status
+    let activeEnv = null;
+    if (status.blue?.status === "active") {
+        activeEnv = "blue";
+    } else if (status.green?.status === "active") {
+        activeEnv = "green";
+    }
+    
+    // Update Blue Environment
+    if (elements.blueStatus) {
+        elements.blueStatus.textContent = status.blue?.status === "active" ? "Active" : "Inactive";
+        elements.blueStatus.className = `status-badge ${status.blue?.status === "active" ? "active" : "inactive"}`;
+        if (elements.blueHealthStatus) elements.blueHealthStatus.textContent = status.blue?.health || "Unknown";
+    }
+    
+    // Update Green Environment
+    if (elements.greenStatus) {
+        elements.greenStatus.textContent = status.green?.status === "active" ? "Active" : "Inactive";
+        elements.greenStatus.className = `status-badge ${status.green?.status === "active" ? "active" : "inactive"}`;
+        if (elements.greenHealthStatus) elements.greenHealthStatus.textContent = status.green?.health || "Unknown";
+    }
+
+    // Update current environment indicator with proper message format
+    let environmentMessage = "No environment is active";
+    let siteUrl = "";
+    
+    if (activeEnv === "blue") {
+        environmentMessage = "Blue environment is active";
+        siteUrl = "https://blue--deployeaselive.netlify.app/";
+    } else if (activeEnv === "green") {
+        environmentMessage = "Green environment is active";
+        siteUrl = "https://green--deployeaselive.netlify.app/";
+    }
+    
+    if (elements.currentActiveEnv) {
+        elements.currentActiveEnv.textContent = environmentMessage;
+    }
+    
+    // Update site link
+    if (elements.siteLink) {
+        if (siteUrl) {
+            elements.siteLink.href = siteUrl;
+            elements.siteLink.textContent = siteUrl;
+            elements.siteLink.style.display = 'inline';
+        } else {
+            elements.siteLink.style.display = 'none';
+        }
+    }
+    
+    // Update switch traffic button
+    if (elements.switchTraffic) {
+        elements.switchTraffic.textContent = `Switch to ${activeEnv === "blue" ? "Green" : "Blue"}`;
     }
 }
 
